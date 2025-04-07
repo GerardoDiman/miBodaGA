@@ -1,0 +1,908 @@
+/* Reseteo Básico y Fuentes */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #1a1a1a; /* Color base oscuro */
+    color: #f0f0f0; /* Color de texto principal (blanco roto) */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden; /* Prevenir scroll horizontal */
+    padding-top: 80px; /* Espacio para el reproductor fijo */
+    padding-bottom: 40px; /* Espacio para el footer */
+}
+
+/* Imagen de fondo sutil (opcional) */
+body::before {
+    content: '';
+    position: fixed; /* Fijo para que no se mueva con el scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('fondo.jpg') no-repeat center center;
+    background-size: cover;
+    opacity: 1; /* Muy sutil */
+    filter: blur(2px); /* Desenfoque */
+    z-index: -1; /* Detrás de todo */
+}
+
+/* Capa oscura sobre el fondo (si usas imagen de fondo) */
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(30, 25, 20, 0.7), rgba(10, 5, 0, 0.9)); /* Degradado oscuro */
+    z-index: -1;
+}
+
+
+/* Reproductor Falso */
+.fake-player {
+    position: fixed; /* Fijo en la parte superior */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px; /* Altura del reproductor */
+    background-color: #0077cc; /* Azul como en la imagen */
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 10;
+}
+
+.fake-player .play-button {
+    width: 25px;
+    height: 25px;
+    background-color: rgba(0, 0, 0, 0.5); /* Botón oscuro */
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    margin-right: 15px;
+}
+/* Triángulo de play (simulado) */
+.fake-player .play-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 55%; /* Ligeramente a la derecha para centrar visualmente */
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 10px solid white;
+}
+
+.fake-player .progress-bar-container {
+    flex-grow: 1;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-right: 15px;
+}
+.fake-player .progress-bar {
+    width: 5%; /* Progreso inicial muy bajo */
+    height: 100%;
+    background-color: white;
+    border-radius: 3px;
+}
+
+.fake-player .time {
+    font-size: 0.8em;
+    color: white;
+}
+
+
+/* Contenedor Principal */
+.container {
+    max-width: 900px;
+    width: 90%;
+    margin: 20px auto 0 auto; /* Margen superior después del reproductor */
+    text-align: center;
+    position: relative; /* Para posicionar elementos hijos */
+    flex-grow: 1; /* Ocupa el espacio disponible */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Centra verticalmente el contenido principal */
+}
+
+/* Sección del Título */
+.title-section {
+    margin-bottom: 40px;
+}
+
+.intro-text {
+    font-size: 0.9em;
+    letter-spacing: 4px; /* Espaciado entre letras */
+    color: #ccc;
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block; /* Para que las líneas before/after funcionen */
+    padding: 0 10px;
+}
+/* Líneas decorativas */
+.intro-text::before,
+.intro-text::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 50px; /* Longitud de las líneas */
+    height: 1px;
+    background-color: #aaa;
+}
+.intro-text::before {
+    left: -55px; /* Posición línea izquierda */
+}
+.intro-text::after {
+    right: -55px; /* Posición línea derecha */
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 4.5em; /* Tamaño grande para los nombres */
+    font-weight: 400; /* Peso normal para Playfair */
+    line-height: 1.1;
+    color: #f5f5f5;
+}
+
+.ampersand {
+    font-family: 'Playfair Display', serif; /* Asegurar la misma fuente */
+    font-style: italic; /* Estilo cursiva si se desea */
+    font-weight: 400;
+    color: #d1b7a0; /* Un color ligeramente diferente o más cálido */
+    font-size: 0.9em; /* Ligeramente más pequeño */
+    margin: 0 5px;
+}
+
+/* Contenido Principal (Foto y Fecha) */
+.main-content {
+    position: relative; /* Necesario para posicionar la fecha */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 60px; /* Espacio antes del footer */
+}
+
+.photo-container {
+    width: 300px; /* Ancho deseado de la foto */
+    max-width: 70%;
+    aspect-ratio: 3 / 4; /* Proporción más vertical */
+    overflow: hidden; /* Oculta lo que se sale de la forma */
+    /* Intento de forma ovalada/cápsula vertical */
+    clip-path: ellipse(45% 50% at 50% 50%); /* Ajusta los % para la forma deseada */
+    /* Alternativa con border-radius (menos preciso para elipse): */
+    /* border-radius: 50% / 30%; */ /* Ajusta para oval vertical */
+    margin: 0 auto; /* Centrar el contenedor de la foto */
+}
+
+.photo-container img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen cubra el contenedor */
+    object-position: center 30%; /* Ajusta para centrar la parte importante */
+}
+
+/* Información de la Fecha (Vertical) */
+.date-info {
+    position: absolute;
+    right: 0; /* Posición a la derecha */
+    top: 50%;
+    transform: translateY(-50%); /* Centrar verticalmente */
+    writing-mode: vertical-rl; /* Texto vertical de derecha a izquierda */
+    text-orientation: mixed;
+    letter-spacing: 3px;
+    font-size: 0.9em;
+    color: #ccc;
+    padding-right: 20px; /* Espacio desde el borde */
+}
+
+.date-info span {
+    display: block; /* Cada parte en una línea "vertical" */
+    margin: 10px 0; /* Espacio entre elementos */
+    text-transform: uppercase;
+}
+
+.date-info .separator {
+    color: #888; /* Color diferente para el separador */
+    margin: 5px 0;
+}
+
+/* Sección del Footer */
+.footer-section {
+    margin-top: auto; /* Empuja el footer hacia abajo si hay poco contenido */
+    padding: 20px 0;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    text-align: center; /* Centra el texto */
+}
+
+/* === ESTILOS AÑADIDOS PARA LA SEGUNDA IMAGEN === */
+
+.details-section {
+    width: 100%;
+    max-width: 600px; /* Limitar ancho de esta sección */
+    margin: 50px auto 50px auto; /* Espacio arriba y abajo */
+    text-align: center;
+}
+
+/* Info Invitado */
+.guest-info {
+    margin-bottom: 40px;
+}
+
+.guest-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8em;
+    font-weight: 500;
+    color: #e0e0e0;
+    margin-bottom: 5px;
+}
+
+.guest-passes {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8em;
+    letter-spacing: 3px;
+    color: #b0b0b0;
+    text-transform: uppercase;
+}
+
+/* Logo */
+.wedding-logo {
+    margin-bottom: 20px;
+}
+
+.wedding-logo img {
+    max-width: 100px; /* Ajusta el tamaño según tu logo */
+    height: auto;
+    filter: brightness(0) invert(1); /* Para hacerlo blanco si es negro */
+    opacity: 0.9;
+}
+
+/* Textos Cuenta Regresiva */
+.countdown-intro,
+.countdown-outro {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9em;
+    letter-spacing: 4px;
+    color: #c5c5c5;
+    text-transform: uppercase;
+    margin: 20px 0;
+}
+
+/* Contenedor Cuenta Regresiva */
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    align-items: baseline; /* Alinea por la base de los números */
+    gap: 30px; /* Espacio entre unidades */
+    margin: 30px 0;
+}
+
+/* Unidad de Tiempo (Días, Horas...) */
+.time-unit {
+    text-align: center;
+    min-width: 70px; /* Ancho mínimo para cada unidad */
+    position: relative; /* Para pseudo-elementos si los necesitas (ej. separadores) */
+}
+
+/* Números Grandes */
+.time-unit .number {
+    display: block;
+    font-family: 'Playfair Display', serif; /* O la fuente que prefieras para números */
+    font-size: 3.5em; /* Tamaño grande */
+    font-weight: 400;
+    color: #f0f0f0;
+    line-height: 1; /* Ajustar altura de línea */
+}
+
+/* Etiquetas (DÍAS, HORAS...) */
+.time-unit .label {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7em;
+    letter-spacing: 2px;
+    color: #a0a0a0;
+    text-transform: uppercase;
+    margin-top: 8px;
+}
+
+/* Caja de Mensaje */
+.message-box {
+    background-color: rgba(20, 20, 20, 0.7); /* Fondo oscuro semi-transparente */
+    padding: 25px 30px;
+    margin: 40px auto 0 auto; /* Espacio arriba */
+    max-width: 450px; /* Ancho máximo de la caja */
+    border-radius: 4px; /* Bordes suavemente redondeados (opcional) */
+}
+
+.message-box p {
+    font-family: 'Playfair Display', serif; /* Usando la fuente serif elegante */
+    font-style: italic; /* Cursiva como en la imagen */
+    font-size: 1em;
+    line-height: 1.6;
+    color: #dcdcdc; /* Un gris claro */
+    text-align: center;
+}
+
+/* === ESTILOS MODIFICADOS PARA EL FOOTER === */
+
+.footer-section {
+    margin-top: 50px; /* Aumentar margen superior */
+    padding: 30px 0;
+    width: 100%;
+    text-align: center; /* Centrar el enlace */
+    position: relative; /* Para la línea decorativa */
+    border-top: 1px solid rgba(170, 170, 170, 0.2); /* Línea superior sutil */
+}
+/* === ESTILOS AÑADIDOS PARA LA SECCIÓN DE GALERÍA === */
+
+.gallery-section {
+    width: 100%;
+    max-width: 800px; /* Ajusta el ancho máximo de la galería */
+    margin: 70px auto 50px auto; /* Espacio arriba y abajo */
+    padding: 0 15px; /* Pequeño padding lateral */
+}
+
+.gallery-wrapper {
+    position: relative; /* Contenedor para las flechas */
+    width: 100%;
+}
+
+.gallery-container {
+    width: 100%;
+    /* max-width: 600px; */ /* Opcional: limitar ancho imagen */
+    aspect-ratio: 4 / 3; /* Proporción de la imagen (ajusta si es necesario) */
+    margin: 0 auto; /* Centrar el contenedor de la imagen */
+    overflow: hidden; /* Ocultar partes de imagen si no encajan perfectamente */
+    position: relative; /* Para slides si se usara JS */
+    /* Simulación del borde superior curvo (puede requerir ajustes) */
+    border-top-left-radius: 150px 80px; /* Curva superior izquierda */
+    border-top-right-radius: 150px 80px; /* Curva superior derecha */
+    /* Alternativa más simple: border-radius: 20px 20px 0 0; */
+}
+
+.gallery-slide {
+    width: 100%;
+    height: 100%;
+    display: none; /* Ocultar slides por defecto (para JS) */
+}
+
+.gallery-slide.active {
+    display: block; /* Mostrar solo el slide activo */
+}
+
+.gallery-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cubre el contenedor sin distorsionar */
+}
+
+/* Estilo de las flechas de navegación */
+.gallery-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente */
+    color: #fff;
+    border: none;
+    border-radius: 50%; /* Círculo */
+    width: 40px;
+    height: 40px;
+    font-size: 1.5em;
+    line-height: 40px; /* Centrar el texto de la flecha verticalmente */
+    text-align: center;
+    cursor: pointer;
+    z-index: 5; /* Asegurar que estén sobre la imagen */
+    opacity: 0.7;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.gallery-arrow:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 1;
+}
+
+.gallery-prev {
+    left: 10px; /* Posición flecha izquierda */
+}
+
+.gallery-next {
+    right: 10px; /* Posición flecha derecha */
+}
+
+/* === NUEVOS ESTILOS PARA TÍTULOS DE SECCIÓN (Como Galería) === */
+
+.section-title-container {
+    text-align: center; /* Centrar el título dentro de su contenedor */
+    margin-bottom: 40px; /* Espacio debajo del título */
+}
+
+.section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9em;
+    letter-spacing: 4px; /* Espaciado entre letras */
+    color: #ccc;
+    text-transform: uppercase;
+    position: relative; /* Para posicionar las líneas */
+    display: inline-block; /* Para que las líneas se ajusten al texto */
+    padding: 0 10px; /* Espacio entre texto y líneas */
+}
+
+/* Líneas decorativas para .section-title (similar a .intro-text) */
+.section-title::before,
+.section-title::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 100px; /* Longitud de las líneas (ajusta si quieres) */
+    height: 1px;
+    background-color: #aaa;
+    transform: translateY(-50%);
+}
+
+.section-title::before {
+    right: 100%; /* Posición línea izquierda (justo a la izquierda del padding) */
+    margin-right: 10px; /* Espacio extra entre línea y texto */
+}
+
+.section-title::after {
+    left: 100%; /* Posición línea derecha (justo a la derecha del padding) */
+    margin-left: 10px; /* Espacio extra entre línea y texto */
+}
+
+
+/* === ESTILOS ACTUALIZADOS/SIMPLIFICADOS PARA EL FOOTER === */
+
+.footer-section {
+    margin-top: 50px;
+    padding: 30px 0;
+    width: 100%;
+    text-align: center;
+    position: relative; /* Mantenido por si acaso, pero ::before/::after eliminados */
+    border-top: 1px solid rgba(170, 170, 170, 0.2);
+    /* Eliminar ::before y ::after */
+}
+
+/* Estilo opcional para texto de copyright en footer */
+.copyright-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8em;
+    color: #888;
+    letter-spacing: 1px;
+}
+
+/* === AJUSTES MENORES EN GALERÍA === */
+
+.gallery-section {
+    /* Puedes ajustar el margin-top si es necesario con el nuevo título */
+    margin-top: 70px;
+}
+
+/* === ESTILOS PARA SECCIÓN UBICACIONES === */
+
+.locations-section {
+    width: 100%;
+    max-width: 850px; /* Ancho un poco mayor para acomodar contenido */
+    margin: 70px auto 50px auto;
+    padding: 0 15px;
+}
+
+/* Reutilizamos .section-title-container.alt-title ya definido */
+
+.locations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Espacio entre bloques de ubicación */
+}
+
+.location-block {
+    background-color: rgba(20, 20, 20, 0.6); /* Fondo oscuro semi-transparente */
+    border-radius: 15px; /* Bordes redondeados para el bloque */
+    padding: 30px;
+    display: flex;
+    gap: 30px; /* Espacio entre imagen y texto */
+    align-items: center; /* Centrar verticalmente imagen y texto */
+    position: relative;
+}
+
+/* Estilo para invertir el orden (imagen a la derecha) */
+.location-block.layout-reversed {
+    flex-direction: row-reverse;
+}
+
+.location-image-container {
+    flex-shrink: 0; /* Evitar que la imagen se encoja */
+    width: 200px; /* Ancho fijo para la imagen */
+    height: 200px; /* Altura fija para la imagen */
+    border-radius: 25px; /* Bordes redondeados para la imagen */
+    /* Alternativa Clip-path (más complejo): */
+    /* clip-path: polygon(0% 15%, 15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%); */
+    overflow: hidden; /* Asegurar que la imagen se recorte */
+}
+
+.location-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Para que la imagen cubra sin distorsionarse */
+}
+
+.location-details {
+    flex-grow: 1; /* El texto ocupa el espacio restante */
+    padding-left: 10px; /* Pequeño espacio izquierdo */
+}
+
+.location-time {
+    display: inline-block;
+    background-color: rgba(40, 40, 40, 0.8); /* Fondo oscuro para la hora */
+    color: #e0e0e0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8em;
+    font-weight: 500;
+    padding: 5px 15px;
+    border-radius: 15px; /* Forma de píldora */
+    position: absolute;
+    top: 5px;      /* <<< CAMBIADO: Distancia desde el borde SUPERIOR del .location-block */
+    right: 20px;     /* <<< CAMBIADO: Distancia desde el borde DERECHO del .location-block */
+    z-index: 2;     /* Opcional: Asegurar que esté sobre otros elementos si hay superposición */
+}
+
+.location-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2em; /* Tamaño grande */
+    color: #f5f5f5;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.location-event-type {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8em;
+    color: #ccc;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    padding-bottom: 10px; /* Espacio para la línea */
+    border-bottom: 1px solid rgba(170, 170, 170, 0.3); /* Línea sutil debajo */
+    display: inline-block; /* Para que la línea no ocupe todo el ancho */
+}
+
+.location-address {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85em;
+    color: #b5b5b5;
+    line-height: 1.6;
+    text-transform: uppercase;
+    margin-bottom: 25px; /* Espacio antes del botón GPS */
+}
+
+.location-gps-link {
+    display: inline-flex; /* Para alinear icono y texto */
+    align-items: center;
+    gap: 8px; /* Espacio entre icono y texto */
+    background-color: rgba(30, 30, 30, 0.9); /* Fondo oscuro para botón */
+    color: #ccc;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8em;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 20px; /* Bordes redondeados */
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.location-gps-link:hover {
+    background-color: #d1b7a0; /* Color dorado al pasar el ratón */
+    color: #1a1a1a; /* Texto oscuro */
+}
+
+.location-gps-link i {
+    font-size: 0.9em; /* Tamaño relativo del icono */
+}
+
+/* === ESTILOS PARA SECCIÓN FILTRO Y HASHTAG === */
+
+.filter-section {
+    width: 100%;
+    max-width: 600px; /* Ancho ajustado */
+    margin: 70px auto 50px auto;
+    padding: 0 15px;
+    text-align: center; /* Centrar todo en esta sección */
+}
+
+/* Estilo para título sin líneas */
+.section-title-container.simple-title .section-title::before,
+.section-title-container.simple-title .section-title::after {
+    display: none; /* Ocultar líneas */
+}
+.section-title-container.simple-title .section-title {
+    padding: 0; /* Quitar padding extra si no hay líneas */
+}
+
+.social-filter-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espacio entre botones */
+    margin: 30px 0;
+}
+
+.social-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(40, 40, 40, 0.8);
+    color: #ccc;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85em;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 10px 25px;
+    border-radius: 25px; /* Bordes muy redondeados */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.social-button:hover {
+    background-color: #d1b7a0;
+    color: #1a1a1a;
+}
+
+.social-button i {
+    font-size: 1.1em; /* Icono ligeramente más grande */
+}
+
+.wedding-hashtag {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.6em;
+    color: #e5e5e5;
+    margin-top: 30px;
+}
+
+
+/* === ESTILOS PARA SECCIÓN SUGERENCIAS DE REGALO === */
+
+.gifts-section {
+    width: 100%;
+    max-width: 800px; /* Ancho para acomodar dos columnas */
+    margin: 70px auto 50px auto;
+    padding: 0 15px;
+}
+
+/* Estilo alternativo para separador (línea a la izquierda) */
+.separator-with-title.alt-separator {
+    flex-direction: row-reverse; /* Poner título a la derecha */
+}
+.separator-with-title.alt-separator .separator-line {
+    margin-right: 0; /* Quitar margen derecho */
+    margin-left: 20px; /* Añadir margen izquierdo */
+}
+
+
+.registry-links {
+    display: flex;
+    justify-content: space-around; /* Distribuir bloques */
+    gap: 20px; /* Espacio entre bloques */
+    margin-bottom: 50px; /* Espacio antes de datos bancarios */
+    padding: 0 10px; /* Padding lateral pequeño */
+    position: relative; /* Para la línea vertical */
+}
+
+/* Línea vertical separadora (sutil) */
+.registry-links::before {
+    content: '';
+    position: absolute;
+    top: 10%; /* Empezar un poco abajo */
+    bottom: 10%; /* Terminar un poco arriba */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    background-color: rgba(170, 170, 170, 0.3); /* Color sutil */
+}
+
+.registry-block {
+    flex: 1; /* Ocupar espacio disponible */
+    max-width: 45%; /* Limitar ancho */
+    text-align: center;
+    padding: 20px 10px; /* Padding interno */
+}
+
+.registry-icon {
+    font-size: 3.5em; /* Icono grande */
+    color: #f0f0f0; /* Icono blanco/gris claro */
+    opacity: 0.8;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.registry-store {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7em;
+    color: #e5e5e5;
+    margin-bottom: 5px;
+}
+
+.registry-code {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8em;
+    color: #aaa;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+.registry-button {
+    display: inline-flex; /* Copiamos estilo de botones GPS */
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(30, 30, 30, 0.9);
+    color: #ccc;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8em;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.registry-button:hover {
+    background-color: #d1b7a0;
+    color: #1a1a1a;
+}
+.registry-button i {
+    font-size: 0.9em;
+}
+
+
+.bank-details {
+    max-width: 500px; /* Limitar ancho de la lista bancaria */
+    margin: 40px auto 0 auto; /* Centrar y añadir margen superior */
+    padding-left: 20px; /* Pequeña indentación */
+}
+
+.bank-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espacio entre icono, etiqueta y valor */
+    margin-bottom: 15px; /* Espacio entre líneas */
+    text-align: left; /* Alinear texto a la izquierda */
+}
+
+.bank-icon {
+    font-size: 1.2em;
+    color: #c5c5c5; /* Color de iconos bancarios */
+    width: 20px; /* Ancho fijo para alinear texto */
+    text-align: center;
+}
+
+.bank-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9em;
+    color: #b5b5b5;
+    /* min-width: 100px; */ /* Opcional: Ancho mínimo si quieres alinear valores */
+}
+
+.bank-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9em;
+    font-weight: 500; /* Valor un poco más destacado */
+    color: #e0e0e0;
+    word-break: break-all; /* Para números largos */
+}
+
+/* --- Ajustes para Responsividad (Ejemplo Básico) --- */
+@media (max-width: 768px) {
+    .location-block,
+    .location-block.layout-reversed {
+        flex-direction: column; /* Apilar imagen y texto en móviles */
+        align-items: center; /* Centrar elementos apilados */
+        padding: 20px;
+        padding-top: 50px; /* <<< AÑADIDO: Más padding arriba para dar espacio al tiempo */
+    }
+
+    .location-image-container {
+        width: 100%; /* Imagen ocupa más ancho */
+        max-width: 250px; /* Pero con un máximo */
+        height: 180px; /* Altura ajustada */
+        margin-bottom: 20px; /* Espacio debajo de la imagen */
+    }
+
+    .location-details {
+        padding-left: 0; /* Quitar padding izquierdo */
+        padding-top: 0; /* Resetear padding top que añadimos para desktop */
+        text-align: center; /* Centrar texto */
+        width: 100%; /* Ocupar todo el ancho */
+    }
+
+     .location-time {
+        position: static; /* Posición normal en el flujo */
+        margin-bottom: 15px; /* Espacio debajo */
+        display: block; /* Ocupar su propia línea */
+        margin-left: auto; /* Centrar si es display:block */
+        margin-right: auto;
+        width: fit-content; /* Ajustar al contenido */
+        top: 15px; /* <<< AJUSTADO: Más cerca del borde superior en móvil */
+        right: 15px;/* <<< AJUSTADO: Más cerca del borde derecho en móvil */
+    }
+
+    .location-event-type {
+       margin-left: auto;
+       margin-right: auto;
+    }
+
+    .location-address {
+        font-size: 0.8em; /* Reducir un poco el texto */
+    }
+
+    .location-gps-link {
+       margin: 0 auto; /* Centrar el botón */
+    }
+
+    .social-filter-buttons {
+        flex-direction: column; /* Apilar botones sociales */
+        gap: 15px;
+        align-items: center; /* Centrar botones apilados */
+    }
+
+    .social-button {
+        width: 80%; /* Ancho mayor en móvil */
+        justify-content: center; /* Centrar contenido */
+        padding: 12px 20px;
+    }
+
+    .registry-links {
+        flex-direction: column; /* Apilar bloques de registro */
+        align-items: center;
+        gap: 0px; /* Quitar gap horizontal */
+        margin-bottom: 30px;
+    }
+
+    .registry-links::before {
+        display: none; /* Ocultar línea vertical en móvil */
+    }
+
+    .registry-block {
+        max-width: 90%; /* Ocupar más ancho */
+        width: 100%;
+        border-bottom: 1px solid rgba(170, 170, 170, 0.2); /* Línea horizontal separadora */
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+    }
+     .registry-block:last-child {
+        border-bottom: none; /* Quitar borde del último */
+        margin-bottom: 0;
+    }
+
+    .bank-details {
+         max-width: 95%; /* Casi todo el ancho */
+         padding-left: 0; /* Sin indentación */
+    }
+
+    .bank-detail-item {
+        gap: 10px; /* Reducir gap */
+    }
+
+    .bank-label,
+    .bank-value {
+        font-size: 0.85em; /* Texto ligeramente más pequeño */
+    }
+}
