@@ -658,23 +658,29 @@ h1 {
 /* Reutilizamos .section-title-container y .section-title definidos antes */
 
 .lodging-container {
-    display: flex;         /* Para poner hoteles lado a lado */
-    justify-content: space-around; /* Espacio entre bloques */
-    align-items: flex-start; /* Alinear arriba si tienen diferente altura */
-    flex-wrap: wrap;       /* Permitir que pasen abajo en pantallas pequeñas */
-    gap: 40px;             /* Espacio entre bloques */
-    margin-top: 50px;      /* Espacio después del título */
+    display: flex;
+    justify-content: space-around;
+    /* align-items: flex-start; */ /* <<< ELIMINA o COMENTA esta línea */
+    align-items: stretch;      /* <<< AÑADE o CAMBIA a esta línea */
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-top: 50px;
 }
 
 .lodging-block {
-    background-color: rgba(20, 20, 20, 0.5); /* Fondo sutil opcional */
-    border-radius: 15px;   /* Bordes redondeados opcional */
-    padding: 25px;         /* Espacio interno */
-    flex: 1 1 300px;       /* Flex: crecer, encoger, base de 300px */
-    max-width: 45%;        /* Máximo aprox para 2 columnas con gap */
-    min-width: 280px;      /* Ancho mínimo antes de envolver */
-    text-align: center;    /* Centrar contenido */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra sutil opcional */
+    background-color: rgba(20, 20, 20, 0.5);
+    border-radius: 15px;
+    padding: 25px;
+    flex: 1 1 300px;
+    max-width: 45%;
+    min-width: 280px;
+    /* text-align: center; */ /* <<< Puedes quitarlo si flex lo maneja */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+    /* --- AÑADIR/MODIFICAR ESTAS PROPIEDADES --- */
+    display: flex;              /* Convertir el bloque en contenedor flex */
+    flex-direction: column;     /* Dirección vertical (imagen arriba, detalles abajo) */
+    align-items: center;        /* Centrar horizontalmente imagen y contenedor de detalles */
 }
 
 .lodging-image-container {
@@ -684,6 +690,8 @@ h1 {
     overflow: hidden;      /* Recortar la imagen a la forma */
     margin: 0 auto 25px auto; /* Centrar horizontalmente y espacio abajo */
     border: 3px solid rgba(255, 255, 255, 0.1); /* Borde sutil opcional */
+    margin: 0 auto 25px auto; /* Asegurar margen inferior */
+    flex-shrink: 0; /* Evitar que se encoja */
 }
 
 .lodging-image {
@@ -693,27 +701,41 @@ h1 {
     object-fit: cover;     /* Asegurar que la imagen cubra el círculo */
 }
 
+
 .lodging-details {
-    /* Contenedor para el texto */
+    /* --- AÑADIR ESTAS PROPIEDADES --- */
+    display: flex;              /* Convertir en contenedor flex */
+    flex-direction: column;     /* Dirección vertical para los items de info */
+    align-items: center;  /* Centrar horizontalmente los items (si no heredan text-align) */
+    flex-grow: 1;               /* Hacer que este contenedor ocupe el espacio vertical extra */
+    width: 100%;                /* Ocupar el ancho del bloque */
+    text-align: center;         /* Centrar texto dentro de este contenedor */
 }
 
 .lodging-name {
     font-family: 'Playfair Display', serif;
     font-size: 1.8em;
     color: #f0f0f0;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     line-height: 1.3;
+    flex-shrink: 0; /* Evitar que se encoja */
 }
 
 .lodging-info-item {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centrar icono y texto */
     gap: 10px;              /* Espacio entre icono y texto */
     margin-bottom: 12px;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.9em;
     color: #c5c5c5;
+    flex-shrink: 0; /* Evitar que se encojan los items */
+    width: 100%; /* Asegurar que ocupe ancho para centrar texto interno */
+    max-width: 250px; /* Limitar ancho para mejor lectura (opcional) */
+    margin-left: auto; /* Centrar el item en sí */
+    margin-right: auto; /* Centrar el item en sí */
+    /* Ajustar alineación interna del icono y texto si se desalinea */
+    justify-content: center; /* Puedes probar a volver a ponerlo aquí si es necesario */
 }
 
 .lodging-info-item i { /* Estilo del icono */
@@ -724,20 +746,19 @@ h1 {
 }
 
 .lodging-info-item span {
-    text-align: left; /* Alinear texto a la izquierda si es largo */
+    text-align: left; 
 }
 
 .lodging-info-item strong { /* Estilo para el código de descuento */
-    font-weight: 500;
-    color: #e0e0e0;
-    display: block; /* Poner en línea nueva si se quiere */
-    margin-top: 2px;
+    display: block; /* Código en línea nueva */
+     text-align: left; /* Asegurar centrado del código */
+     margin-top: 2px;
 }
 
 .lodging-info-item a { /* Estilo para enlace de teléfono */
-    color: inherit; /* Heredar color del span */
+    display: inline-block;
+    color: inherit;
     text-decoration: none;
-    transition: color 0.3s ease;
 }
 .lodging-info-item a:hover {
     color: #d1b7a0; /* Cambiar color al pasar el ratón */
@@ -755,10 +776,23 @@ h1 {
     font-size: 0.8em;
     font-weight: 500;
     transition: background-color 0.3s ease, color 0.3s ease;
+    margin-top: 20px; /* Empujar hacia abajo (si usas justify-content: space-between en details) */
+     /* O simplemente mantener margen: */
+     /* margin-top: 20px; */
+     flex-shrink: 0;
 }
 .lodging-button:hover {
     background-color: #d1b7a0;
     color: #1a1a1a;
+}
+
+.lodging-info-content {
+    display: flex;
+    flex-direction: column;     /* Apilar items verticalmente */
+    align-items: center;        /* Centrar items horizontalmente */
+    width: 100%;                /* Ocupar ancho */
+    margin-top: auto;           /* <<< EMPUJAR TODO ESTE BLOQUE HACIA ABAJO */
+    padding-top: 15px;          /* Espacio opcional arriba, dentro del wrapper */
 }
 
 
@@ -841,13 +875,26 @@ h1 {
         font-size: 1.6em;
     }
     .lodging-info-item {
-        font-size: 0.85em;
-         justify-content: flex-start; /* Alinear a la izquierda en móvil */
-         text-align: left;
-         padding-left: 10%; /* Indentación para centrar visualmente */
-         padding-right: 10%;
+        /* Revisa si la alineación izquierda/padding aún tiene sentido en móvil */
+        /* justify-content: flex-start; */
+        /* padding-left: 10%; */
+        /* padding-right: 10%; */
+        /* O simplemente centrar todo */
+        justify-content: center;
+        text-align: center;
+        padding-left: 0;
+        padding-right: 0;
     }
      .lodging-info-item i {
          flex-shrink: 0; /* Evitar que el icono se encoja */
      }
+
+
+     .lodging-info-item span {
+        text-align: center;
+     }
+
+     .lodging-info-item strong {
+        text-align: center;
+    }
 }
