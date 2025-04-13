@@ -213,12 +213,21 @@ body::before {
     font-weight: 500;
 }
 
-/* Ocultar elementos de confirmación cuando se muestra el QR */
-/* Añadiremos una clase al body o sección para activar esto */
-.qr-code-shown .rsvp-options,
-.qr-code-shown .rsvp-contact-prompt,
+/* Ocultar SOLO el botón principal cuando se muestra el QR */
 .qr-code-shown .confirm-main-rsvp-button {
-    display: none !important; /* Ocultar con importancia */
+    display: none !important;
+}
+
+/* Ajustar margen inferior del texto de dudas si el botón se oculta */
+.qr-code-shown .rsvp-contact-prompt {
+    margin-bottom: 50px; /* Mantener o ajustar espacio antes de opciones */
+}
+
+/* Ajustar margen/padding superior de las opciones si el botón se oculta */
+.qr-code-shown .rsvp-options {
+    margin-top: 0; /* Resetear margen si es necesario */
+    padding-top: 40px; /* Mantener o ajustar padding */
+    border-top: 1px solid rgba(170, 170, 170, 0.2); /* Asegurar que la línea siga visible */
 }
 .qr-code-shown .rsvp-deadline {
      margin-bottom: 20px; /* Menos margen si ya confirmó */
