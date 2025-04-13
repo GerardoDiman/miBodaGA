@@ -795,6 +795,143 @@ h1 {
     padding-top: 15px;          /* Espacio opcional arriba, dentro del wrapper */
 }
 
+.rsvp-section {
+    width: 100%;
+    max-width: 750px; /* Ancho similar a Dress Code */
+    margin: 70px auto 50px auto;
+    padding: 0 15px;
+    text-align: center; /* Centrar texto por defecto */
+}
+
+/* Reutilizamos .separator-with-title.alt-separator definido antes */
+
+.rsvp-heading {
+    font-family: 'Montserrat', sans-serif; /* Fuente sans-serif */
+    font-size: 1.4em; /* Tamaño grande */
+    letter-spacing: 5px; /* Muy espaciado */
+    color: #e5e5e5;
+    text-transform: uppercase;
+    margin: 40px 0 15px 0; /* Espacio arriba y abajo */
+}
+
+.rsvp-deadline {
+    font-family: 'Playfair Display', serif; /* Fuente serif */
+    font-size: 0.9em;
+    font-style: italic; /* Cursiva */
+    color: #b0b0b0;
+    margin-bottom: 50px; /* Espacio antes de las opciones */
+}
+
+.rsvp-options {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start; /* Alinear arriba */
+    flex-wrap: wrap; /* Permitir envolver */
+    gap: 30px; /* Espacio entre opciones */
+    border-top: 1px solid rgba(170, 170, 170, 0.2); /* Línea divisoria superior */
+    padding-top: 40px; /* Espacio sobre las opciones */
+    position: relative; /* Para línea vertical */
+}
+
+/* Línea vertical separadora */
+.rsvp-options::before {
+    content: '';
+    position: absolute;
+    top: 15%; /* Ajusta inicio */
+    bottom: 15%; /* Ajusta fin */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    background-color: rgba(170, 170, 170, 0.2); /* Color sutil */
+}
+
+
+.rsvp-option {
+    flex: 1 1 250px; /* Crecer, encoger, base de 250px */
+    max-width: 45%;   /* Máximo para 2 columnas */
+    min-width: 220px; /* Ancho mínimo */
+    text-align: center;
+    padding: 10px;
+}
+
+.rsvp-icon {
+    font-size: 3em; /* Icono grande */
+    color: #f0f0f0;
+    margin-bottom: 20px;
+    display: block; /* Que ocupe su línea */
+}
+
+.rsvp-method-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6em;
+    color: #e0e0e0;
+    margin-bottom: 25px;
+}
+
+.rsvp-button {
+    display: inline-flex; /* Estilo similar a otros botones */
+    align-items: center;
+    justify-content: center; /* Centrar icono y texto */
+    gap: 10px;
+    background-color: rgba(30, 30, 30, 0.9);
+    color: #ccc;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8em;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 10px 30px; /* Más padding */
+    border-radius: 25px; /* Redondeado */
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-width: 150px; /* Ancho mínimo */
+}
+
+.rsvp-button:hover {
+    background-color: #d1b7a0;
+    color: #1a1a1a;
+}
+
+.rsvp-button i {
+    font-size: 1em; /* Tamaño del icono dentro del botón */
+}
+
+.rsvp-contact-prompt {
+    font-family: 'Montserrat', sans-serif; /* O la fuente que prefieras */
+    font-size: 0.9em;
+    color: #b0b0b0; /* Un color grisáceo, similar a deadline pero quizá un poco más claro */
+    padding: 0 15px; /* Padding lateral por si acaso */
+    margin-top: 15px; /* Espacio DESPUÉS del nuevo botón */
+    margin-bottom: 40px; /* Espacio ANTES de las opciones */
+}
+
+/* Estilo para el NUEVO botón principal de confirmar */
+.confirm-main-rsvp-button {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #e0e0e0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 12px 45px; /* Padding un poco más grande */
+    /* Ajustar márgenes para su posición */
+    margin-top: 25px;      /* Espacio DESPUÉS de la fecha límite */
+    margin-bottom: 15px;   /* Espacio ANTES del texto de dudas */
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9em;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    text-decoration: none; /* Si usas <a> */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.confirm-main-rsvp-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+}
 
 /* === AJUSTES RESPONSIVIDAD === */
 @media (max-width: 768px) {
@@ -896,5 +1033,46 @@ h1 {
 
      .lodging-info-item strong {
         text-align: center;
+    }
+
+    .rsvp-heading {
+        font-size: 1.2em;
+        letter-spacing: 4px;
+    }
+    .rsvp-deadline {
+        font-size: 0.85em;
+    }
+
+    .rsvp-options {
+        padding-top: 30px;
+    }
+
+    .rsvp-options::before {
+        display: none; /* Ocultar línea vertical */
+    }
+
+    .rsvp-option {
+        max-width: 80%; /* Ocupar más ancho */
+        width: 100%;
+         border-bottom: 1px solid rgba(170, 170, 170, 0.2); /* Línea horizontal separadora */
+         padding-bottom: 40px;
+    }
+     .rsvp-option:last-child {
+        border-bottom: none; /* Quitar borde del último */
+    }
+
+     .rsvp-icon { font-size: 2.5em; }
+     .rsvp-method-title { font-size: 1.4em; }
+
+     .rsvp-contact-prompt {
+        margin-top: 15px;
+        margin-bottom: 30px;
+    }
+
+    .confirm-main-rsvp-button {
+        padding: 10px 30px;
+        font-size: 0.85em;
+        margin-top: 20px;
+        margin-bottom: 15px;
     }
 }
