@@ -37,6 +37,134 @@ body::before {
     z-index: -1;
 }
 
+/* === ESTILOS REPRODUCTOR AUDIO MINIMALISTA === */
+
+#audio-toggle-button {
+    /* Quitar position, top, left, z-index (ahora están en el contenedor) */
+    /* position: fixed; top: 15px; left: 15px; z-index: 100; */
+
+    background-color: transparent; /* Hacer el botón transparente dentro del contenedor */
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    /* transition ya no es necesaria aquí */
+}
+/* Quitar hover del botón individual si se prefiere hover en contenedor */
+/* #audio-toggle-button:hover { background-color: rgba(0, 0, 0, 0.7); } */
+
+#play-pause-icon {
+    font-size: 0.9em;
+}
+
+/* Contenedor del Control de Volumen */
+#volume-control {
+    display: flex;
+    align-items: center;
+    overflow: hidden; /* Ocultar slider inicialmente */
+    width: 0; /* Ancho inicial cero */
+    opacity: 0; /* Opacidad inicial cero */
+    transition: width 0.4s ease, opacity 0.4s ease; /* Transición suave */
+    margin-left: 5px; /* Pequeño espacio si el slider está visible */
+}
+
+/* Mostrar el control de volumen al pasar el ratón por el CONTENEDOR */
+#audio-controls-container:hover #volume-control {
+    width: 130px; /* <<< Ancho deseado para icono + slider (ajusta) */
+    opacity: 1;
+}
+
+#volume-icon {
+    color: #fff;
+    font-size: 0.9em;
+    margin: 0 8px 0 5px; /* Espacios alrededor del icono de volumen */
+    cursor: pointer; /* Permitir clic para mute */
+}
+
+#volume-slider {
+    /* Estilo básico del slider */
+    flex-grow: 1; /* Ocupar espacio restante */
+    height: 5px; /* Altura de la barra */
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.3); /* Fondo de la barra */
+    border-radius: 5px;
+
+    /* --- Quitar apariencia por defecto para estilizar --- */
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+}
+
+/* Estilo para el 'thumb' (la bolita) en Webkit (Chrome, Safari) */
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #fff; /* Color de la bolita */
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Estilo para el 'thumb' en Firefox */
+#volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none; /* Quitar borde por defecto de FF */
+}
+
+ /* Estilo para la barra de progreso (opcional, mejora visual) */
+/* (No funciona perfectamente en todos los navegadores sin JS adicional) */
+/* #volume-slider::-webkit-progress-value { background-color: #fff; border-radius: 5px;} */
+/* #volume-slider::-moz-progress-bar { background-color: #fff; border-radius: 5px;} */
+
+
+/* Ocultar el reproductor de audio por defecto */
+#background-audio {
+    display: none;
+}
+
+#audio-toggle-button:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* Oscurecer un poco al pasar el ratón */
+}
+
+#play-pause-icon {
+    font-size: 0.9em; /* Tamaño del icono (ajusta si es necesario) */
+    /* El centrado lo hace el flex del botón */
+}
+
+/* Ocultar el reproductor de audio por defecto */
+#background-audio {
+    display: none;
+}
+
+#audio-controls-container { /* Nuevo Contenedor */
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 100;
+    display: flex; /* Para alinear botón y control de volumen */
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo para el contenedor */
+    border-radius: 25px; /* Redondear el contenedor */
+    padding: 5px; /* Pequeño padding interno */
+    transition: background-color 0.3s ease;
+}
+
+/* Opcional: Oscurecer contenedor al pasar el ratón */
+#audio-controls-container:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
 /* Capa oscura sobre el fondo */
 .background-overlay {
     position: fixed;
@@ -47,64 +175,6 @@ body::before {
     background: linear-gradient(to bottom, rgba(30, 25, 20, 0.7), rgba(10, 5, 0, 0.9));
     z-index: -1;
 }
-
-
-/* Reproductor Falso */
-.fake-player {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50px;
-    background-color: #0077cc;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    z-index: 10;
-}
-
-.fake-player .play-button {
-    width: 25px;
-    height: 25px;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    position: relative;
-    cursor: pointer;
-    margin-right: 15px;
-}
-.fake-player .play-button::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 55%;
-    transform: translate(-50%, -50%);
-    width: 0;
-    height: 0;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
-    border-left: 10px solid white;
-}
-
-.fake-player .progress-bar-container {
-    flex-grow: 1;
-    height: 6px;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-right: 15px;
-}
-.fake-player .progress-bar {
-    width: 5%;
-    height: 100%;
-    background-color: white;
-    border-radius: 3px;
-}
-
-.fake-player .time {
-    font-size: 0.8em;
-    color: white;
-}
-
 
 /* Contenedor Principal */
 .container {

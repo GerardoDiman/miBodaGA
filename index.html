@@ -11,16 +11,21 @@
     <script src="https://kit.fontawesome.com/171beeb065.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="background-overlay"></div>
-
-    <!-- Reproductor Falso -->
-    <div class="fake-player">
-        <div class="play-button"></div>
-        <div class="progress-bar-container">
-            <div class="progress-bar"></div>
+        <!-- Reproductor de Audio Funcional Minimalista -->
+    <div id="audio-controls-container"> <!-- Contenedor Principal -->
+        <button id="audio-toggle-button" aria-label="Reproducir/Pausar música">
+            <i id="play-pause-icon" class="fas fa-play"></i>
+        </button>
+        <div id="volume-control" class="volume-hidden"> <!-- Contenedor para el slider -->
+            <i class="fas fa-volume-high" id="volume-icon"></i> <!-- Icono de volumen -->
+            <input type="range" id="volume-slider" min="0" max="100" value="50" aria-label="Control de volumen"> <!-- Slider -->
         </div>
-        <div class="time">02:54</div>
     </div>
+    <!-- El elemento <audio> real (oculto con CSS) -->
+    <audio id="background-audio" src="unicos.mp3" loop></audio>
+    <!-- Reemplaza "cancion.mp3" con la ruta a tu archivo de música -->
+
+    <div class="background-overlay"></div>
 
     <div class="container">
         <!-- Sección Título Boda -->
@@ -188,7 +193,7 @@
                 <h3 class="section-title">USA NUESTRO FILTRO</h3>
             </div>
             <div class="social-filter-buttons">
-                <a href="#" class="social-button facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i> EN FACEBOOK</a>
+                <a href="https://www.facebook.com/hashtag/Alejandra&Gerardo2025?__tsid__=0.14386744298439236&__epa__=SEARCH_BOX&__eps__=comet.home&__eep__=4&locale=es_LA" class="social-button facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i> EN FACEBOOK</a>
                 <a href="#" class="social-button instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i> EN INSTAGRAM</a>
             </div>
             <h4 class="wedding-hashtag">#Alejandra&Gerardo2025</h4>
@@ -235,6 +240,6 @@
     <!-- Scripts JS -->
     <script src="countdown.js"></script>
     <script src="gallery.js"></script>
-
+    <script src="player.js"></script>
 </body>
 </html>
