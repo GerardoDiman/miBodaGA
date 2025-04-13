@@ -165,6 +165,65 @@ body::before {
     background-color: rgba(0, 0, 0, 0.7);
 }
 
+#qr-code-display {
+    margin-top: 40px; /* Espacio sobre el contenedor QR */
+    padding: 30px 20px;
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo claro sutil */
+    border-radius: 15px;
+    display: flex; /* Usar flex para centrar contenido */
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.qr-code-intro {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9em;
+    color: #d0d0d0;
+    margin-bottom: 20px;
+    max-width: 300px; /* Limitar ancho del texto intro */
+    line-height: 1.5;
+}
+
+#qrcode-target {
+    width: 180px; /* Ancho del QR */
+    height: 180px; /* Alto del QR */
+    padding: 10px; /* Espacio para que respire */
+    background-color: #fff; /* Fondo blanco para el QR */
+    border-radius: 8px; /* Bordes redondeados suaves */
+    margin-bottom: 15px;
+    display: flex; /* Para centrar el canvas/img generado */
+    justify-content: center;
+    align-items: center;
+}
+/* Estilos para la imagen/canvas generado por qrcode.js si es necesario */
+#qrcode-target img,
+#qrcode-target canvas {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+.qr-guest-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1em;
+    color: #e5e5e5;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+/* Ocultar elementos de confirmación cuando se muestra el QR */
+/* Añadiremos una clase al body o sección para activar esto */
+.qr-code-shown .rsvp-options,
+.qr-code-shown .rsvp-contact-prompt,
+.qr-code-shown .confirm-main-rsvp-button {
+    display: none !important; /* Ocultar con importancia */
+}
+.qr-code-shown .rsvp-deadline {
+     margin-bottom: 20px; /* Menos margen si ya confirmó */
+}
+
 /* Capa oscura sobre el fondo */
 .background-overlay {
     position: fixed;

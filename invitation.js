@@ -1,95 +1,189 @@
-// Espera a que todo el HTML esté cargado y listo
+// invitation.js
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Obtener referencias a los elementos HTML que actualizaremos
+    // --- Referencias a Elementos ---
     const guestNameElement = document.getElementById('guest-name-placeholder');
     const guestPassesElement = document.getElementById('guest-passes-placeholder');
     const guestKidsElement = document.getElementById('guest-kids-placeholder');
-    const guestDetailsContainer = document.getElementById('guest-passes-details'); // El <span> que contiene pases/niños
+    const guestDetailsContainer = document.getElementById('guest-passes-details');
+    const confirmButton = document.querySelector('.confirm-main-rsvp-button');
+    const rsvpSectionElements = document.querySelectorAll('.rsvp-heading, .rsvp-deadline, .confirm-main-rsvp-button, .rsvp-contact-prompt, .rsvp-options'); // Elementos a ocultar/mostrar
+    const qrDisplayContainer = document.getElementById('qr-code-display');
+    const qrCodeTargetDiv = document.getElementById('qrcode-target');
+    const qrGuestNameDisplay = document.getElementById('qr-guest-name-display');
 
-    // Verificar si los elementos existen (buena práctica)
-    if (!guestNameElement || !guestPassesElement || !guestKidsElement || !guestDetailsContainer) {
-        console.error("Error: No se encontraron todos los elementos placeholder necesarios en el HTML.");
-        // Podrías mostrar un error genérico en la página aquí si lo deseas
-        if(guestNameElement) guestNameElement.textContent = "Error en la página";
-        return; // Detener la ejecución si faltan elementos clave
+    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgPRD9WI4cj35G5LprFJKMjL4KNkKSN3fJtsBguv1SxRZikHf2uUiTmOPuo0tqQDTH/exec'; // <<< ¡¡TU URL!!
+
+    let invitadoActual = null; // Datos del invitado cargados desde JSON
+    let confirmacionVerificada = false; // Para saber si ya chequeamos con el script
+    let yaConfirmoSheet = false; // Estado según Google Sheet
+
+    // --- Funciones Helper ---
+    function mostrarErrorCarga(mensaje = "Error al cargar datos") {
+        if (guestNameElement) guestNameElement.textContent = mensaje;
+        if (guestDetailsContainer) guestDetailsContainer.style.display = 'none';
+        if (confirmButton) confirmButton.style.display = 'none';
+        rsvpSectionElements.forEach(el => el.style.display = 'none'); // Ocultar sección RSVP
+         if (qrDisplayContainer) qrDisplayContainer.style.display = 'none';
     }
 
-    // --- PASO 1: Obtener el ID del invitado desde la URL ---
+    function displayQrCode(invitado) {
+        if (!qrDisplayContainer || !qrCodeTargetDiv || !qrGuestNameDisplay || !invitado) return;
+        console.log("Mostrando QR para:", invitado.id);
+        qrCodeTargetDiv.innerHTML = '';
+        try {
+            new QRCode(qrCodeTargetDiv, { text: invitado.id, width: 160, height: 160, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H });
+            qrGuestNameDisplay.textContent = invitado.nombre;
+            qrDisplayContainer.style.display = 'flex';
+            // Ocultar elementos de confirmación
+            rsvpSectionElements.forEach(el => {
+                if (el !== qrDisplayContainer) { // No ocultar el propio contenedor QR si está dentro
+                     el.style.display = 'none';
+                }
+            });
+             document.body.classList.add('qr-code-shown'); // Clase CSS opcional
+        } catch(qrError) { /* ... manejo error QR ... */ }
+    }
+
+    function updateUIBasedOnConfirmation(confirmado) {
+         yaConfirmoSheet = confirmado;
+         if (confirmado && invitadoActual) {
+             displayQrCode(invitadoActual); // Mostrar QR si está confirmado
+             // Opcional: Actualizar estado botón aunque esté oculto por la clase .qr-code-shown
+              if (confirmButton) {
+                 confirmButton.textContent = "¡Confirmado!";
+                 confirmButton.style.backgroundColor = '#4CAF50';
+                 confirmButton.disabled = true;
+              }
+         } else if (!confirmado && invitadoActual) {
+             // Asegurar que elementos de confirmación estén visibles y QR oculto
+             rsvpSectionElements.forEach(el => el.style.display = ''); // Resetear display
+              if (qrDisplayContainer) qrDisplayContainer.style.display = 'none';
+              document.body.classList.remove('qr-code-shown');
+              if (confirmButton) {
+                 confirmButton.textContent = "Confirmar";
+                 confirmButton.style.backgroundColor = '';
+                 confirmButton.style.borderColor = '';
+                 confirmButton.disabled = false;
+                 confirmButton.style.display = 'inline-block'; // Asegurar visibilidad
+              }
+         }
+         // También guardar/borrar en localStorage si se quiere usar como caché secundario
+         const confirmationKey = `boda_confirmado_${invitadoActual?.id}`;
+         if (confirmado) {
+              try { localStorage.setItem(confirmationKey, 'true'); } catch(e){}
+         } else {
+              try { localStorage.removeItem(confirmationKey); } catch(e){}
+         }
+    }
+
+
+    // --- Lógica Principal ---
     const urlParams = new URLSearchParams(window.location.search);
-    const guestId = urlParams.get('invitado'); // Busca el parámetro "?invitado=CODIGO"
+    const guestId = urlParams.get('invitado');
 
-    // Verificar si se proporcionó un ID en la URL
     if (!guestId) {
-        console.warn("No se especificó un código de invitado en la URL.");
-        guestNameElement.textContent = "Invitación Genérica"; // Mostrar un título genérico
-        guestDetailsContainer.style.display = 'none'; // Ocultar pases/niños
-        // Podrías ocultar otras secciones o mostrar un mensaje diferente
-        return; // Detener si no hay ID
+        console.warn("No se especificó ID de invitado.");
+        mostrarErrorCarga("Invitación Genérica");
+        return;
     }
+    console.log(`ID encontrado: ${guestId}`);
 
-    console.log(`ID de invitado encontrado en URL: ${guestId}`);
-
-    // --- PASO 2: Cargar los datos de los invitados desde invitados.json ---
-    fetch('invitados.json') // Asegúrate que el archivo esté en la misma ruta o ajusta la ruta
+    // 1. Cargar datos del invitado DESDE JSON PRIMERO para tener el nombre
+    fetch('invitados.json')
         .then(response => {
-            // Verificar si la respuesta del servidor fue exitosa
-            if (!response.ok) {
-                // Lanza un error si hubo problemas (ej. archivo no encontrado 404)
-                throw new Error(`Error al cargar invitados.json: ${response.status} ${response.statusText}`);
-            }
-            // Convertir la respuesta a formato JSON
+            if (!response.ok) { throw new Error(`Error ${response.status} cargando invitados.json`); }
             return response.json();
         })
         .then(invitados => {
-            // --- PASO 3: Buscar al invitado específico usando el ID ---
-            console.log("Datos de invitados cargados:", invitados); // Para depuración
-            const invitadoActual = invitados.find(inv => inv.id === guestId);
-
-            // --- PASO 4: Actualizar el HTML con los datos encontrados ---
-            if (invitadoActual) {
-                console.log("Invitado encontrado:", invitadoActual);
-
-                // Actualizar Nombre
-                guestNameElement.textContent = invitadoActual.nombre;
-
-                // Actualizar Pases y Niños (placeholders)
-                guestPassesElement.textContent = invitadoActual.pases;
-                guestKidsElement.textContent = invitadoActual.ninos;
-
-                // Mostrar el contenedor principal de la línea
-                guestDetailsContainer.style.display = 'flex'; // Asegurar que el contenedor sea visible
-
-                // Referencias a los spans específicos
-                const kidsSpanElement = guestDetailsContainer.querySelector('.guest-pass-kids');
-                const separatorSpanElement = guestDetailsContainer.querySelector('.guest-pass-separator');
-
-                if (invitadoActual.ninos === 0) {
-                    // Ocultar sección Niños y separador si no hay niños
-                    if (kidsSpanElement) kidsSpanElement.style.display = 'none';
-                    if (separatorSpanElement) separatorSpanElement.style.display = 'none';
-
-                    // Opcional: Cambiar "PASES" a "PASE" si solo hay 1 pase
-                    const passesSpanElement = guestDetailsContainer.querySelector('.guest-pass-item:not(.guest-pass-kids)'); // Selecciona el primer item (Pases)
-                    if (invitadoActual.pases === 1) {
-                        if (passesSpanElement) passesSpanElement.innerHTML = `<span id="guest-passes-placeholder">${invitadoActual.pases}</span> - PASE`;
-                    } else {
-                        if (passesSpanElement) passesSpanElement.innerHTML = `<span id="guest-passes-placeholder">${invitadoActual.pases}</span> - PASES`; // Asegurar plural
-                    }
-
-                } else {
-                    // Asegurarse que estén visibles si hay niños
-                    if (kidsSpanElement) kidsSpanElement.style.display = 'inline'; // O 'inline-block'
-                    if (separatorSpanElement) separatorSpanElement.style.display = 'inline'; // O 'inline-block'
-
-                    // Asegurar texto plural para pases
-                    const passesSpanElement = guestDetailsContainer.querySelector('.guest-pass-item:not(.guest-pass-kids)');
-                     if (passesSpanElement) passesSpanElement.innerHTML = `<span id="guest-passes-placeholder">${invitadoActual.pases}</span> - PASES`;
-                }
-
-            } else {
-                // ... (Manejo ID no encontrado) ...
-                guestNameElement.textContent = "Invitación No Válida";
-                guestDetailsContainer.style.display = 'none';
+            invitadoActual = invitados.find(inv => inv.id === guestId);
+            if (!invitadoActual) {
+                throw new Error(`Invitado con ID "${guestId}" no encontrado en invitados.json.`);
             }
-})});
+            console.log("Invitado encontrado en JSON:", invitadoActual);
+            // Mostrar datos básicos inmediatamente
+            guestNameElement.textContent = invitadoActual.nombre;
+            guestPassesElement.textContent = invitadoActual.pases;
+            guestKidsElement.textContent = invitadoActual.ninos;
+            guestDetailsContainer.style.display = 'flex'; // Mostrar pases/niños
+             // Lógica para ocultar niños si es 0 (como antes)
+             const kidsSpanElement = guestDetailsContainer.querySelector('.guest-pass-kids');
+             const separatorSpanElement = guestDetailsContainer.querySelector('.guest-pass-separator');
+             if (invitadoActual.ninos === 0) {
+                 if (kidsSpanElement) kidsSpanElement.style.display = 'none';
+                 if (separatorSpanElement) separatorSpanElement.style.display = 'none';
+                 const passesSpanElement = guestDetailsContainer.querySelector('.guest-pass-item:not(.guest-pass-kids)');
+                 if (invitadoActual.pases === 1) { if(passesSpanElement) passesSpanElement.innerHTML = `<span id="guest-passes-placeholder">${invitadoActual.pases}</span> - PASE`; }
+                 else { if(passesSpanElement) passesSpanElement.innerHTML = `<span id="guest-passes-placeholder">${invitadoActual.pases}</span> - PASES`; }
+             } else {
+                 if (kidsSpanElement) kidsSpanElement.style.display = 'inline';
+                 if (separatorSpanElement) separatorSpanElement.style.display = 'inline';
+                 const passesSpanElement = guestDetailsContainer.querySelector('.guest-pass-item:not(.guest-pass-kids)');
+                 if(passesSpanElement) passesSpanElement.innerHTML = `<span id="guest-passes-placeholder">${invitadoActual.pases}</span> - PASES`;
+             }
+
+
+            // 2. AHORA, verificar estado de confirmación con Google Script
+            console.log("Verificando estado de confirmación...");
+            const checkUrl = `${GOOGLE_APPS_SCRIPT_URL}?action=checkStatus&id=${guestId}&t=${Date.now()}`; // Añadir timestamp para evitar caché
+            return fetch(checkUrl); // Devolver la promesa del fetch
+        })
+        .then(response => {
+             if (!response.ok) { throw new Error(`Error ${response.status} verificando estado.`); }
+             return response.json();
+        })
+        .then(data => {
+             console.log("Respuesta del checkStatus:", data);
+             confirmacionVerificada = true;
+             updateUIBasedOnConfirmation(data.status === 'confirmed');
+        })
+        .catch(error => {
+            console.error("Error en carga inicial o verificación de estado:", error);
+            // Si falla la verificación, podríamos asumir que no está confirmado o mostrar error
+             mostrarErrorCarga("Error al cargar datos"); // O un mensaje más específico
+             // O permitir confirmar de todas formas si falló el check:
+             // if (invitadoActual && confirmButton) { confirmButton.style.display = 'inline-block'; }
+        });
+
+
+    // --- Listener del Botón Confirmar ---
+    if (confirmButton) {
+        confirmButton.addEventListener('click', () => {
+            if (!invitadoActual || yaConfirmoSheet || confirmButton.disabled) {
+                console.log("Confirmación no posible o ya realizada.");
+                return;
+            }
+
+            confirmButton.disabled = true;
+            confirmButton.textContent = "Confirmando...";
+            const dataToSend = { id: invitadoActual.id, nombre: invitadoActual.nombre, pases: invitadoActual.pases, ninos: invitadoActual.ninos };
+
+            fetch(GOOGLE_APPS_SCRIPT_URL, { method: 'POST', cache: 'no-cache', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow', body: JSON.stringify(dataToSend) })
+                .then(response => {
+                    if (!response.ok) { return response.json().catch(() => response.text()).then(err => { throw new Error(err || response.statusText); }); }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Respuesta del doPost:", data);
+                    if (data.status === 'success' || data.status === 'already_confirmed') {
+                         // Mostrar QR en ambos casos (éxito o si ya estaba confirmado pero el check inicial falló)
+                         displayQrCode(invitadoActual);
+                         try { localStorage.setItem(`boda_confirmado_${invitadoActual.id}`, 'true'); } catch (e) {}
+                         yaConfirmoSheet = true; // Marcar como confirmado
+                    } else {
+                        throw new Error(data.message || "Respuesta inesperada al confirmar.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al enviar/procesar confirmación POST:', error);
+                    alert(`Hubo un error al confirmar: ${error.message}. Inténtalo de nuevo.`);
+                    // Rehabilitar solo si NO está ya confirmado en la hoja
+                    if (!yaConfirmoSheet) {
+                       confirmButton.disabled = false;
+                       confirmButton.textContent = "Confirmar";
+                    }
+                });
+        });
+    }
+
+}); // Fin DOMContentLoaded
