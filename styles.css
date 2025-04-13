@@ -1030,6 +1030,56 @@ h1 {
     color: #fff;
 }
 
+#validation-view {
+    background-color: rgba(30, 30, 30, 0.85); /* Fondo oscuro */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 40px 30px;
+    margin: 50px auto; /* Centrar y dar espacio */
+    max-width: 500px; /* Ancho máximo */
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    color: #e0e0e0; /* Color de texto principal */
+}
+
+#validation-view h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+.validation-details {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.validation-details p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1em;
+    line-height: 1.8;
+    margin-bottom: 10px;
+}
+
+.validation-details p strong {
+    color: #d1b7a0; /* Color dorado para etiquetas */
+    margin-right: 8px;
+    font-weight: 500;
+}
+
+.validation-details p span {
+    color: #fff; /* Color blanco para valores */
+    font-weight: 500;
+}
+
+.validation-status {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #4CAF50; /* Verde para éxito */
+}
+
 /* === AJUSTES RESPONSIVIDAD === */
 @media (max-width: 768px) {
 
