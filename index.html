@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Boda de Alejandra & Gerardo</title> <!-- Título actualizado -->
+    <title>La Boda de Alejandra & Gerardo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -32,7 +32,7 @@
         <!-- Contenido Principal (Foto y Fecha Vertical) -->
         <main class="main-content">
             <div class="photo-container">
-                <img src="img09.jpg" alt="Alejandra y Gerardo"> <!-- Alt text actualizado -->
+                <img src="img09.jpg" alt="Alejandra y Gerardo">
             </div>
             <aside class="date-info">
                 <span class="day">SÁBADO</span>
@@ -48,6 +48,8 @@
             <div class="guest-info">
                 <h2 class="guest-name">Nombre del Invitado</h2>
                 <p class="guest-passes">2 - PASES</p>
+                <p class="guest-passes">|</p>
+                <p class="guest-passes">2 - NIÑOS</p>
             </div>
             <div class="wedding-logo">
                 <img src="logo.png" alt="Logo Boda A&G">
@@ -65,14 +67,13 @@
             </div>
         </section>
 
-         <!-- ***** SECCIÓN GALERÍA MODIFICADA ***** -->
+         <!-- ***** SECCIÓN GALERÍA ***** -->
         <section class="gallery-section" id="gallery">
-            <!-- NUEVO TÍTULO DE SECCIÓN GALERÍA -->
+             <!-- Título base (sin clase modificadora) -->
             <div class="section-title-container">
                  <h3 class="section-title">GALERÍA</h3>
             </div>
 
-            <!-- Contenedor de la galería (sin cambios) -->
             <div class="gallery-wrapper">
                 <button class="gallery-arrow gallery-prev" aria-label="Foto anterior"><</button>
                 <div class="gallery-container">
@@ -81,59 +82,39 @@
                     </div>
                     <div class="gallery-slide"><img src="img10.jpg" alt="Foto de galería 2" class="gallery-image"></div>
                     <div class="gallery-slide"><img src="img12.jpg" alt="Foto de galería 3" class="gallery-image"></div>
-                     
                 </div>
                 <button class="gallery-arrow gallery-next" aria-label="Foto siguiente">></button>
             </div>
         </section>
-        <!-- ***** FIN SECCIÓN GALERÍA MODIFICADA ***** -->
+        <!-- ***** FIN SECCIÓN GALERÍA ***** -->
 
         <!-- ***** NUEVA SECCIÓN - Itinerario ***** -->
         <section class="itinerary-section">
-            <div class="section-title-container alt-title"> <!-- Clase 'alt-title' para estilo diferente -->
+            <!-- Título con clase modificadora para ajustar líneas -->
+            <div class="section-title-container title-adjust-lines">
                  <h3 class="section-title">ITINERARIO</h3>
-                 <!-- Línea se controla con CSS -->
             </div>
 
             <div class="itinerary-list">
                 <div class="itinerary-item">
-                    <div class="itinerary-icon">
-                        <i class="fas fa-church"></i> <!-- Icono Font Awesome (Iglesia) -->
-                        <!-- Alternativa: <img src="icon-church.png" alt="Iglesia"> -->
-                    </div>
+                    <div class="itinerary-icon"><i class="fas fa-church"></i></div>
                     <div class="itinerary-details">
-                        <p class="event-time-name"><strong>4:00 pm - Ceremonia religiosa:</strong></p>
-                        <p class="event-location">Iglesia ejemplo</p>
+                        <p class="event-time-name"><strong>17:00 - Ceremonia religiosa:</strong></p>
+                        <p class="event-location">Parroquía de San Sebastian</p>
                     </div>
                 </div>
                 <div class="itinerary-item">
-                    <div class="itinerary-icon">
-                         <i class="fas fa-heart"></i> <!-- Icono Font Awesome (Corazón) -->
-                         <!-- Alternativa: <img src="icon-heart.png" alt="Corazón"> -->
-                    </div>
+                     <div class="itinerary-icon"><i class="fas fa-glass-cheers"></i></div>
                     <div class="itinerary-details">
-                        <p class="event-time-name"><strong>5:00 pm - Ceremonia civil:</strong></p>
-                        <p class="event-location">Salón ejemplo</p>
+                        <p class="event-time-name"><strong>20:00 - Recepción:</strong></p>
+                        <p class="event-location">Salón y Jardín El Laurel</p>
                     </div>
                 </div>
                 <div class="itinerary-item">
-                     <div class="itinerary-icon">
-                         <i class="fas fa-glass-cheers"></i> <!-- Icono Font Awesome (Copas Brindis) -->
-                         <!-- Alternativa: <img src="icon-cheers.png" alt="Copas"> -->
-                    </div>
+                    <div class="itinerary-icon"><i class="fas fa-martini-glass-empty"></i></div>
                     <div class="itinerary-details">
-                        <p class="event-time-name"><strong>6:00 pm - Recepción:</strong></p>
-                        <p class="event-location">Salón ejemplo</p>
-                    </div>
-                </div>
-                <div class="itinerary-item">
-                    <div class="itinerary-icon">
-                        <i class="fas fa-martini-glass-empty"></i> <!-- Icono Font Awesome (Copa Cocktail) -->
-                        <!-- Alternativa: <img src="icon-cocktail.png" alt="Copa"> -->
-                    </div>
-                    <div class="itinerary-details">
-                         <p class="event-time-name"><strong>2:00 pm (día siguiente) - Tornaboda:</strong></p>
-                         <p class="event-location">Casa de los papás de la novia</p>
+                         <p class="event-time-name"><strong>15:00 (día siguiente) - Tornaboda:</strong></p>
+                         <p class="event-location">La Rejoyita</p>
                     </div>
                 </div>
             </div>
@@ -143,7 +124,7 @@
 
         <!-- ***** NUEVA SECCIÓN - Dress Code ***** -->
         <section class="dress-code-section">
-             <!-- Separador con título -->
+             <!-- Estructura diferente, no usa .section-title-container -->
             <div class="separator-with-title">
                 <hr class="separator-line">
                 <span class="separator-title">DRESS CODE</span>
@@ -151,18 +132,12 @@
 
             <div class="dress-code-container">
                 <div class="dress-code-block">
-                    <div class="dress-code-icon">
-                         <i class="fas fa-person-dress"></i> <!-- Icono Font Awesome (Vestido) -->
-                         <!-- Alternativa: <img src="icon-dress.png" alt="Vestido"> -->
-                    </div>
+                    <div class="dress-code-icon"><i class="fas fa-person-dress"></i></div>
                     <h4 class="dress-code-name">Formal</h4>
                     <p class="dress-code-desc">SE RECOMIENDA LLEVAR TACONES CÓMODOS Y ABRIGO.</p>
                 </div>
                 <div class="dress-code-block">
-                     <div class="dress-code-icon">
-                         <i class="fas fa-user-tie"></i> <!-- Icono Font Awesome (Traje/Corbata) -->
-                         <!-- Alternativa: <img src="icon-tuxedo.png" alt="Traje"> -->
-                    </div>
+                     <div class="dress-code-icon"><i class="fas fa-user-tie"></i></div>
                     <h4 class="dress-code-name">Etiqueta</h4>
                     <p class="dress-code-desc">SMOKING NEGRO (FAVOR DE NO LLEVAR OTROS COLORES)</p>
                 </div>
@@ -172,175 +147,104 @@
 
         <!-- ***** NUEVA SECCIÓN - Ubicaciones ***** -->
         <section class="locations-section">
-            <div class="section-title-container alt-title">
+             <!-- Título con clase modificadora para ajustar líneas -->
+            <div class="section-title-container title-adjust-lines">
                 <h3 class="section-title">UBICACIONES</h3>
-                <!-- Línea CSS -->
             </div>
 
             <div class="locations-list">
-                <!-- Bloque 1: Ceremonia Religiosa (Imagen Izquierda) -->
+                <!-- Bloque 1: Ceremonia Religiosa -->
                 <div class="location-block">
-                    <div class="location-image-container">
-                        <!-- Reemplaza con tu imagen -->
-                        <img src="iglesia.jpg" alt="Basílica de Guadalupe" class="location-image">
-                    </div>
+                    <div class="location-image-container"><img src="iglesia.jpg" alt="Basílica de Guadalupe" class="location-image"></div>
                     <div class="location-details">
                         <span class="location-time">16:00 HRS</span>
                         <h4 class="location-name">Basílica de Guadalupe</h4>
                         <p class="location-event-type">CEREMONIA RELIGIOSA</p>
-                        <p class="location-address">
-                            FRAY JUAN DE ZUMÁRRAGA NO. 2,<br>
-                            VILLA GUSTAVO A. MADERO, GUSTAVO A. MADERO,<br>
-                            07050 CIUDAD DE MÉXICO, CDMX
-                        </p>
-                        <!-- Reemplaza href con tu enlace GPS -->
-                        <a href="https://www.google.com.mx/maps/place/Parque+de+San+Sebasti%C3%A1n/@16.2471093,-92.1314067,19z/data=!4m14!1m7!3m6!1s0x858d39006e679e7f:0x9f61036d3dfedcc8!2sParroquia+de+San+Sebasti%C3%A1n!8m2!3d16.246759!4d-92.1311006!16s%2Fg%2F11wbfgkhzl!3m5!1s0x858d38b3e0b11b1d:0xe631d81adebf27ee!8m2!3d16.2471093!4d-92.1314067!16s%2Fm%2F0_gwnn_?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwMi4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" class="location-gps-link" target="_blank" rel="noopener noreferrer">
-                            <i class="fas fa-paper-plane"></i> VER EN GPS
-                        </a>
+                        <p class="location-address">FRAY JUAN DE ZUMÁRRAGA NO. 2,<br>VILLA GUSTAVO A. MADERO, GUSTAVO A. MADERO,<br>07050 CIUDAD DE MÉXICO, CDMX</p>
+                        <a href="https://www.google.com.mx/maps/place/Parque+de+San+Sebasti%C3%A1n/@16.2471093,-92.1314067,19z/data=!4m14!1m7!3m6!1s0x858d39006e679e7f:0x9f61036d3dfedcc8!2sParroquia+de+San+Sebasti%C3%A1n!8m2!3d16.246759!4d-92.1311006!16s%2Fg%2F11wbfgkhzl!3m5!1s0x858d38b3e0b11b1d:0xe631d81adebf27ee!8m2!3d16.2471093!4d-92.1314067!16s%2Fm%2F0_gwnn_?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwMi4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" class="location-gps-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-paper-plane"></i> VER EN GPS</a>
                     </div>
                 </div>
-
-                <!-- Bloque 2: Recepción (Imagen Derecha) -->
-                <div class="location-block layout-reversed"> <!-- Añadida clase layout-reversed -->
-                    <div class="location-image-container">
-                        <!-- Reemplaza con tu imagen -->
-                        <img src="salon.jpg" alt="Salón Los Candiles" class="location-image">
-                    </div>
+                <!-- Bloque 2: Recepción -->
+                <div class="location-block layout-reversed">
+                    <div class="location-image-container"><img src="salon.jpg" alt="Salón Los Candiles" class="location-image"></div>
                     <div class="location-details">
                         <span class="location-time">18:00 HRS</span>
                         <h4 class="location-name">Salón Los Candiles</h4>
                         <p class="location-event-type">RECEPCIÓN</p>
-                        <p class="location-address">
-                            AV. EJÉRCITO NACIONAL MEXICANO 613-MEZZANINE,<br>
-                            GRANADA, MIGUEL HIDALGO,<br>
-                            11520 CIUDAD DE MÉXICO, CDMX
-                        </p>
-                         <!-- Reemplaza href con tu enlace GPS -->
-                        <a href="https://www.google.com.mx/maps/place/Salon+%26+Jardin+El+Laurel/@16.2403462,-92.1141258,17z/data=!4m17!1m10!3m9!1s0x858d3f2d3e7f5cbb:0x6ac9340686ed37aa!2sSalon+%26+Jardin+El+Laurel!8m2!3d16.2404127!4d-92.11411!10e5!14m1!1BCgIgAQ!16s%2Fg%2F11dxd965d0!3m5!1s0x858d3f2d3e7f5cbb:0x6ac9340686ed37aa!8m2!3d16.2404127!4d-92.11411!16s%2Fg%2F11dxd965d0?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwMi4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" class="location-gps-link" target="_blank" rel="noopener noreferrer">
-                             <i class="fas fa-paper-plane"></i> VER EN GPS
-                        </a>
+                        <p class="location-address">AV. EJÉRCITO NACIONAL MEXICANO 613-MEZZANINE,<br>GRANADA, MIGUEL HIDALGO,<br>11520 CIUDAD DE MÉXICO, CDMX</p>
+                        <a href="https://www.google.com.mx/maps/place/Salon+%26+Jardin+El+Laurel/@16.2403462,-92.1141258,17z/data=!4m17!1m10!3m9!1s0x858d3f2d3e7f5cbb:0x6ac9340686ed37aa!2sSalon+%26+Jardin+El+Laurel!8m2!3d16.2404127!4d-92.11411!10e5!14m1!1BCgIgAQ!16s%2Fg%2F11dxd965d0!3m5!1s0x858d3f2d3e7f5cbb:0x6ac9340686ed37aa!8m2!3d16.2404127!4d-92.11411!16s%2Fg%2F11dxd965d0?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwMi4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" class="location-gps-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-paper-plane"></i> VER EN GPS</a>
                     </div>
                 </div>
-
-                <!-- Bloque 3: Tornaboda (Imagen Izquierda) -->
+                <!-- Bloque 3: Tornaboda -->
                 <div class="location-block">
-                    <div class="location-image-container">
-                         <!-- Reemplaza con tu imagen -->
-                        <img src="torna.jpg" alt="Tornaboda Salón Los Candiles" class="location-image">
-                    </div>
+                    <div class="location-image-container"><img src="torna.jpg" alt="Tornaboda Salón Los Candiles" class="location-image"></div>
                     <div class="location-details">
-                        <span class="location-time">16:00 HRS</span> <!-- Hora del día siguiente? Ajustar si es necesario -->
+                        <span class="location-time">16:00 HRS</span>
                         <h4 class="location-name">Salón Los Candiles</h4>
                         <p class="location-event-type">TORNABODA</p>
-                         <p class="location-address">
-                            AV. EJÉRCITO NACIONAL MEXICANO 613-MEZZANINE,<br>
-                            GRANADA, MIGUEL HIDALGO,<br>
-                            11520 CIUDAD DE MÉXICO, CDMX
-                        </p>
-                         <!-- Reemplaza href con tu enlace GPS -->
-                         <a href="https://www.google.com.mx/maps/place/La+Rejoyita/@16.2083843,-92.1233913,17z/data=!4m17!1m10!3m9!1s0x858d3f12f0155d67:0xa6992e9d03abfaa7!2sLa+Rejoyita!8m2!3d16.2083843!4d-92.1233913!10e5!14m1!1BCgIgAQ!16s%2Fg%2F1hhj8mq21!3m5!1s0x858d3f12f0155d67:0xa6992e9d03abfaa7!8m2!3d16.2083843!4d-92.1233913!16s%2Fg%2F1hhj8mq21?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwMi4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" class="location-gps-link" target="_blank" rel="noopener noreferrer">
-                             <i class="fas fa-paper-plane"></i> VER EN GPS
-                        </a>
+                         <p class="location-address">AV. EJÉRCITO NACIONAL MEXICANO 613-MEZZANINE,<br>GRANADA, MIGUEL HIDALGO,<br>11520 CIUDAD DE MÉXICO, CDMX</p>
+                         <a href="https://www.google.com.mx/maps/place/La+Rejoyita/@16.2083843,-92.1233913,17z/data=!4m17!1m10!3m9!1s0x858d3f12f0155d67:0xa6992e9d03abfaa7!2sLa+Rejoyita!8m2!3d16.2083843!4d-92.1233913!10e5!14m1!1BCgIgAQ!16s%2Fg%2F1hhj8mq21!3m5!1s0x858d3f12f0155d67:0xa6992e9d03abfaa7!8m2!3d16.2083843!4d-92.1233913!16s%2Fg%2F1hhj8mq21?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwMi4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" class="location-gps-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-paper-plane"></i> VER EN GPS</a>
                     </div>
                 </div>
-
-            </div> <!-- Fin locations-list -->
+            </div>
         </section>
         <!-- ***** FIN NUEVA SECCIÓN UBICACIONES ***** -->
 
         <!-- ***** NUEVA SECCIÓN - Filtro y Hashtag ***** -->
         <section class="filter-section">
-            <div class="section-title-container simple-title"> <!-- Nuevo estilo de título sin líneas -->
+             <!-- Título sin líneas -->
+            <div class="section-title-container simple-title">
                 <h3 class="section-title">USA NUESTRO FILTRO</h3>
             </div>
             <div class="social-filter-buttons">
-                <!-- Reemplaza href con tu enlace de filtro FB -->
-                <a href="#" class="social-button facebook" target="_blank" rel="noopener noreferrer">
-                    <i class="fa-brands fa-facebook-f"></i> EN FACEBOOK
-                </a>
-                 <!-- Reemplaza href con tu enlace de filtro IG -->
-                <a href="#" class="social-button instagram" target="_blank" rel="noopener noreferrer">
-                    <i class="fa-brands fa-instagram"></i> EN INSTAGRAM
-                </a>
+                <a href="#" class="social-button facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i> EN FACEBOOK</a>
+                <a href="#" class="social-button instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i> EN INSTAGRAM</a>
             </div>
-            <h4 class="wedding-hashtag">#Alejandra&Gerardo2025</h4> <!-- Hashtag actualizado -->
+            <h4 class="wedding-hashtag">#Alejandra&Gerardo2025</h4>
         </section>
         <!-- ***** FIN NUEVA SECCIÓN FILTRO ***** -->
 
 
         <!-- ***** NUEVA SECCIÓN - Sugerencias de Regalo ***** -->
         <section class="gifts-section">
-            <!-- Separador con título -->
-            <div class="separator-with-title alt-separator"> <!-- Clase extra para estilo diferente -->
+             <!-- Estructura diferente, no usa .section-title-container -->
+            <div class="separator-with-title alt-separator">
                  <hr class="separator-line">
                  <span class="separator-title">SUGERENCIAS DE REGALO</span>
             </div>
 
-             <!-- Links a Mesas de Regalos -->
              <div class="registry-links">
                  <div class="registry-block">
-                     <div class="registry-icon">
-                         <i class="fas fa-gift"></i>
-                     </div>
+                     <div class="registry-icon"><i class="fas fa-gift"></i></div>
                      <h4 class="registry-store">Liverpool</h4>
                      <p class="registry-code">EVENTO - 12345678</p>
-                      <!-- Reemplaza href con tu enlace a Liverpool -->
-                     <a href="#" class="registry-button" target="_blank" rel="noopener noreferrer">
-                          <i class="fas fa-gift"></i> VER REGALOS
-                     </a>
+                     <a href="#" class="registry-button" target="_blank" rel="noopener noreferrer"><i class="fas fa-gift"></i> VER REGALOS</a>
                  </div>
                  <div class="registry-block">
-                     <div class="registry-icon">
-                         <i class="fas fa-gift"></i>
-                     </div>
+                     <div class="registry-icon"><i class="fas fa-gift"></i></div>
                      <h4 class="registry-store">Amazon</h4>
                      <p class="registry-code">EVENTO - 12345678</p>
-                      <!-- Reemplaza href con tu enlace a Amazon -->
-                     <a href="#" class="registry-button" target="_blank" rel="noopener noreferrer">
-                         <i class="fas fa-gift"></i> VER REGALOS
-                     </a>
+                     <a href="#" class="registry-button" target="_blank" rel="noopener noreferrer"><i class="fas fa-gift"></i> VER REGALOS</a>
                  </div>
              </div>
 
-             <!-- Datos Bancarios -->
              <div class="bank-details">
-                 <div class="bank-detail-item">
-                     <i class="fas fa-building-columns bank-icon"></i>
-                     <span class="bank-label">Banco:</span>
-                     <span class="bank-value">Banco ejemplo</span>
-                 </div>
-                  <div class="bank-detail-item">
-                     <i class="fas fa-user bank-icon"></i>
-                     <span class="bank-label">Titular:</span>
-                     <span class="bank-value">Nombre Completo de Ejemplo</span>
-                 </div>
-                  <div class="bank-detail-item">
-                     <i class="fas fa-hashtag bank-icon"></i> <!-- O fa-id-card -->
-                     <span class="bank-label">No. de cuenta:</span>
-                     <span class="bank-value">123456789</span>
-                 </div>
-                  <div class="bank-detail-item">
-                     <i class="fas fa-credit-card bank-icon"></i>
-                     <span class="bank-label">Tarjeta:</span>
-                     <span class="bank-value">1111 2222 3333 4444</span>
-                 </div>
-                  <div class="bank-detail-item">
-                     <i class="fas fa-file-invoice-dollar bank-icon"></i> <!-- O fa-key -->
-                     <span class="bank-label">CLABE :</span>
-                     <span class="bank-value">123456789101112</span>
-                 </div>
+                 <div class="bank-detail-item"><i class="fas fa-building-columns bank-icon"></i><span class="bank-label">Banco:</span><span class="bank-value">Banco ejemplo</span></div>
+                  <div class="bank-detail-item"><i class="fas fa-user bank-icon"></i><span class="bank-label">Titular:</span><span class="bank-value">Nombre Completo de Ejemplo</span></div>
+                  <div class="bank-detail-item"><i class="fas fa-hashtag bank-icon"></i><span class="bank-label">No. de cuenta:</span><span class="bank-value">123456789</span></div>
+                  <div class="bank-detail-item"><i class="fas fa-credit-card bank-icon"></i><span class="bank-label">Tarjeta:</span><span class="bank-value">1111 2222 3333 4444</span></div>
+                  <div class="bank-detail-item"><i class="fas fa-file-invoice-dollar bank-icon"></i><span class="bank-label">CLABE :</span><span class="bank-value">123456789101112</span></div>
              </div>
         </section>
         <!-- ***** FIN NUEVA SECCIÓN REGALOS ***** -->
 
         <!-- Footer Simplificado -->
         <footer class="footer-section">
-            <!-- Enlace a galería eliminado -->
-            <!-- Puedes poner aquí copyright o dejarlo vacío si prefieres -->
-            <p class="copyright-text">© Alejandra & Gerardo 2025</p> <!-- Ejemplo de texto alternativo -->
+            <p class="copyright-text">© Alejandra & Gerardo 2025</p>
         </footer>
     </div>
 
+    <!-- Scripts JS -->
     <script src="countdown.js"></script>
     <script src="gallery.js"></script>
 
