@@ -318,6 +318,35 @@ h1 {
     gap: 10px;
 }
 
+/* Contenedor de la línea Pases/Niños */
+.guest-passes-line {
+    display: flex; /* Usar flex para alinear horizontalmente */
+    justify-content: center; /* Centrar los items */
+    align-items: baseline; /* Alinear por la línea base del texto */
+    gap: 10px; /* Espacio entre PASES | NIÑOS */
+    width: 100%; /* Ocupar ancho */
+    margin-top: 5px; /* Pequeño espacio después del nombre */
+}
+
+/* Estilo para cada item (Pases, Niños) */
+.guest-pass-item {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8em;
+    letter-spacing: 3px;
+    color: #b0b0b0;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Estilo para el separador | */
+.guest-pass-separator {
+    font-family: 'Montserrat', sans-serif; /* Misma fuente */
+    font-size: 0.8em; /* Mismo tamaño */
+    color: #888; /* Color del separador */
+    /* Ajustar alineación si es necesario con padding o line-height */
+    padding: 0 5px; /* Espacio alrededor del separador */
+}
+
 .guest-name {
     font-family: 'Playfair Display', serif;
     font-size: 1.8em;
@@ -1074,5 +1103,10 @@ h1 {
         font-size: 0.85em;
         margin-top: 20px;
         margin-bottom: 15px;
+    }
+
+    .guest-passes-line {
+        font-size: 0.75em; /* Reducir tamaño en móvil si es necesario */
+        gap: 8px;
     }
 }

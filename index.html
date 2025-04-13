@@ -51,10 +51,17 @@
         <!-- Sección Detalles (Invitado, Logo, Countdown, Mensaje) -->
         <section class="details-section">
             <div class="guest-info">
-                <h2 class="guest-name">Nombre del Invitado</h2>
-                <p class="guest-passes">2 - PASES</p>
-                <p class="guest-passes">|</p>
-                <p class="guest-passes">2 - NIÑOS</p>
+                <h2 class="guest-name" id="guest-name-placeholder">Cargando Invitado...</h2>
+                <!-- Contenedor principal para pases/niños -->
+                <div id="guest-passes-details" class="guest-passes-line" style="display: none;"> <!-- Añadida clase guest-passes-line -->
+                    <span class="guest-pass-item"> <!-- Span para Pases -->
+                        <span id="guest-passes-placeholder">X</span> - PASES
+                    </span>
+                    <span class="guest-pass-separator">|</span> <!-- Span para el separador -->
+                    <span class="guest-pass-item guest-pass-kids"> <!-- Span para Niños (con clase extra) -->
+                        <span id="guest-kids-placeholder">X</span> - NIÑOS
+                    </span>
+                </div>
             </div>
             <div class="wedding-logo">
                 <img src="logo.png" alt="Logo Boda A&G">
@@ -344,5 +351,6 @@
     <script src="countdown.js"></script>
     <script src="gallery.js"></script>
     <script src="player.js"></script>
+    <script src="invitation.js"></script>
 </body>
 </html>
