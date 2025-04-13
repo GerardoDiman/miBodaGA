@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validación de Invitado - Boda A&G</title>
+    <style>
+        /* Estilos CSS (con añadidos para logo y contexto) */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            /* Opcional: Añadir un fondo suave si quieres */
+            /* background-image: url('fondo-validacion.jpg'); */
+            /* background-size: cover; */
+            /* background-position: center; */
+        }
+        .validation-container {
+            background-color: rgba(40, 40, 40, 0.92); /* Ligeramente más opaco */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 30px 25px; /* Ajustar padding */
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+        /* Logo de la Boda */
+        .validation-logo img {
+            max-width: 80px; /* Tamaño del logo */
+            height: auto;
+            margin-bottom: 15px;
+             /* Si tu logo es oscuro y necesita ser blanco */
+             filter: brightness(0) invert(1) opacity(0.8);
+        }
+        /* Contexto de la Boda */
+        .wedding-context {
+            font-size: 0.85em;
+            color: #b0b0b0;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        .validation-icon {
+             font-size: 4em; /* Un poco más pequeño */
+             color: #ffc107;
+             margin-bottom: 20px;
+             display: block;
+        }
+         .validation-icon.success { color: #4CAF50; }
+         .validation-icon.error { color: #f44336; }
+        h1 { /* Cambiado a h2 para mejor semántica */
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8em; /* Más pequeño */
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Separador sutil */
+            padding-bottom: 15px;
+        }
+        .guest-details p {
+            font-size: 1.1em; /* Ligeramente más pequeño */
+            line-height: 1.7;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            text-align: left;
+        }
+         .guest-details p:last-child { border-bottom: none; margin-bottom: 0; }
+        .guest-details strong {
+            color: #d1b7a0;
+            margin-right: 8px;
+            font-weight: 500;
+            display: inline-block;
+            min-width: 65px; /* Ajustar si es necesario */
+            text-align: right;
+        }
+         .guest-details span { color: #fff; font-weight: 500; }
+        .status-message { margin-top: 25px; font-weight: 500; font-size: 1em; }
+        .status-message.success { color: #4CAF50; }
+        .status-message.error { color: #f44336; }
+        .loading-message { font-style: italic; color: #aaa; }
+
+    </style>
+    <script src="https://kit.fontawesome.com/171beeb065.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="validation-container">
+        <!-- ***** Logo Añadido ***** -->
+        <div class="validation-logo">
+            <!-- Asegúrate que la ruta al logo sea correcta desde validar.html -->
+            <img src="logo.png" alt="Logo Boda A&G">
+        </div>
+        <!-- ***** Contexto Añadido ***** -->
+        <p class="wedding-context">Boda Alejandra & Gerardo - 11 Octubre 2025</p>
+
+        <i id="validation-status-icon" class="fas fa-spinner fa-spin validation-icon loading"></i>
+
+        <!-- Cambiado h1 a h2 -->
+        <h2>Validación de Pase</h2>
+
+        <div id="guest-details" class="guest-details" style="display: none;">
+            <p><strong>Nombre:</strong> <span id="val-guest-name">---</span></p>
+            <p><strong>Pases:</strong> <span id="val-passes">---</span></p>
+            <p><strong>Niños:</strong> <span id="val-kids">---</span></p>
+            <p><strong>ID:</strong> <span id="val-guest-id">---</span></p>
+        </div>
+
+        <p id="status-message" class="status-message loading-message">Verificando invitado...</p>
+    </div>
+
+    <!-- Script para esta página -->
+    <script src="validar.js"></script>
+</body>
+</html>

@@ -42,34 +42,83 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /** Genera y muestra el código QR */
     function displayQrCode(invitado) {
-        if (!qrDisplayContainer || !qrCodeTargetDiv || !qrGuestNameDisplay || !invitado || !invitado.id) {
-            console.error("displayQrCode: Faltan elementos o datos para mostrar QR.");
-            return;
+        // 1. Verificar si los elementos HTML necesarios existen
+        // (Asegúrate que qrDisplayContainer, qrCodeTargetDiv, qrGuestNameDisplay estén definidos fuera o pasados como argumento)
+        if (!qrDisplayContainer || !qrCodeTargetDiv || !qrGuestNameDisplay) {
+            console.error("displayQrCode: Faltan elementos HTML para el QR.");
+            return; // No continuar si falta algo
         }
-        console.log("Mostrando código QR para ID:", invitado.id);
+        // 2. Verificar si tenemos datos válidos del invitado y un ID
+        if (!invitado || typeof invitado.id !== 'string' || invitado.id.trim() === '') {
+            console.error("displayQrCode: Datos inválidos para generar QR. Invitado:", invitado);
+            qrCodeTargetDiv.innerHTML = '<p style="color: red; font-size: small;">Error: Datos inválidos</p>'; // Mensaje de error
+            qrGuestNameDisplay.textContent = '';
+            qrDisplayContainer.style.display = 'flex'; // Mostrar el contenedor con el error
+            document.body.classList.add('qr-code-shown'); // Ocultar botón
+            if (confirmButton) confirmButton.style.display = 'none'; // Ocultar explícito
+            return; // No continuar
+        }
+    
+        console.log("Mostrando código QR para ID:", invitado.id); // Log del ID
+        console.log("Elemento target para QR:", qrCodeTargetDiv); // Log del div target
+    
+        // 3. Limpiar contenido anterior
         qrCodeTargetDiv.innerHTML = '';
-        const qrUrl = `${BASE_INVITATION_URL}?invitado=${invitado.id}&val=1`;
-        console.log("URL para QR:", qrUrl);
-
+    
+        // 4. Verificar si la biblioteca QRCode está disponible
+        if (typeof QRCode === 'undefined') {
+             console.error("displayQrCode: La biblioteca QRCode no está definida/cargada.");
+             qrCodeTargetDiv.innerHTML = '<p style="color: red; font-size: small;">Error: Biblioteca QR no cargada</p>';
+             qrGuestNameDisplay.textContent = invitado.nombre;
+             qrDisplayContainer.style.display = 'flex'; // Mostrar contenedor con error
+             document.body.classList.add('qr-code-shown');
+             if (confirmButton) confirmButton.style.display = 'none';
+             return; // No continuar
+        }
+    
+        // 5. Construir la URL para la página de validación
+        //    Usa 'id' como nombre del parámetro para que coincida con validar.js
+        const validationPageUrl = `${window.location.origin}/validar.html?id=${invitado.id}`;
+        console.log("URL para QR (validación):", validationPageUrl);
+    
+        // 6. Intentar generar el QR dentro de try...catch
         try {
-             // Verificar si QRCode está definido ANTES de usarlo
-             if (typeof QRCode === 'undefined') {
-                 throw new Error("La biblioteca QRCode no está cargada.");
-             }
+            console.log("Intentando generar QR con URL:", validationPageUrl);
             new QRCode(qrCodeTargetDiv, {
-                text: qrUrl, width: 160, height: 160, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
+                text: validationPageUrl, // <<< USAR LA URL DE VALIDACIÓN
+                width: 160,
+                height: 160,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H // Nivel alto de corrección es bueno para URLs
             });
+            console.log("Llamada a new QRCode completada.");
+    
+            // Verificar si se añadió algo al div después de un instante
+             setTimeout(() => {
+                 if (qrCodeTargetDiv.innerHTML.trim() === '') {
+                     console.warn("displayQrCode: El div target sigue vacío después de llamar a new QRCode.");
+                     qrCodeTargetDiv.innerHTML = '<p style="color: red; font-size: small;">Error al dibujar QR</p>';
+                 } else {
+                     console.log("Contenido generado en qrCodeTargetDiv:", qrCodeTargetDiv.innerHTML.substring(0, 50) + "...");
+                 }
+             }, 100);
+    
+            // Mostrar nombre y contenedor QR
             qrGuestNameDisplay.textContent = invitado.nombre;
             qrDisplayContainer.style.display = 'flex';
-            document.body.classList.add('qr-code-shown'); // Oculta botón principal via CSS
+            document.body.classList.add('qr-code-shown'); // Activar CSS para ocultar botón
+            if (confirmButton) confirmButton.style.display = 'none'; // Ocultar explícito
+    
         } catch(qrError) {
-            console.error("Error al generar QR:", qrError);
+            console.error("displayQrCode: Error específico durante la generación del QR:", qrError);
             qrCodeTargetDiv.textContent = "Error al generar QR";
             qrGuestNameDisplay.textContent = invitado.nombre;
-            qrDisplayContainer.style.display = 'flex'; // Mostrar aunque haya error
-            document.body.classList.add('qr-code-shown'); // Ocultar botón
+            qrDisplayContainer.style.display = 'flex';
+            document.body.classList.add('qr-code-shown');
+            if (confirmButton) confirmButton.style.display = 'none';
         }
-    }
+    } // --- Fin de displayQrCode ---
 
     /** Muestra la vista de validación simple */
     function displayValidationView(invitado) {
