@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const validationViewContainer = document.getElementById('validation-view'); // Referencia al contenedor de validar.html
 
     // --- Configuraciones ---
-    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/a/~/macros/s/AKfycbzgPRD9WI4cj35G5LprFJKMjL4KNkKSN3fJtsBguv1SxRZikHf2uUiTmOPuo0tqQDTH/exec'; // <<< ¡¡TU URL DE APPS SCRIPT!!
+    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec'; // <<< ¡¡TU URL DE APPS SCRIPT!!
     const PUBLIC_SITE_URL_BASE = 'https://mibodaag.netlify.app/';   // <<< ¡¡TU URL DE NETLIFY!!
     const validationPagePath = '/validar.html';                   // O 'validar.html' si está en la raíz
 
