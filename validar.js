@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusMessageEl = document.getElementById('status-message');
 
     // --- URL del Apps Script (¡¡REEMPLAZAR!!) ---
-    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgPRD9WI4cj35G5LprFJKMjL4KNkKSN3fJtsBguv1SxRZikHf2uUiTmOPuo0tqQDTH/exec';
+    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/a/~/macros/s/AKfycbzgPRD9WI4cj35G5LprFJKMjL4KNkKSN3fJtsBguv1SxRZikHf2uUiTmOPuo0tqQDTH/exec';
 
     // --- Función para actualizar la UI ---
     function updateValidationUI(status, message, invitado = null) {
