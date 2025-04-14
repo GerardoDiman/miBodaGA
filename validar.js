@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Lógica Principal ---
     const urlParams = new URLSearchParams(window.location.search);
-    const guestId = urlParams.get('id'); // Lee el parámetro 'id' de la URL
+    const guestId = urlParams.get('id'); // <--- Leer parámetro 'id'
 
     if (!guestId) {
         updateValidationUI('error', "No se proporcionó ID de invitado en la URL.");
@@ -45,27 +45,38 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(`Validando ID: ${guestId}`);
 
     // --- Llamar al Apps Script usando JSONP ---
-    const callbackFunctionName = 'handleValidationResponse'; // Nombre único
+    const callbackFunctionName = 'handleValidationResponse' + Date.now(); // Nombre único para evitar colisiones
 
-    // Crear la URL para JSONP, incluyendo el callback
+    // Crear la URL para JSONP
     const validationUrl = `${GOOGLE_APPS_SCRIPT_URL}?action=getGuestDetails&id=${guestId}&callback=${callbackFunctionName}&t=${Date.now()}`;
 
     // Crear la etiqueta script
     const scriptTag = document.createElement('script');
     scriptTag.src = validationUrl;
 
-    // Manejar errores de carga del script
+    // Variable para controlar timeout
+    let timeoutId = setTimeout(() => {
+         console.error("Timeout esperando respuesta JSONP para:", callbackFunctionName);
+         updateValidationUI('error', "No se recibió respuesta del servidor (timeout).");
+         // Limpiar
+         try { delete window[callbackFunctionName]; } catch(e){} // Eliminar función global
+          // Quitar el script tag si aún existe podría ser problemático aquí
+    }, 10000); // Timeout de 10 segundos (ajustable)
+
+
+    // Manejar errores de carga del script (problemas de red, etc.)
     scriptTag.onerror = () => {
+        clearTimeout(timeoutId); // Cancelar timeout
         console.error("Error al cargar el script JSONP desde:", validationUrl);
         updateValidationUI('error', "Error de comunicación con el servidor.");
-        // Limpiar (opcional pero recomendado)
+        // Limpiar
         try { document.body.removeChild(scriptTag); } catch (e) {}
         try { delete window[callbackFunctionName]; } catch (e) {}
     };
 
-    // Definir la función de callback ANTES de añadir el script al DOM
-    // Esta función será llamada por el script devuelto por Google
+    // Definir la función de callback global ANTES de añadir el script
     window[callbackFunctionName] = (data) => {
+        clearTimeout(timeoutId); // Cancelar timeout al recibir respuesta
         console.log("Respuesta JSONP recibida:", data);
         if (data.status === 'success' && data.invitado) {
             updateValidationUI('success', "¡Invitado Válido!", data.invitado);
@@ -75,8 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Limpiar después de ejecutar
-         try { document.body.removeChild(scriptTag); } catch (e) {}
-         try { delete window[callbackFunctionName]; } catch (e) {}
+        try { document.body.removeChild(scriptTag); } catch (e) {}
+        try { delete window[callbackFunctionName]; } catch (e) {}
     };
 
     // Añadir el script al body para ejecutar la solicitud
