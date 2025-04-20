@@ -174,6 +174,7 @@ body {
     background-position: center center;
     background-repeat: no-repeat;
 }
+
 .rsvp-bg::before {
     background:
         /* Degradado - Oscuro a casi negro */
@@ -185,6 +186,22 @@ body {
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
+}
+.footer-bg::before {
+    background:
+        /* Ejemplo Degradado: Suave desde arriba, más oscuro abajo */
+        linear-gradient(to bottom, rgb(0, 0, 0) 0%, rgb(0, 0, 0) 100%);
+
+    /* Propiedades repetidas necesarias */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.footer-wrapper { /* Clase añadida al div.section-background-wrapper del footer */
+    padding-top: 20px;    /* <<< Ajusta el espacio ANTES del copyright */
+    padding-bottom: 40px; /* <<< Ajusta el espacio DESPUÉS del copyright */
+    /* Hereda el fondo de rsvp-bg (o el que le hayas puesto) */
+    /* El margin-top: -1px; debería aplicarse automáticamente por la regla general */
 }
 
 /* === ESTILO PARA CENTRAR CONTENIDO DENTRO DE WRAPPERS === */
@@ -272,8 +289,28 @@ body {
     box-sizing: border-box;
 }
 
-.filter-section { margin-top: 70px; margin-bottom: 50px; max-width: 600px;}
-.footer-section { margin-top: 50px; margin-bottom: 0; padding-top: 30px; padding-bottom: 30px; border-top: 1px solid rgba(170, 170, 170, 0.2); background-color: #1a1a1a; max-width: none; width: 100%; padding-left: 0; padding-right: 0;} /* Footer ancho completo */
+.filter-section {
+    /* 1. Eliminar Ancho/Margen conflictivos */
+    max-width: none;      /* <<< ASEGÚRATE que no tenga un max-width */
+    width: auto;          /* <<< O 100%, dejar que ocupe el container-content */
+    margin-left: 0;       /* <<< Sin margen izquierdo específico */
+    margin-right: 0;      /* <<< Sin margen derecho específico */
+
+    /* 2. Mantener márgenes verticales necesarios */
+    margin-top: 70px;     /* Margen superior original */
+    margin-bottom: 50px;  /* Margen inferior original */
+
+    /* 3. Asegurar centrado del texto interno */
+    text-align: center;   /* <<< ASEGÚRATE de que esté centrado */
+
+    /* 4. Otros estilos base */
+    position: relative;   /* Ya lo tenía */
+    z-index: 1;           /* Ya lo tenía */
+    padding-left: 15px;   /* Ya lo tenía */
+    padding-right: 15px;  /* Ya lo tenía */
+    box-sizing: border-box;/* Ya lo tenía */
+}
+.footer-section {margin-bottom: 0; padding-top: 10px; padding-bottom: 10px; border-top: 1px solid rgba(170, 170, 170, 0); max-width: none; width: 100%; padding-left: 0; padding-right: 0;} /* Footer ancho completo */
 
 .title-section,
 .main-content {
@@ -497,9 +534,8 @@ h1 { font-family: 'Playfair Display', serif; font-size: 4em; font-weight: 400; l
 #validation-view .validation-icon.error { color: #f44336; }
 #validation-view .loading-message { font-style: italic; color: #aaa; }
 
-/* === FOOTER === */
-.footer-section { margin-top: 50px; padding: 30px 0; width: 100%; text-align: center; position: relative; border-top: 1px solid rgba(170, 170, 170, 0.2); background-color: #1a1a1a; z-index: 1;}
-.copyright-text { font-family: 'Montserrat', sans-serif; font-size: 0.8em; color: #888; letter-spacing: 1px; }
+
+.copyright-text { font-family: 'Montserrat', sans-serif; font-size: 0.8em; color: #888; letter-spacing: 1px; text-align: center;}
 
 /* === KEYFRAMES ANIMACIÓN === */
 @keyframes fadeInPage { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
