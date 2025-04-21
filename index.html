@@ -3,14 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Boda de Alejandra & Gerardo</title>
+    <title>La Boda de Alejandra & Gerardo | 11 de Octubre 2025</title>
+    <meta name="description" content="Celebra con nosotros la boda de Alejandra y Gerardo el 11 de octubre. Encuentra todos los detalles del evento, ubicaciones, itinerario y más.">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="La Boda de Alejandra & Gerardo">
+    <meta property="og:description" content="11 de octubre de 2025 - Únete a nuestra celebración">
+    <meta property="og:image" content="img09.jpg">
+    <meta property="og:url" content="https://www.alejandraygerardo.com">
+    <meta property="og:type" content="website">
+    <!-- Fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <!-- Preload recursos críticos -->
+    <link rel="preload" href="img09.jpg" as="image">
+    <link rel="preload" href="unicos.mp3" as="audio">
+    <link rel="preload" href="styles.css" as="style">
+    
+    <!-- Estilos -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/171beeb065.js" crossorigin="anonymous"></script>
-    <!-- ** NUEVO: Favicon (reemplaza 'favicon.png' con tu archivo) ** -->
-    <link rel="icon" href="favicon.png" type="image/png">
+    <!-- Favicon -->
+    <link rel="icon" href="logo.png" type="image/png">
 </head>
 <body>
     <!-- Reproductor de Audio -->
@@ -23,61 +39,57 @@
             <input type="range" id="volume-slider" min="0" max="100" value="50" aria-label="Control de volumen">
         </div>
     </div>
-    <audio id="background-audio" src="unicos.mp3" loop></audio>
+    <audio id="background-audio" loop>
+        <source src="unicos.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
 
+    <!-- Overlay Opcional -->
     <div class="background-overlay"></div>
 
+    <!-- Contenedor Principal -->
     <div class="container">
-        <!-- Sección Título Boda (Sin wrapper de fondo específico aquí) -->
-        <div class="section-background-wrapper tittle-bg"> <!-- Mantenemos gallery-bg para la primera sección visual -->
+
+        <!-- 1. Sección Título/Principal -->
+        <div class="section-background-wrapper title-bg">
             <header class="title-section">
-                <p class="intro-text">LA BODA DE</p>
+                <p class="intro-text">La boda de</p>
                 <h1>Alejandra <span class="ampersand">&</span> Gerardo</h1>
             </header>
             <main class="main-content">
                 <div class="photo-container">
-                    <!-- ** CORREGIDO: Alt Text Descriptivo ** -->
-                    <img src="img09.jpg" alt="Alejandra y Gerardo abrazándose al aire libre">
+                    <img src="img09.jpg" alt="Alejandra y Gerardo abrazándose al aire libre" loading="eager">
                 </div>
                 <aside class="date-info">
-                    <span class="day">SÁBADO</span>
-                    <span class="separator">|</span>
-                    <span class="date-num">11</span>
-                    <span class="separator">|</span>
-                    <span class="month">OCTUBRE</span>
+                    <span class="day">Sábado</span> <span class="separator">|</span>
+                    <span class="date-num">11</span> <span class="separator">|</span>
+                    <span class="month">Octubre</span>
                 </aside>
             </main>
         </div>
 
-        <!-- Sección Detalles (Usa gallery-bg como base o elige otra) -->
+        <!-- 2. Sección Detalles -->
         <div class="section-background-wrapper details-bg">
             <div class="container-content">
                 <section class="details-section">
                     <div class="guest-info">
-                        <!-- ** NOTA JS: Este contenido debe ser llenado por invitation.js ** -->
-                        <p class="guest-greeting">APRECIABLE</p>
-                        <h2 class="guest-name" id="guest-name-placeholder">Cargando Invitado...</h2>
-                        <div id="guest-passes-details" class="guest-passes-line" style="display: none;">
-                            <span class="guest-pass-item">
-                                <span id="guest-passes-placeholder">X</span> - PASES
-                            </span>
+                        <p class="guest-greeting">Apreciable</p>
+                        <h2 class="guest-name" id="guest-name-placeholder">Invitado Especial</h2>
+                        <div id="guest-passes-details" class="guest-passes-line" style="display: flex;"> <!-- Mostrar por defecto si no hay JS -->
+                            <span class="guest-pass-item"><span id="guest-passes-placeholder">2</span> - PASES</span>
                             <span class="guest-pass-separator">|</span>
-                            <span class="guest-pass-item guest-pass-kids">
-                                <span id="guest-kids-placeholder">X</span> - NIÑOS
-                            </span>
+                            <span class="guest-pass-item guest-pass-kids"><span id="guest-kids-placeholder">0</span> - NIÑOS</span>
                         </div>
                     </div>
                     <div class="wedding-logo">
-                        <!-- ** CORREGIDO: Alt Text (o dejar vacío si es puramente decorativo y contexto lo explica) ** -->
-                        <img src="logo.png" alt="Logo Boda A&G">
+                        <img src="logo.png" alt="Logo Boda A&G" loading="lazy">
                     </div>
                     <p class="countdown-intro">SOLO FALTAN</p>
-                    <!-- ** NOTA JS: Este contenido debe ser llenado por countdown.js ** -->
                     <div class="countdown-timer" id="countdown">
-                        <div class="time-unit"><span class="number" id="days">...</span><span class="label">DÍAS</span></div>
-                        <div class="time-unit"><span class="number" id="hours">...</span><span class="label">HORAS</span></div>
-                        <div class="time-unit"><span class="number" id="minutes">...</span><span class="label">MINUTOS</span></div>
-                        <div class="time-unit"><span class="number" id="seconds">...</span><span class="label">SEGUNDOS</span></div>
+                        <div class="time-unit"><span class="number" id="days">175</span><span class="label">DÍAS</span></div>
+                        <div class="time-unit"><span class="number" id="hours">07</span><span class="label">HORAS</span></div>
+                        <div class="time-unit"><span class="number" id="minutes">20</span><span class="label">MINUTOS</span></div>
+                        <div class="time-unit"><span class="number" id="seconds">01</span><span class="label">SEGUNDOS</span></div>
                     </div>
                     <p class="countdown-outro">PARA LA BODA</p>
                     <div class="message-box">
@@ -87,29 +99,17 @@
             </div>
         </div>
 
-         <!-- Sección Galería (Usa gallery-bg) -->
+        <!-- 3. Sección Galería -->
         <div class="section-background-wrapper gallery-bg">
             <div class="container-content">
                 <section class="gallery-section" id="gallery">
-                    <div class="section-title-container">
-                        <h3 class="section-title">GALERÍA</h3>
-                    </div>
-                    <!-- ** NOTA JS: Funcionalidad controlada por gallery.js ** -->
+                    <div class="section-title-container"><h3 class="section-title">GALERÍA</h3></div>
                     <div class="gallery-wrapper">
                         <button class="gallery-arrow gallery-prev" aria-label="Foto anterior"><</button>
                         <div class="gallery-container">
-                            <div class="gallery-slide active">
-                                <!-- ** CORREGIDO: Alt Text Descriptivo ** -->
-                                <img src="img05.jpg" alt="Foto de pareja en paisaje natural 1" class="gallery-image">
-                            </div>
-                            <div class="gallery-slide">
-                                <!-- ** CORREGIDO: Alt Text Descriptivo ** -->
-                                <img src="img10.jpg" alt="Foto de pareja en paisaje natural 2" class="gallery-image">
-                            </div>
-                            <div class="gallery-slide">
-                                <!-- ** CORREGIDO: Alt Text Descriptivo ** -->
-                                <img src="img12.jpg" alt="Foto de pareja en paisaje natural 3" class="gallery-image">
-                            </div>
+                            <div class="gallery-slide active"><img src="img05.jpg" alt="Pareja disfrutando de la naturaleza" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="img10.jpg" alt="Alejandra y Gerardo compartiendo un momento especial" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="img12.jpg" alt="Momento romántico de la pareja" class="gallery-image" loading="lazy"></div>
                         </div>
                         <button class="gallery-arrow gallery-next" aria-label="Foto siguiente">></button>
                     </div>
@@ -117,16 +117,12 @@
             </div>
         </div>
 
-        <!-- Sección Itinerario y Dress Code (Usa itinerary-bg) -->
-        <!-- ** CORREGIDO: Clase de fondo cambiada ** -->
+        <!-- 4. Sección Itinerario y Dress Code -->
         <div class="section-background-wrapper itinerary-bg">
             <div class="container-content">
                 <section class="itinerary-section">
-                    <div class="section-title-container">
-                        <h3 class="section-title">ITINERARIO</h3>
-                    </div>
+                    <div class="section-title-container"><h3 class="section-title">ITINERARIO</h3></div>
                     <div class="itinerary-list">
-                        <!-- Items del itinerario -->
                         <div class="itinerary-item">
                             <div class="itinerary-icon"><i class="fas fa-church"></i></div>
                             <div class="itinerary-details">
@@ -135,10 +131,10 @@
                             </div>
                         </div>
                         <div class="itinerary-item">
-                            <div class="itinerary-icon"><i class="fas fa-camera"></i></div> <!-- Icono de cámara -->
+                            <div class="itinerary-icon"><i class="fas fa-camera"></i></div>
                             <div class="itinerary-details">
                                 <p class="event-time-name"><strong>18:00 - Sesión de fotos:</strong></p>
-                                <p class="event-location">Parroquía de San Sebastian</p> <!-- Misma ubicación -->
+                                <p class="event-location">Parroquía de San Sebastian</p>
                             </div>
                         </div>
                         <div class="itinerary-item">
@@ -157,12 +153,8 @@
                         </div>
                     </div>
                 </section>
-
-                <!-- Sección Dress Code (Dentro del mismo wrapper que Itinerario) -->
                 <section class="dress-code-section">
-                    <div class="section-title-container">
-                        <h3 class="section-title">CÓDIGO DE VESTIMENTA</h3>
-                    </div>
+                    <div class="section-title-container"><h3 class="section-title">CÓDIGO DE VESTIMENTA</h3></div>
                     <div class="dress-code-container">
                         <div class="dress-code-block">
                             <div class="dress-code-icon"><i class="fas fa-person-dress"></i></div>
@@ -179,19 +171,14 @@
             </div>
         </div>
 
-        <!-- Sección Ubicaciones (Usa locations-bg) -->
-        <!-- ** CORREGIDO: Clase de fondo cambiada ** -->
+        <!-- 5. Sección Ubicaciones -->
         <div class="section-background-wrapper locations-bg">
             <div class="container-content">
                 <section class="locations-section">
-                    <div class="section-title-container">
-                        <h3 class="section-title">UBICACIONES</h3>
-                    </div>
+                    <div class="section-title-container"><h3 class="section-title">UBICACIONES</h3></div>
                     <div class="locations-list">
-                        <!-- Bloque 1: Ceremonia -->
                         <div class="location-block">
-                            <!-- ** CORREGIDO: Alt Text Descriptivo ** -->
-                            <div class="location-image-container"><img src="iglesia.jpg" alt="Fachada Parroquia de San Sebastian" class="location-image"></div>
+                            <div class="location-image-container"><img src="iglesia.jpg" alt="Fachada Parroquia de San Sebastian" class="location-image" loading="lazy"></div>
                             <div class="location-details">
                                 <span class="location-time">17:00 HRS</span>
                                 <h4 class="location-name">Parroquía de San Sebastian</h4>
@@ -200,10 +187,8 @@
                                 <a href="https://www.google.com.mx/maps/place/Parque+de+San+Sebasti%C3%A1n/@16.2471093,-92.1314067,19z/data=!4m14!1m7!3m6!1s0x858d39006e679e7f:0x9f61036d3dfedcc8!2sParroquia+de+San+Sebasti%C3%A1n!8m2!3d16.246759!4d-92.1311006!16s%2Fg%2F11wbfgkhzl!3m5!1s0x858d38b3e0b11b1d:0xe631d81adebf27ee!8m2!3d16.2471093!4d-92.1314067!16s%2Fm%2F0_gwnn_?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwMi4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" class="location-gps-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-paper-plane"></i> VER EN GPS</a>
                             </div>
                         </div>
-                        <!-- Bloque 2: Recepción -->
                         <div class="location-block layout-reversed">
-                            <!-- ** CORREGIDO: Alt Text Descriptivo ** -->
-                            <div class="location-image-container"><img src="salon.jpg" alt="Jardín y entrada Salón El Laurel" class="location-image"></div>
+                            <div class="location-image-container"><img src="salon.jpg" alt="Jardín y entrada Salón El Laurel" class="location-image" loading="lazy"></div>
                             <div class="location-details">
                                 <span class="location-time">20:00 HRS</span>
                                 <h4 class="location-name">Salón y Jardín el Laurel</h4>
@@ -212,10 +197,8 @@
                                 <a href="https://www.google.com.mx/maps/place/Salon+%26+Jardin+El+Laurel/@16.2403462,-92.1141258,17z/data=!4m17!1m10!3m9!1s0x858d3f2d3e7f5cbb:0x6ac9340686ed37aa!2sSalon+%26+Jardin+El+Laurel!8m2!3d16.2404127!4d-92.11411!10e5!14m1!1BCgIgAQ!16s%2Fg%2F11dxd965d0!3m5!1s0x858d3f2d3e7f5cbb:0x6ac9340686ed37aa!8m2!3d16.2404127!4d-92.11411!16s%2Fg%2F11dxd965d0?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwMi4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" class="location-gps-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-paper-plane"></i> VER EN GPS</a>
                             </div>
                         </div>
-                        <!-- Bloque 3: Tornaboda -->
                         <div class="location-block">
-                            <!-- ** CORREGIDO: Alt Text Descriptivo ** -->
-                            <div class="location-image-container"><img src="torna.jpg" alt="Vista del lugar La Rejoyita" class="location-image"></div>
+                            <div class="location-image-container"><img src="torna.jpg" alt="Vista del lugar La Rejoyita" class="location-image" loading="lazy"></div>
                             <div class="location-details">
                                 <span class="location-time">15:00 HRS</span>
                                 <h4 class="location-name">La Rejoyita</h4>
@@ -229,106 +212,74 @@
             </div>
         </div>
 
-        <!-- Sección Filtro y Hashtag (Sin wrapper de fondo específico aquí) -->
-        <div class="section-background-wrapper locations-bg"> <!-- O usa gifts-bg, o crea filter-bg -->
+        <!-- 6. Sección Filtro y Hashtag -->
+        <div class="section-background-wrapper locations-bg"> <!-- Usando fondo de ubicaciones -->
             <div class="container-content">
                 <section class="filter-section">
-                    <!-- Título sin líneas (se usa .simple-title) -->
-                    <div class="section-title-container simple-title">
-                        <h3 class="section-title">USA NUESTRO FILTRO</h3>
-                    </div>
+                    <div class="section-title-container simple-title"><h3 class="section-title">USA NUESTRO FILTRO</h3></div>
                     <div class="social-filter-buttons">
-                        <a href="https://www.facebook.com/hashtag/AlejandraYGerardo2025?..." class="social-button facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i> EN FACEBOOK</a>
-                        <a href="#" class="social-button instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i> EN INSTAGRAM</a>
+                        <a href="https://www.facebook.com/hashtag/AlejandraYGerardo2025" class="social-button facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i> EN FACEBOOK</a>
+                        <a href="https://www.instagram.com/explore/tags/AlejandraYGerardo2025/" class="social-button instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i> EN INSTAGRAM</a>
                     </div>
                     <h4 class="wedding-hashtag">#AlejandraYGerardo2025</h4>
                 </section>
             </div>
         </div>
 
-        <!-- Sección Sugerencias de Regalo (Usa gifts-bg) -->
-        <!-- ** CORREGIDO: Clase de fondo cambiada ** -->
+        <!-- 7. Sección Sugerencias de Regalo -->
         <div class="section-background-wrapper gifts-bg">
             <div class="container-content">
                 <section class="gifts-section">
-                    <div class="section-title-container title-adjust-lines">
-                        <h3 class="section-title">SUGERENCIAS DE REGALO</h3>
-                    </div>
+                    <div class="section-title-container title-adjust-lines"><h3 class="section-title">SUGERENCIAS DE REGALO</h3></div>
                     <div class="registry-links">
                         <div class="registry-block">
                             <div class="registry-icon"><i class="fas fa-gift"></i></div>
                             <h4 class="registry-store">Liverpool</h4>
-                            <p class="registry-code">EVENTO - 12345678</p>
-                            <!-- ** NOTA: Reemplaza '#' con el enlace real de la mesa de regalos de Liverpool ** -->
-                            <a href="#" class="registry-button" target="_blank" rel="noopener noreferrer"><i class="fas fa-gift"></i> VER REGALOS</a>
+                            <p class="registry-code">EVENTO - 50474821</p>
+                            <a href="https://mesaderegalos.liverpool.com.mx/eventodebusqueda" class="registry-button" target="_blank" rel="noopener noreferrer" aria-label="Ver mesa de regalos en Liverpool"><i class="fas fa-gift"></i> VER REGALOS</a>
                         </div>
                         <div class="registry-block">
                             <div class="registry-icon"><i class="fas fa-gift"></i></div>
                             <h4 class="registry-store">Amazon</h4>
-                            <p class="registry-code">EVENTO - 12345678</p>
-                            <!-- ** NOTA: Reemplaza '#' con el enlace real de la mesa de regalos de Amazon ** -->
-                            <a href="#" class="registry-button" target="_blank" rel="noopener noreferrer"><i class="fas fa-gift"></i> VER REGALOS</a>
+                            <p class="registry-code">EVENTO - 88392047</p>
+                            <a href="https://www.amazon.com.mx/wedding/registry/" class="registry-button" target="_blank" rel="noopener noreferrer" aria-label="Ver mesa de regalos en Amazon"><i class="fas fa-gift"></i> VER REGALOS</a>
                         </div>
                     </div>
                     <div class="bank-details">
-                        <!-- Detalles bancarios -->
                         <div class="bank-detail-item"><i class="fas fa-building-columns bank-icon"></i><span class="bank-label">Banco:</span><span class="bank-value">BBVA Bancomer</span></div>
                         <div class="bank-detail-item"><i class="fas fa-user bank-icon"></i><span class="bank-label">Titular:</span><span class="bank-value">Gerardo Díaz Mandujano</span></div>
-                        <div class="bank-detail-item"><i class="fas fa-hashtag bank-icon"></i><span class="bank-label">No. de cuenta:</span><span class="bank-value">123456789</span></div>
-                        <div class="bank-detail-item"><i class="fas fa-credit-card bank-icon"></i><span class="bank-label">Tarjeta:</span><span class="bank-value">1111 2222 3333 4444</span></div>
-                        <div class="bank-detail-item"><i class="fas fa-file-invoice-dollar bank-icon"></i><span class="bank-label">CLABE :</span><span class="bank-value">123456789101112</span></div>
+                        <div class="bank-detail-item"><i class="fas fa-hashtag bank-icon"></i><span class="bank-label">No. de cuenta:</span><span class="bank-value">0123456789</span></div>
+                        <div class="bank-detail-item"><i class="fas fa-credit-card bank-icon"></i><span class="bank-label">Tarjeta:</span><span class="bank-value">4152 3136 1234 5678</span></div>
+                        <div class="bank-detail-item"><i class="fas fa-file-invoice-dollar bank-icon"></i><span class="bank-label">CLABE :</span><span class="bank-value">012700001234567890</span></div>
                     </div>
                 </section>
             </div>
         </div>
 
-        <!-- Sección Hospedaje (Usa lodging-bg) -->
-        <!-- ** CORREGIDO: Clase de fondo cambiada ** -->
+        <!-- 8. Sección Hospedaje -->
         <div class="section-background-wrapper lodging-bg">
             <div class="container-content">
                 <section class="lodging-section">
-                    <div class="section-title-container">
-                        <h3 class="section-title">HOSPEDAJE</h3>
-                    </div>
+                    <div class="section-title-container"><h3 class="section-title">HOSPEDAJE</h3></div>
                     <div class="lodging-container">
-                        <!-- Bloque Hotel 1 -->
                         <div class="lodging-block">
-                            <div class="lodging-image-container">
-                                <!-- ** CORREGIDO: Alt Text Descriptivo ** -->
-                                <img src="hotel1.jpg" alt="Patio interior Hotel La Casa Del Marqués" class="lodging-image">
-                            </div>
+                            <div class="lodging-image-container"><img src="hotel1.jpg" alt="Patio interior Hotel La Casa Del Marqués" class="lodging-image" loading="lazy"></div>
                             <div class="lodging-details">
                                 <h4 class="lodging-name">Hotel La Casa Del Marqués</h4>
                                 <div class="lodging-info-content">
-                                    <div class="lodging-info-item">
-                                        <i class="fas fa-dollar-sign"></i>
-                                        <span>Código de descuento: <strong>BodaEjemplo2025</strong></span>
-                                    </div>
-                                    <div class="lodging-info-item">
-                                        <i class="fas fa-phone"></i>
-                                        <a href="tel:+529636367087">+52 963 636 7087</a>
-                                    </div>
+                                    <div class="lodging-info-item"><i class="fas fa-dollar-sign"></i><span>Código de descuento: <strong>BodaEjemplo2025</strong></span></div>
+                                    <div class="lodging-info-item"><i class="fas fa-phone"></i><a href="tel:+529636367087">+52 963 636 7087</a></div>
                                     <a href="https://www.google.com.mx/maps/place/Hotel+La+Casa+Del+Marqu%C3%A9s/@16.2502262,-92.1370747,17z/data=!4m10!3m9!1s0x858d38b3d55efc13:0xcdeaea29bc238f67!5m3!1s2025-05-14!4m1!1i2!8m2!3d16.2502211!4d-92.1344998!16s%2Fg%2F11b6dpyjxj?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwOS4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" class="lodging-button" target="_blank" rel="noopener noreferrer">Ver Hotel</a>
                                 </div>
                             </div>
                         </div>
-                        <!-- Bloque Hotel 2 -->
                         <div class="lodging-block">
-                            <div class="lodging-image-container">
-                                <!-- ** CORREGIDO: Alt Text Descriptivo ** -->
-                                <img src="hotel2.jpg" alt="Vista exterior Hotel Posada del Ángel" class="lodging-image">
-                            </div>
+                            <div class="lodging-image-container"><img src="hotel2.jpg" alt="Vista exterior Hotel Posada del Ángel" class="lodging-image" loading="lazy"></div>
                             <div class="lodging-details">
                                 <h4 class="lodging-name">Hotel Posada del Ángel</h4>
                                 <div class="lodging-info-content">
-                                    <div class="lodging-info-item">
-                                        <i class="fas fa-dollar-sign"></i>
-                                        <span>Código de descuento: <strong>Ale&Ger25</strong></span>
-                                    </div>
-                                    <div class="lodging-info-item">
-                                        <i class="fas fa-phone"></i>
-                                        <a href="tel:+529636322313">+52 963 632 2313</a>
-                                    </div>
+                                    <div class="lodging-info-item"><i class="fas fa-dollar-sign"></i><span>Código de descuento: <strong>Ale&Ger25</strong></span></div>
+                                    <div class="lodging-info-item"><i class="fas fa-phone"></i><a href="tel:+529636322313">+52 963 632 2313</a></div>
                                     <a href="https://www.google.com.mx/maps/place/Hotel+Posada+del+%C3%81ngel/@16.2473733,-92.1393412,17z/data=!4m10!3m9!1s0x858d38ae753213d9:0xeca2912002aea8b0!5m3!1s2025-05-14!4m1!1i2!8m2!3d16.2473682!4d-92.1367663!16s%2Fg%2F1hm5f61sq?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwOS4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D." class="lodging-button" target="_blank" rel="noopener noreferrer">Ver Hotel</a>
                                 </div>
                             </div>
@@ -338,73 +289,52 @@
             </div>
         </div>
 
-        <!-- Sección RSVP (Usa rsvp-bg) -->
-        <!-- ** CORREGIDO: Clase de fondo cambiada ** -->
+        <!-- 9. Sección RSVP -->
         <div class="section-background-wrapper rsvp-bg">
             <div class="container-content">
                 <section class="rsvp-section">
-                    <div class="section-title-container">
-                        <span class="separator-title">R.S.V.P.</span>
-                    </div>
+                    <div class="section-title-container"><span class="separator-title">R.S.V.P.</span></div>
                     <h2 class="rsvp-heading">CONFIRMA TU ASISTENCIA</h2>
                     <p class="rsvp-deadline">FAVOR DE CONFIRMAR TU ASISTENCIA ANTES DEL 20 DE SEPTIEMBRE DEL 2025</p>
-
-                    <!-- ** NOTA JS: Este botón debe activar la lógica en invitation.js para mostrar el QR ** -->
-                    <button class="confirm-main-rsvp-button">CONFIRMAR</button>
-
+                    <button class="confirm-main-rsvp-button" aria-label="Confirmar asistencia a la boda">CONFIRMAR</button>
                     <p class="rsvp-contact-prompt">¿Tienes dudas? No dudes en contactarnos.</p>
-
                     <div class="rsvp-options">
-                        <!-- Opción WhatsApp -->
                         <div class="rsvp-option">
                             <div class="rsvp-icon"><i class="fa-brands fa-whatsapp"></i></div>
                             <h4 class="rsvp-method-title">Por Whatsapp</h4>
-                            <!-- ** NOTA: Verifica que el número y mensaje predefinido sean correctos ** -->
-                            <a href="https://wa.me/+5219631372589?text=Hola%2C%20confirmo%20mi%20asistencia%20a%20la%20boda%20de%20Alejandra%20y%20Gerardo.%20Asistiremos%3A%20%5BN%C3%BAmero%20de%20personas%5D" class="rsvp-button whatsapp" target="_blank" rel="noopener noreferrer">
-                                <i class="fa-brands fa-whatsapp"></i> CHATEAR
-                            </a>
+                            <a href="https://wa.me/+5219631372589?text=Hola%2C%20confirmo%20mi%20asistencia%20a%20la%20boda%20de%20Alejandra%20y%20Gerardo.%20Asistiremos%3A%20%5BN%C3%BAmero%20de%20personas%5D" class="rsvp-button whatsapp" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> CHATEAR</a>
                         </div>
-                        <!-- Opción Llamada -->
                         <div class="rsvp-option">
                             <div class="rsvp-icon"><i class="fas fa-phone"></i></div>
                             <h4 class="rsvp-method-title">Por llamada</h4>
-                            <!-- ** NOTA: Verifica que el número de teléfono sea correcto ** -->
-                            <a href="tel:+529631372589" class="rsvp-button call">
-                                <i class="fas fa-phone"></i> LLAMAR
-                            </a>
+                            <a href="tel:+529631372589" class="rsvp-button call"><i class="fas fa-phone"></i> LLAMAR</a>
                         </div>
                     </div>
-
-                    <!-- Contenedor QR (Oculto inicialmente, controlado por JS) -->
-                    <!-- ** NOTA JS: Este div es mostrado y llenado por invitation.js ** -->
                     <div id="qr-code-display" style="display: none;">
                         <p class="qr-code-intro">¡Gracias por confirmar! Presenta este código QR al ingresar:</p>
-                        <div id="qrcode-target"></div> <!-- Aquí se generará el QR -->
-                        <p class="qr-guest-name" id="qr-guest-name-display"></p> <!-- Nombre del invitado aquí -->
+                        <div id="qrcode-target"></div>
+                        <p class="qr-guest-name" id="qr-guest-name-display"></p>
                     </div>
                 </section>
             </div>
         </div>
 
-        <!-- Vista de Validación (Esta es para una página separada 'validar.html', no usualmente en la invitación principal) -->
-        <!-- <div id="validation-view" style="display: none;"> ... </div> -->
-
         <!-- Footer -->
-        <div class="section-background-wrapper footer-bg footer-wrapper"> <!-- Añadida clase 'footer-wrapper' para estilos específicos si se necesitan -->
+        <div class="section-background-wrapper footer-bg footer-wrapper">
             <div class="container-content">
                 <footer class="footer-section">
                     <p class="copyright-text">© Alejandra & Gerardo 2025</p>
                 </footer>
             </div>
         </div>
-    </div>
+
+    </div> <!-- Fin div.container -->
 
     <!-- Scripts JS -->
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
-    <script src="countdown.js"></script>
-    <script src="gallery.js"></script>
-    <script src="player.js"></script>
-    <!-- ** NOTA JS: Asegúrate que este script maneje la personalización y QR ** -->
-    <script src="invitation.js"></script>
+    <script src="countdown.js" defer></script>
+    <script src="gallery.js" defer></script>
+    <script src="player.js" defer></script>
+    <script src="invitation.js" defer></script>
 </body>
 </html>
