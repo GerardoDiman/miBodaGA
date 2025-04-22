@@ -100,7 +100,7 @@ body {
                       linear-gradient(to top, rgb(0, 0, 0) 5%, transparent 25%),
                       linear-gradient(to right, rgb(0, 0, 0) 0%, transparent 35%),
                       linear-gradient(to left, rgb(0, 0, 0) 0%, transparent 35%),
-                      url('img03.jpg');
+                      url('DSC_7701.jpg');
 }
 .gallery-bg::before {
     background-image: linear-gradient(to bottom, rgb(0, 0, 0) 5%, transparent 25%),
