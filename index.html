@@ -9,7 +9,7 @@
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="La Boda de Alejandra & Gerardo">
     <meta property="og:description" content="11 de octubre de 2025 - Únete a nuestra celebración">
-    <meta property="og:image" content="img09.jpg">
+    <meta property="og:image" content="assets/images/img09.jpg">
     <meta property="og:url" content="https://www.alejandraygerardo.com">
     <meta property="og:type" content="website">
     <!-- Fuentes -->
@@ -17,16 +17,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
     <!-- Preload recursos críticos -->
-    <link rel="preload" href="img09.jpg" as="image">
-    <link rel="preload" href="unicos.mp3" as="audio">
-    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="assets/images/img09.jpg" as="image">
+    <link rel="preload" href="assets/audio/unicos.mp3" as="audio">
+    <link rel="preload" href="src/css/styles.css" as="style">
     
     <!-- Estilos -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="src/css/styles.css">
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/171beeb065.js" crossorigin="anonymous"></script>
     <!-- Favicon -->
-    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
 </head>
 <body>
     <!-- Reproductor de Audio -->
@@ -40,7 +40,7 @@
         </div>
     </div>
     <audio id="background-audio" loop>
-        <source src="unicos.mp3" type="audio/mpeg">
+        <source src="assets/audio/unicos.mp3" type="audio/mpeg">
         Tu navegador no soporta el elemento de audio.
     </audio>
 
@@ -58,7 +58,7 @@
             </header>
             <main class="main-content">
                 <div class="photo-container">
-                    <img src="img01.JPG" alt="Alejandra y Gerardo abrazándose al aire libre" loading="eager">
+                    <img src="assets/images/img01.JPG" alt="Alejandra y Gerardo abrazándose al aire libre" loading="eager">
                 </div>
                 <aside class="date-info">
                     <span class="day">Sábado</span> <span class="separator">|</span>
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                     <div class="wedding-logo">
-                        <img src="logo.png" alt="Logo Boda A&G" loading="lazy">
+                        <img src="assets/images/logo.png" alt="Logo Boda A&G" loading="lazy">
                     </div>
                     <p class="countdown-intro">SOLO FALTAN</p>
                     <div class="countdown-timer" id="countdown">
@@ -105,26 +105,21 @@
                 <section class="gallery-section" id="gallery">
                     <div class="section-title-container"><h3 class="section-title">GALERÍA</h3></div>
                     <div class="gallery-wrapper">
-                        <button class="gallery-arrow gallery-prev" aria-label="Foto anterior"><</button>
+                        <button class="gallery-arrow gallery-prev" aria-label="Foto anterior"></button>
                         <div class="gallery-container">
-                            <div class="gallery-slide active"><img src="img02.JPG" alt="Pareja disfrutando de la naturaleza" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="img03.JPG" alt="Alejandra y Gerardo en un momento romántico" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="img04.JPG" alt="Foto artística de la pareja" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="img05.JPG" alt="Alejandra y Gerardo sonriendo" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="img06.JPG" alt="Pareja en un paisaje" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="DSC_7565.jpg" alt="Momento tierno de la pareja" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="DSC_7569.jpg" alt="Alejandra y Gerardo en un abrazo" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="DSC_7571.jpg" alt="Pareja caminando de la mano" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="DSC_7574.jpg" alt="Alejandra y Gerardo en un atardecer" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="DSC_7592.jpg" alt="Foto de la pareja en un jardín" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="DSC_7662.jpg" alt="Alejandra y Gerardo en un viñedo" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="DSC_7675.jpg" alt="Pareja en un campo" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="DSC_7695.jpg" alt="Alejandra y Gerardo en un bosque" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="DSC_7701.jpg" alt="Momento feliz de la pareja" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="DSC_7706.jpg" alt="Alejandra y Gerardo en un paisaje montañoso" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="DSC_7716.jpg" alt="Pareja en un lago" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="img10.jpg" alt="Alejandra y Gerardo compartiendo un momento especial" class="gallery-image" loading="lazy"></div>
-                            <div class="gallery-slide"><img src="img12.jpg" alt="Momento romántico de la pareja" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide active"><img src="assets/images/img02.JPG" alt="Pareja disfrutando de la naturaleza" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img03.JPG" alt="Alejandra y Gerardo en un momento romántico" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img04.JPG" alt="Foto artística de la pareja" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img05.JPG" alt="Alejandra y Gerardo sonriendo" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img06.JPG" alt="Pareja en un paisaje" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img07.JPG" alt="Momento tierno de la pareja" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img08.JPG" alt="Alejandra y Gerardo en un abrazo" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img09.JPG" alt="Pareja caminando de la mano" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img10.JPG" alt="Alejandra y Gerardo en un atardecer" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img11.JPG" alt="Foto de la pareja en un jardín" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img12.JPG" alt="Alejandra y Gerardo en un viñedo" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img13.JPG" alt="Pareja en un campo" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/img14.JPG" alt="Alejandra y Gerardo en un bosque" class="gallery-image" loading="lazy"></div>
                         </div>
                         <button class="gallery-arrow gallery-next" aria-label="Foto siguiente">></button>
                     </div>
@@ -172,12 +167,12 @@
                     <div class="section-title-container"><h3 class="section-title">CÓDIGO DE VESTIMENTA</h3></div>
                     <div class="dress-code-container">
                         <div class="dress-code-block">
-                            <div class="dress-code-icon"><img src="dress.png" alt="Vestido formal"></div>
+                            <div class="dress-code-icon"><img src="assets/images/dress.png" alt="Vestido formal"></div>
                             <h4 class="dress-code-name">Formal</h4>
                             <p class="dress-code-desc">TACONES CÓMODOS Y ABRIGO.</p>
                         </div>
                         <div class="dress-code-block">
-                            <div class="dress-code-icon"><img src="smoking.png" alt="Traje formal"></div>
+                            <div class="dress-code-icon"><img src="assets/images/smoking.png" alt="Traje formal"></div>
                             <h4 class="dress-code-name">Etiqueta</h4>
                             <p class="dress-code-desc">ZAPATOS CÓMODOS Y SACO</p>
                         </div>
@@ -193,7 +188,7 @@
                     <div class="section-title-container"><h3 class="section-title">UBICACIONES</h3></div>
                     <div class="locations-list">
                         <div class="location-block">
-                            <div class="location-image-container"><img src="iglesia.jpg" alt="Fachada Parroquia de San Sebastian" class="location-image" loading="lazy"></div>
+                            <div class="location-image-container"><img src="assets/images/iglesia.jpg" alt="Fachada Parroquia de San Sebastian" class="location-image" loading="lazy"></div>
                             <div class="location-details">
                                 <span class="location-time">17:00 HRS</span>
                                 <h4 class="location-name">Parroquía de San Sebastian</h4>
@@ -203,7 +198,7 @@
                             </div>
                         </div>
                         <div class="location-block layout-reversed">
-                            <div class="location-image-container"><img src="salon.jpg" alt="Jardín y entrada Salón El Laurel" class="location-image" loading="lazy"></div>
+                            <div class="location-image-container"><img src="assets/images/salon.jpg" alt="Jardín y entrada Salón El Laurel" class="location-image" loading="lazy"></div>
                             <div class="location-details">
                                 <span class="location-time">20:00 HRS</span>
                                 <h4 class="location-name">Salón y Jardín el Laurel</h4>
@@ -213,7 +208,7 @@
                             </div>
                         </div>
                         <div class="location-block">
-                            <div class="location-image-container"><img src="torna.jpg" alt="Vista del lugar La Rejoyita" class="location-image" loading="lazy"></div>
+                            <div class="location-image-container"><img src="assets/images/torna.jpg" alt="Vista del lugar La Rejoyita" class="location-image" loading="lazy"></div>
                             <div class="location-details">
                                 <span class="location-time">15:00 HRS</span>
                                 <h4 class="location-name">La Rejoyita</h4>
@@ -248,24 +243,54 @@
                     <div class="section-title-container title-adjust-lines"><h3 class="section-title">SUGERENCIAS DE REGALO</h3></div>
                     <div class="registry-links">
                         <div class="registry-block">
-                            <div class="registry-icon"><img src="liverpool.png" alt="Logo Liverpool"></div>
+                            <div class="registry-icon"><img src="assets/images/liverpool.png" alt="Logo Liverpool"></div>
                             <h4 class="registry-store">Liverpool</h4>
                             <p class="registry-code">EVENTO - 50474821</p>
                             <a href="https://mesaderegalos.liverpool.com.mx/eventodebusqueda" class="registry-button" target="_blank" rel="noopener noreferrer" aria-label="Ver mesa de regalos en Liverpool"><i class="fas fa-gift"></i> VER REGALOS</a>
                         </div>
                         <div class="registry-block">
-                            <div class="registry-icon"><img src="amazon.png" alt="Logo Amazon"></div>
+                            <div class="registry-icon"><img src="assets/images/amazon.png" alt="Logo Amazon"></div>
                             <h4 class="registry-store">Amazon</h4>
                             <p class="registry-code">EVENTO - 88392047</p>
                             <a href="https://www.amazon.com.mx/wedding/registry/" class="registry-button" target="_blank" rel="noopener noreferrer" aria-label="Ver mesa de regalos en Amazon"><i class="fas fa-gift"></i> VER REGALOS</a>
                         </div>
                     </div>
                     <div class="bank-details">
-                        <div class="bank-detail-item"><i class="fas fa-building-columns bank-icon"></i><span class="bank-label">Banco:</span><span class="bank-value">BBVA Bancomer</span></div>
-                        <div class="bank-detail-item"><i class="fas fa-user bank-icon"></i><span class="bank-label">Titular:</span><span class="bank-value">Gerardo Díaz Mandujano</span></div>
-                        <div class="bank-detail-item"><i class="fas fa-hashtag bank-icon"></i><span class="bank-label">No. de cuenta:</span><span class="bank-value">0123456789</span></div>
-                        <div class="bank-detail-item"><i class="fas fa-credit-card bank-icon"></i><span class="bank-label">Tarjeta:</span><span class="bank-value">4152 3136 1234 5678</span></div>
-                        <div class="bank-detail-item"><i class="fas fa-file-invoice-dollar bank-icon"></i><span class="bank-label">CLABE :</span><span class="bank-value">012700001234567890</span></div>
+                        <div class="bank-detail-item">
+                            <div class="bank-header">
+                                <i class="fas fa-building-columns bank-icon"></i>
+                                <span class="bank-label">Banco:</span>
+                            </div>
+                            <span class="bank-value">BBVA Bancomer</span>
+                        </div>
+                        <div class="bank-detail-item">
+                            <div class="bank-header">
+                                <i class="fas fa-user bank-icon"></i>
+                                <span class="bank-label">Titular:</span>
+                            </div>
+                            <span class="bank-value">Gerardo Díaz Mandujano</span>
+                        </div>
+                        <div class="bank-detail-item">
+                            <div class="bank-header">
+                                <i class="fas fa-hashtag bank-icon"></i>
+                                <span class="bank-label">No. de cuenta:</span>
+                            </div>
+                            <span class="bank-value">0123456789</span>
+                        </div>
+                        <div class="bank-detail-item">
+                            <div class="bank-header">
+                                <i class="fas fa-credit-card bank-icon"></i>
+                                <span class="bank-label">Tarjeta:</span>
+                            </div>
+                            <span class="bank-value">4152 3136 1234 5678</span>
+                        </div>
+                        <div class="bank-detail-item">
+                            <div class="bank-header">
+                                <i class="fas fa-file-invoice-dollar bank-icon"></i>
+                                <span class="bank-label">CLABE :</span>
+                            </div>
+                            <span class="bank-value">012700001234567890</span>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -278,7 +303,7 @@
                     <div class="section-title-container"><h3 class="section-title">HOSPEDAJE</h3></div>
                     <div class="lodging-container">
                         <div class="lodging-block">
-                            <div class="lodging-image-container"><img src="hotel1.jpg" alt="Patio interior Hotel La Casa Del Marqués" class="lodging-image" loading="lazy"></div>
+                            <div class="lodging-image-container"><img src="assets/images/hotel1.jpg" alt="Patio interior Hotel La Casa Del Marqués" class="lodging-image" loading="lazy"></div>
                             <div class="lodging-details">
                                 <h4 class="lodging-name">Hotel La Casa Del Marqués</h4>
                                 <div class="lodging-info-content">
@@ -289,7 +314,7 @@
                             </div>
                         </div>
                         <div class="lodging-block">
-                            <div class="lodging-image-container"><img src="hotel2.jpg" alt="Vista exterior Hotel Posada del Ángel" class="lodging-image" loading="lazy"></div>
+                            <div class="lodging-image-container"><img src="assets/images/hotel2.jpg" alt="Vista exterior Hotel Posada del Ángel" class="lodging-image" loading="lazy"></div>
                             <div class="lodging-details">
                                 <h4 class="lodging-name">Hotel Posada del Ángel</h4>
                                 <div class="lodging-info-content">
@@ -347,9 +372,9 @@
 
     <!-- Scripts JS -->
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
-    <script src="countdown.js" defer></script>
-    <script src="gallery.js" defer></script>
-    <script src="player.js" defer></script>
-    <script src="invitation.js" defer></script>
+    <script src="src/js/countdown.js" defer></script>
+    <script src="src/js/gallery.js" defer></script>
+    <script src="src/js/player.js" defer></script>
+    <script src="src/js/invitation.js" defer></script>
 </body>
 </html>
