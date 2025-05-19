@@ -289,9 +289,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-medium);
+    gap: var(--spacing-small);
     white-space: nowrap;
     max-width: 100%;
+    font-weight: normal;
+    font-family: var(--font-primary);
 }
 
 .intro-text::before,
@@ -632,6 +634,15 @@ h1 {
 
 /* --- 4.13 RSVP --- */
 .rsvp-section { padding: 0; text-align: center; margin-bottom: 0; }
+.rsvp-section .section-title { 
+    font-size: 0.9em;
+    letter-spacing: 4px;
+    color: var(--color-text);
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
 .rsvp-heading { font-family: var(--font-primary); font-size: 1.4em; letter-spacing: 5px; color: #e5e5e5; text-transform: uppercase; margin: 0 0 var(--spacing-small) 0; position: relative; z-index: 1;}
 .rsvp-deadline { font-family: var(--font-secondary); font-size: 0.9em; font-style: italic; color: #b0b0b0; margin-bottom: var(--spacing-medium); position: relative; z-index: 1;}
 .confirm-main-rsvp-button { display: inline-block; background-color: rgba(255, 255, 255, 0.15); color: var(--color-text); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 25px; padding: 12px 45px; margin: 0 auto var(--spacing-small) auto; font-family: var(--font-primary); font-size: 0.9em; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; position: relative; z-index: 1; }
@@ -678,7 +689,6 @@ h1 {
     }
 
     .section-title-container {
-        margin-bottom: var(--spacing-medium);
         max-width: 95%;
         gap: var(--spacing-small);
     }
@@ -686,11 +696,31 @@ h1 {
     .section-title {
         font-size: 0.8em;
         letter-spacing: 3px;
+        line-height: 1.8;
+        white-space: normal;
+        max-width: 130px;
     }
 
-    .section-title-container::before, .section-title-container::after {
-        min-width: 15px;
+    /* Ajustes específicos por sección para la responsividad de títulos */
+    .gifts-section .section-title,
+    .dress-code-section .section-title,
+    .rsvp-section .section-title {
+        font-size: 0.8em;
+        letter-spacing: 3px;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        display: inline-block;
+        text-transform: uppercase;
+        font-family: var(--font-primary);
+        color: var(--color-text);
+        line-height: 1.8;
+        white-space: normal;
     }
+
+    .gifts-section .section-title { max-width: 128px; }
+    .dress-code-section .section-title { max-width: 115px; }
+    .rsvp-section .section-title { max-width: 128px; }
 
     .container-content section {
         margin-bottom: var(--spacing-medium);
@@ -871,6 +901,27 @@ h1 {
         margin-bottom: 0;
     }
 
+    /* Ajuste del título en dos líneas */
+    .dress-code-section .section-title {
+        font-size: 0.8em;
+        letter-spacing: 3px;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        display: inline-block;
+        text-transform: uppercase;
+        font-family: var(--font-primary);
+        color: var(--color-text);
+        max-width: 115px;
+        line-height: 1.8;
+        white-space: normal;
+    }
+
+    .dress-code-section .section-title-container::before,
+    .dress-code-section .section-title-container::after {
+        width: 40px;
+    }
+
     .location-block, .location-block.layout-reversed {
         flex-direction: column;
         align-items: center;
@@ -960,6 +1011,15 @@ h1 {
 
 /* Media Queries para dispositivos muy pequeños */
 @media (max-width: 320px) {
+    /* Ajuste para el título RSVP */
+    .rsvp-section .section-title {
+        font-size: 0.8em;
+        letter-spacing: 3px;
+        max-width: 128px;
+        line-height: 1.8;
+        white-space: normal;
+    }
+
     /* Ajustes de fecha e información */
     .date-info {
         letter-spacing: 0.1rem;
@@ -1181,5 +1241,81 @@ h1 {
 
     .qr-guest-name {
         font-size: 0.9em;
+    }
+
+    /* Ajustes para la sección de sugerencias de regalo */
+    .gifts-section .section-title-container {
+        margin-bottom: var(--spacing-medium);
+    }
+
+    .gifts-section .section-title {
+        font-size: 0.8em;
+        letter-spacing: 3px;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        display: inline-block;
+        text-transform: uppercase;
+        font-family: var(--font-primary);
+        color: var(--color-text);
+        max-width: 128px;
+        line-height: 1.8;
+        white-space: normal;
+    }
+
+    .gifts-section .section-title-container::before,
+    .gifts-section .section-title-container::after {
+        width: 40px;
+    }
+
+    .registry-block {
+        padding: var(--spacing-small);
+        margin-bottom: var(--spacing-small);
+    }
+
+    .registry-store {
+        font-size: 1.2em;
+        margin: var(--spacing-small) 0;
+    }
+
+    .registry-code {
+        font-size: 0.7em;
+        letter-spacing: 1px;
+        margin-bottom: var(--spacing-small);
+    }
+
+    .registry-button {
+        font-size: 0.6em;
+        padding: 8px 20px;
+        letter-spacing: 1px;
+    }
+
+    .bank-details {
+        padding: var(--spacing-small);
+        margin-top: var(--spacing-medium);
+    }
+
+    .bank-detail-item {
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+
+    .bank-header {
+        margin-bottom: 4px;
+    }
+
+    .bank-icon {
+        font-size: 0.9em;
+        margin-right: 6px;
+    }
+
+    .bank-label {
+        font-size: 0.7em;
+    }
+
+    .bank-value {
+        font-size: 0.75em;
+        padding: 6px 8px;
+        letter-spacing: 0.5px;
     }
 }

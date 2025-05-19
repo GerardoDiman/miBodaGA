@@ -123,11 +123,9 @@
             mostrarErrorCarga("Invitación Genérica");
             return;
         }
-        console.log(`ID invitado: ${guestId}`);
-
-        fetch('invitados.json')
+        console.log(`ID invitado: ${guestId}`);        fetch('data/invitados.json')
             .then(response => {
-                if (!response.ok) { throw new Error(`Error ${response.status} cargando invitados.json`); }
+                if (!response.ok) { throw new Error(`Error ${response.status} cargando data/invitados.json`); }
                 return response.json();
             })
             .then(invitados => {
