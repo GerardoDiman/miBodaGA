@@ -42,13 +42,13 @@
             }
         }
 
-        /** Genera y muestra el código QR */
+        /** Muestra el código QR pre-generado */
         function displayQrCode(invitado) {
             if (!qrDisplayContainer || !qrCodeTargetDiv || !qrGuestNameDisplay) {
                 console.error("displayQrCode: Faltan elementos HTML para el QR."); return;
             }
             if (!invitado || typeof invitado.id !== 'string' || invitado.id.trim() === '') {
-                console.error("displayQrCode: Datos inválidos para generar QR. Invitado:", invitado);
+                console.error("displayQrCode: Datos inválidos para mostrar QR. Invitado:", invitado);
                 qrCodeTargetDiv.innerHTML = '<p style="color: red; font-size: small;">Error: Datos inválidos</p>';
                 qrGuestNameDisplay.textContent = '';
                 qrDisplayContainer.style.display = 'flex';
@@ -56,48 +56,28 @@
                 if (confirmButton) confirmButton.style.display = 'none';
                 return;
             }
-            if (typeof QRCode === 'undefined') {
-                console.error("displayQrCode: La biblioteca QRCode no está definida/cargada.");
-                qrCodeTargetDiv.innerHTML = '<p style="color: red; font-size: small;">Error: Biblioteca QR no cargada</p>';
-                qrGuestNameDisplay.textContent = invitado.nombre;
-                qrDisplayContainer.style.display = 'flex';
-                document.body.classList.add('qr-code-shown');
-                if (confirmButton) confirmButton.style.display = 'none';
-                return;
-            }
 
-            console.log("Mostrando código QR para ID:", invitado.id);
-            qrCodeTargetDiv.innerHTML = '';
+            console.log("Mostrando código QR pre-generado para ID:", invitado.id);
+            qrCodeTargetDiv.innerHTML = ''; // Limpiar contenido anterior
 
-            const validationPageUrl = `${PUBLIC_SITE_URL_BASE}${validationPagePath}?id=${invitado.id}`;
-            console.log("URL pública para QR (validación):", validationPageUrl);
+            // Construir la ruta al archivo QR pre-generado
+            const qrImagePath = `qrcodes/${invitado.id}.png`;
+            console.log("Ruta de la imagen QR:", qrImagePath);
 
-            try {
-                new QRCode(qrCodeTargetDiv, {
-                    text: validationPageUrl, width: 160, height: 160, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
-                });
-                console.log("Llamada a new QRCode completada.");
+            // Crear un elemento de imagen y establecer su fuente
+            const qrImageElement = document.createElement('img');
+            qrImageElement.src = qrImagePath;
+            qrImageElement.alt = `Código QR para ${invitado.nombre}`;
+            qrImageElement.style.maxWidth = '100%'; // Asegurar que la imagen se ajuste al contenedor
+            qrImageElement.style.height = 'auto';
 
-                setTimeout(() => {
-                    if (qrCodeTargetDiv.innerHTML.trim() === '') {
-                        console.warn("displayQrCode: El div target sigue vacío después de llamar a new QRCode.");
-                        qrCodeTargetDiv.innerHTML = '<p style="color: red; font-size: small;">Error al dibujar QR</p>';
-                    }
-                }, 100);
+            // Añadir la imagen al contenedor
+            qrCodeTargetDiv.appendChild(qrImageElement);
 
-                qrGuestNameDisplay.textContent = invitado.nombre;
-                qrDisplayContainer.style.display = 'flex';
-                document.body.classList.add('qr-code-shown');
-                if (confirmButton) confirmButton.style.display = 'none';
-
-            } catch(qrError) {
-                console.error("displayQrCode: Error específico durante la generación del QR:", qrError);
-                qrCodeTargetDiv.textContent = "Error al generar QR";
-                qrGuestNameDisplay.textContent = invitado.nombre;
-                qrDisplayContainer.style.display = 'flex';
-                document.body.classList.add('qr-code-shown');
-                if (confirmButton) confirmButton.style.display = 'none';
-            }
+            qrGuestNameDisplay.textContent = invitado.nombre;
+            qrDisplayContainer.style.display = 'flex';
+            document.body.classList.add('qr-code-shown');
+            if (confirmButton) confirmButton.style.display = 'none';
         }
 
         /** Actualiza la UI (botón/QR) basado en el estado de confirmación */
@@ -224,7 +204,8 @@
                 fetch(GOOGLE_APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow', body: JSON.stringify(dataToSend) })
                     .then(response => {
                         console.log("Solicitud POST de confirmación enviada (no-cors).");
-                        updateUIBasedOnConfirmation(true);
+                        // Llamamos a displayQrCode para mostrar el QR después de confirmar
+                        updateUIBasedOnConfirmation(true); 
                     })
                     .catch(error => {
                         console.error('Error de RED al enviar confirmación POST:', error);

@@ -3,11 +3,14 @@ import json
 import random
 import string
 import os
-import codecs # Necesitamos este módulo para identificar el BOM
+import codecs
+import qrcode # Importar la librería qrcode
 
 # --- Configuración (igual que antes) ---
 INPUT_CSV_FILENAME = 'invitados.csv'
 OUTPUT_JSON_FILENAME = 'invitados.json'
+QR_CODES_OUTPUT_FOLDER = 'qrcodes' # Carpeta para guardar los códigos QR
+BASE_VALIDATION_URL = 'https://mibodaag.netlify.app//validar.html' # <<-- ¡CONFIGURA ESTA URL CON LA DE TU SITIO DESPLEGADO!
 ID_LENGTH = 6
 ID_CHARACTERS = string.ascii_lowercase + string.digits
 COLUMNA_NOMBRE = 'Nombre'
@@ -31,6 +34,12 @@ def procesar_csv_a_json(archivo_csv, archivo_json):
     """Lee el CSV, añade IDs únicos y escribe el resultado en JSON."""
     lista_invitados_json = []
     ids_generados = set()
+
+    # --- NUEVO: Crear carpeta de salida para QRs si no existe ---
+    if not os.path.exists(QR_CODES_OUTPUT_FOLDER):
+        os.makedirs(QR_CODES_OUTPUT_FOLDER)
+        print(f"Carpeta de salida para QRs creada: {QR_CODES_OUTPUT_FOLDER}")
+    # --- Fin NUEVO ---
 
     if not os.path.exists(archivo_csv):
         print(f"Error: El archivo CSV '{archivo_csv}' no fue encontrado.")
@@ -90,6 +99,25 @@ def procesar_csv_a_json(archivo_csv, archivo_json):
                     # Generar un ID único
                     id_unico = generar_id_unico(ID_LENGTH, ID_CHARACTERS, ids_generados)
 
+                    # --- NUEVO: Generar Código QR ---
+                    qr_data = f"{BASE_VALIDATION_URL}?id={id_unico}" # Datos para el QR (la URL de validación con el ID)
+                    qr = qrcode.QRCode(
+                        version=1, # Versión del QR (1 a 40)
+                        error_correction=qrcode.constants.ERROR_CORRECT_L, # Nivel de corrección de error
+                        box_size=10, # Tamaño de cada "caja" del QR
+                        border=4, # Tamaño del borde
+                    )
+                    qr.add_data(qr_data)
+                    qr.make(fit=True)
+
+                    img = qr.make_image(fill_color="black", back_color="white") # Crear la imagen del QR
+
+                    # Guardar la imagen del QR
+                    qr_filename = os.path.join(QR_CODES_OUTPUT_FOLDER, f'{id_unico}.png')
+                    img.save(qr_filename)
+                    print(f"  Código QR generado para {nombre}: {qr_filename}")
+                    # --- Fin NUEVO ---
+
                     # Convertir pases y niños a enteros (manejar posibles errores)
                     try:
                         pases_int = int(pases_str) if pases_str else 0
@@ -128,6 +156,7 @@ def procesar_csv_a_json(archivo_csv, archivo_json):
             json.dump(lista_invitados_json, jsonfile, ensure_ascii=False, indent=2)
 
         print(f"\n¡Éxito! Se ha creado el archivo JSON: {archivo_json}")
+        print(f"¡Éxito! Se han generado los códigos QR en la carpeta: {QR_CODES_OUTPUT_FOLDER}")
         return True
 
     except Exception as e:
