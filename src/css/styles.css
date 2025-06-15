@@ -3,9 +3,9 @@
    ========================================================================== */
 :root {
     --color-background: #1a1a1a;
-    --color-text: #f0f0f0;
+    --color-text: #ffffff; /* Cambiado a blanco puro para mejor contraste */
     --color-accent: #d1b7a0;
-    --color-muted: #888888;
+    --color-muted: #a0a0a0; /* Aclarado para mejor visibilidad */
     --font-primary: 'Montserrat', sans-serif;
     --font-secondary: 'Playfair Display', serif;
     --spacing-section: 50px;
@@ -73,8 +73,9 @@ html, body {
 body {
     font-family: var(--font-primary);
     background-color: var(--color-background);
-    color: var(--color-text);
+    min-height: 100vh;
     position: relative;
+    z-index: 0;
 }
 
 /* ==========================================================================
@@ -91,7 +92,7 @@ body {
     width: 90%;
     margin: 0 auto;
     position: relative;
-    z-index: 1;
+    z-index: 2;
     padding: 0 var(--spacing-small);
     box-sizing: border-box;
 }
@@ -105,6 +106,7 @@ body {
     padding-top: var(--spacing-large);
     padding-bottom: var(--spacing-large);
     box-sizing: border-box;
+    z-index: 1;
 }
 
 /* Solapamiento para eliminar línea entre wrappers */
@@ -120,8 +122,8 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    opacity: 0.25;
-    filter: blur(2px);
+    opacity: 0.5;
+    filter: blur(1px);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -149,7 +151,7 @@ body {
                       linear-gradient(to top, rgb(0, 0, 0) 5%, transparent 25%),
                       linear-gradient(to right, rgb(0, 0, 0) 0%, transparent 35%),
                       linear-gradient(to left, rgb(0, 0, 0) 0%, transparent 35%),
-                      url('../../assets/images/img09.JPG');
+                      url('../../assets/images/img02.JPG');
 }
 .itinerary-bg::before {
     background-image: linear-gradient(to bottom, rgb(0, 0, 0) 5%, transparent 25%),
@@ -218,10 +220,17 @@ body {
 
 /* --- 4.2 Secciones dentro de .container-content --- */
 .container-content section {
-    margin: 0; padding: 0; box-sizing: border-box; position: relative;
-    opacity: 0;
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    position: relative;
+    opacity: 1;
     animation: fadeInPage 1s ease-out 0.2s forwards;
+    z-index: 3;
+    padding: var(--spacing-medium);
+    border-radius: 10px;
 }
+
 /* Márgenes inferiores para espaciado vertical entre secciones */
 .details-section, .gallery-section, .itinerary-section, .locations-section,
 .filter-section, .gifts-section, .lodging-section, .rsvp-section {
@@ -333,17 +342,18 @@ h1 {
 }
 .date-info { 
     position: absolute; 
-    left: 50%; 
-    bottom: 2rem; 
-    transform: translateX(-50%);
+    right: 14rem;
+    top: 75%;
+    transform: translateY(-50%) rotate(90deg);
     letter-spacing: 0.3rem; 
-    font-size: 0.9rem; 
+    font-size: 1rem; 
     color: var(--color-muted); 
     z-index: 0; 
     display: flex;
     align-items: center;
     gap: var(--spacing-small);
     white-space: nowrap;
+    transform-origin: right center;
 }
 .date-info span { 
     display: inline-block;
@@ -414,17 +424,17 @@ h1 {
 /* --- 4.6 Galería --- */
 .gallery-section { 
     padding: 0;
-    margin: var(--spacing-large) 0; 
+    margin: var(--spacing-medium) 0; 
 }
 .gallery-wrapper { 
     position: relative; 
     width: 100%;
-    margin-top: -var(--spacing-large);
-    margin-bottom: -var(--spacing-large);
+    margin-top: -var(--spacing-medium);
+    margin-bottom: -var(--spacing-medium);
 }
 .gallery-container { 
     width: 100%; 
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 14 / 9;
     margin: 0 auto; 
     overflow: hidden; 
     position: relative;
@@ -443,11 +453,11 @@ h1 {
 }
 .gallery-image { 
     display: block; 
-    width: 90%; 
+    width: 60%; 
     height: 100%; 
     object-fit: cover; 
     margin: 0 auto;
-    border-radius: 15px;
+    border-radius: 20px 150px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 .gallery-arrow { 
@@ -465,7 +475,6 @@ h1 {
     text-align: center; 
     cursor: pointer; 
     z-index: 5; 
-    opacity: 0; 
     transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.3s ease; 
 }
 .gallery-wrapper:hover .gallery-arrow {
@@ -476,13 +485,300 @@ h1 {
     transform: translateY(-50%) scale(1.1);
 }
 .gallery-prev { 
-    left: 2%; 
+    left: 10%; 
 }
 .gallery-next { 
-    right: 2%; 
+    right: 10%; 
 }
 
-/* --- 4.7 Itinerario --- */
+/* --- 4.7 Sección de Padres --- */
+.parents-bg::before {
+    background-image: linear-gradient(to bottom, rgb(0, 0, 0) 5%, transparent 25%),
+                      linear-gradient(to top, rgb(0, 0, 0) 5%, transparent 25%),
+                      linear-gradient(to right, rgb(0, 0, 0) 0%, transparent 35%),
+                      linear-gradient(to left, rgb(0, 0, 0) 0%, transparent 35%),
+                      url('../../assets/images/gardenias.JPG');
+}
+
+.parents-section {
+    padding: 0;
+}
+
+.parents-section .section-title-container {
+    margin-bottom: calc(var(--spacing-section) * 0.8);
+}
+
+.parents-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: dense;
+    gap: calc(var(--spacing-large) * 2) calc(var(--spacing-large) * 0);
+    margin: 0 auto;
+    max-width: 1000px;
+    padding: calc(var(--spacing-medium) * 1.5) 0;
+}
+
+.parents-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.parents-group:nth-child(2) {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: var(--spacing-large);
+}
+
+.parents-group:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.parent-content {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    padding: var(--spacing-medium) 0;
+}
+
+.parent-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        rgba(255, 255, 255, 0.3) 20%,
+        rgba(255, 255, 255, 0.3) 80%,
+        transparent
+    );
+}
+
+.parent-content::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        rgba(255, 255, 255, 0.3) 20%,
+        rgba(255, 255, 255, 0.3) 80%,
+        transparent
+    );
+}
+
+.parent-title {
+    font-family: var(--font-secondary);
+    font-size: 2.5em;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-medium);
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.parent-subtitle {
+    font-family: var(--font-primary);
+    font-size: 0.8em;
+    letter-spacing: 3px;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    margin-top: var(--spacing-small);
+}
+
+/* Media queries para la sección de padres */
+@media (max-width: 768px) {
+    .parents-container {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-large) * 1.5);
+    }
+
+    .parents-group {
+        width: 100%;
+        max-width: none;
+    }
+
+    .parents-group:nth-child(1),
+    .parents-group:nth-child(2) {
+        grid-column: 1;
+        margin-top: 0;
+    }
+
+    .parents-group:nth-child(2) {
+        margin-top: var(--spacing-large);
+    }
+
+    .parent-title {
+        font-size: 2em;
+    }
+}
+
+@media (max-width: 576px) {
+    .parents-container {
+        gap: var(--spacing-large);
+        padding: var(--spacing-large) 0;
+    }
+
+    .parent-title {
+        font-size: 1.8em;
+    }
+
+    .parent-subtitle {
+        font-size: 0.7em;
+        letter-spacing: 2px;
+    }
+}
+
+/* --- 4.8 Sección de Madrinas y Padrinos --- */
+.sponsors-bg::before {
+    background-image: linear-gradient(to bottom, rgb(0, 0, 0) 5%, transparent 25%),
+                      linear-gradient(to top, rgb(0, 0, 0) 5%, transparent 25%),
+                      linear-gradient(to right, rgb(0, 0, 0) 0%, transparent 35%),
+                      linear-gradient(to left, rgb(0, 0, 0) 0%, transparent 35%),
+                      url('../../assets/images/flores.JPG');
+}
+
+.sponsors-section {
+    padding: 0;
+}
+
+.sponsors-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: calc(var(--spacing-large) * 1.5);
+    margin: var(--spacing-large) auto;
+    max-width: 1200px;
+    padding: 0 var(--spacing-medium);
+}
+
+.sponsor-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--spacing-large) var(--spacing-medium);
+    position: relative;
+    background-color: rgba(36, 36, 36, 0.462);
+    border-radius: 15px;
+}
+
+.sponsor-icon {
+    font-size: 2.5em;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-medium);
+    height: 60px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.sponsor-card:hover .sponsor-icon {
+    transform: scale(1.1);
+    background-color: rgba(209, 183, 160, 0.1);
+}
+
+.sponsor-info {
+    position: relative;
+    padding: var(--spacing-medium) 0;
+    width: 100%;
+}
+
+.sponsor-info::before,
+.sponsor-info::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        rgba(255, 255, 255, 0.3) 20%,
+        rgba(255, 255, 255, 0.3) 80%,
+        transparent
+    );
+    transform: translateX(-50%);
+}
+
+.sponsor-info::before {
+    top: 0;
+}
+
+.sponsor-info::after {
+    bottom: 0;
+}
+
+.sponsor-names {
+    font-family: var(--font-secondary);
+    font-size: 2.5em;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-small);
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.sponsor-role {
+    font-family: var(--font-primary);
+    font-size: 0.8em;
+    letter-spacing: 3px;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    margin-top: var(--spacing-small);
+}
+
+/* Media queries para la sección de madrinas y padrinos */
+@media (max-width: 1200px) {
+    .sponsors-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--spacing-large);
+    }
+
+    .sponsor-names {
+        font-size: 2.2em;
+    }
+}
+
+@media (max-width: 768px) {
+    .sponsor-names {
+        font-size: 2em;
+    }
+}
+
+@media (max-width: 576px) {
+    .sponsors-container {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-medium) * 1.2);
+    }
+
+    .sponsor-card {
+        padding: var(--spacing-medium);
+    }
+
+    .sponsor-names {
+        font-size: 1.8em;
+    }
+
+    .sponsor-role {
+        font-size: 0.7em;
+        letter-spacing: 2px;
+    }
+}
+
+/* --- 4.9 Itinerario --- */
 .itinerary-section { padding: 0; }
 .itinerary-list { padding-left: 22.4%; width: 100%; box-sizing: border-box; margin: 0; }
 .itinerary-item { 
@@ -506,7 +802,7 @@ h1 {
 .event-time-name strong { font-weight: 500; }
 .event-location { font-family: var(--font-primary); font-size: 0.9em; color: #b0b0b0; }
 
-/* --- 4.8 Dress Code --- */
+/* --- 4.10 Dress Code --- */
 .dress-code-section { 
     margin-top: var(--spacing-medium); 
     padding: 0; 
@@ -551,7 +847,7 @@ h1 {
     padding-top: 8px;
 }
 
-/* --- 4.9 Ubicaciones --- */
+/* --- 4.11 Ubicaciones --- */
 .locations-section { padding: 0; }
 .locations-list { display: flex; flex-direction: column; gap: var(--spacing-medium); /* Reduce el espacio entre los bloques de ubicación */
 }
@@ -582,15 +878,7 @@ h1 {
 .location-gps-link:hover { background-color: var(--color-accent); color: var(--color-background); }
 .location-gps-link i { font-size: 0.9em; margin-right: var(--spacing-small); }
 
-/* --- 4.10 Filtro --- */
-.filter-section { text-align: center; padding: 0; }
-.social-filter-buttons { display: flex; justify-content: center; gap: var(--spacing-medium); margin: var(--spacing-large) 0; flex-wrap: wrap; }
-.social-button { display: inline-flex; align-items: center; gap: var(--spacing-small); background-color: rgba(40, 40, 40, 0.8); color: var(--color-text); font-family: var(--font-primary); font-size: 0.85em; font-weight: 500; text-decoration: none; padding: var(--spacing-small) var(--spacing-medium); border-radius: 25px; transition: background-color 0.3s ease, color 0.3s ease; }
-.social-button:hover { background-color: var(--color-accent); color: var(--color-background); }
-.social-button i { font-size: 1.1em; margin-right: var(--spacing-small); }
-.wedding-hashtag { font-family: var(--font-secondary); font-style: italic; font-size: 1.6em; color: #e5e5e5; margin-top: var(--spacing-large); }
-
-/* --- 4.11 Regalos --- */
+/* --- 4.12 Regalos --- */
 .gifts-section { padding: 0; }
 .registry-links { 
     display: flex; 
@@ -613,24 +901,6 @@ h1 {
 .bank-icon { font-size: 1.2em; color: #c5c5c5; width: 20px; text-align: center; flex-shrink: 0; }
 .bank-label { font-family: var(--font-primary); font-size: 0.9em; color: #b5b5b5; flex-shrink: 0; }
 .bank-value { font-family: var(--font-primary); font-size: 0.9em; font-weight: 500; color: var(--color-text); word-break: break-all; text-align: center; margin-top: 4px; }
-
-/* --- 4.12 Hospedaje --- */
-.lodging-section { padding: 0; }
-.lodging-container { display: flex; justify-content: space-around; align-items: stretch; flex-wrap: wrap; gap: var(--spacing-large); }
-.lodging-block { background-color: rgba(36, 36, 36, 0.462); border-radius: 15px; padding: 25px; flex: 1 1 300px; max-width: 45%; min-width: 280px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;}
-.lodging-image-container { width: 180px; height: 180px; border-radius: 50%; overflow: hidden; margin: 0 auto var(--spacing-large) auto; border: 3px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
-.lodging-image { display: block; width: 100%; height: 100%; object-fit: cover; }
-.lodging-details { display: flex; flex-direction: column; align-items: center; flex-grow: 1; width: 100%; text-align: center; }
-.lodging-name { font-family: var(--font-secondary); font-size: 1.8em; color: var(--color-text); margin-bottom: var(--spacing-medium); line-height: 1.3; flex-shrink: 0; }
-.lodging-info-content { display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: auto; padding-top: var(--spacing-small); }
-.lodging-info-item { display: flex; align-items: center; gap: var(--spacing-small); margin-bottom: 12px; font-family: var(--font-primary); font-size: 0.9em; color: #c5c5c5; flex-shrink: 0; width: 100%; max-width: 250px; margin-left: auto; margin-right: auto; justify-content: center; }
-.lodging-info-item i { color: var(--color-accent); font-size: 1.1em; width: 20px; text-align: center; flex-shrink: 0; }
-.lodging-info-item span { text-align: left; flex-grow: 1; }
-.lodging-info-item strong { display: block; text-align: left; margin-top: 2px; font-weight: 500; color: var(--color-text);}
-.lodging-info-item a { color: inherit; text-decoration: none; }
-.lodging-info-item a:hover { color: var(--color-accent); }
-.lodging-button { display: inline-block; background-color: rgba(17, 17, 17, 0.588); color: var(--color-text); padding: var(--spacing-small) var(--spacing-medium); border-radius: 20px; text-decoration: none; font-size: 0.8em; font-weight: 500; transition: background-color 0.3s ease, color 0.3s ease; margin-top: var(--spacing-medium); flex-shrink: 0; }
-.lodging-button:hover { background-color: var(--color-accent); color: var(--color-background); }
 
 /* --- 4.13 RSVP --- */
 .rsvp-section { padding: 0; text-align: center; margin-bottom: 0; }
@@ -669,653 +939,347 @@ h1 {
 .footer-section { padding: var(--spacing-small) 0; text-align: center; margin: 0; }
 .copyright-text { font-family: var(--font-primary); font-size: 0.8em; color: var(--color-muted); letter-spacing: 1px; text-align: center; }
 
-/* ==========================================================================
-   5. Animaciones y Efectos Varios
-   ========================================================================== */
-@keyframes fadeInPage { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+/* --- 4.15 Sección Final --- */
+.final-bg {
+    position: relative;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.final-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                      url('../../assets/images/img14.JPG');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    opacity: 1;
+}
+
+.final-section {
+    text-align: center;
+    padding: calc(var(--spacing-large) * 3) 0;
+    margin: 0;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.final-title {
+    font-family: var(--font-primary);
+    font-size: 1em;
+    letter-spacing: 4px;
+    color: var(--color-text);
+    text-transform: uppercase;
+    margin-bottom: calc(var(--spacing-large) * 1.5);
+    position: relative;
+    display: inline-block;
+}
+
+.final-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -20px;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 60px;
+    background-color: var(--color-accent);
+}
+
+.couple-names {
+    margin: calc(var(--spacing-large) * 1.5) auto;
+    max-width: 800px;
+}
+
+.bride-name,
+.groom-name {
+    font-family: var(--font-secondary);
+    font-size: 3em;
+    color: var(--color-text);
+    line-height: 1.4;
+    font-weight: 400;
+}
+
+.wedding-date {
+    font-family: var(--font-primary);
+    font-size: 1.1em;
+    letter-spacing: 3px;
+    color: var(--color-text);
+    margin-top: calc(var(--spacing-large) * 1.5);
+    margin-bottom: calc(var(--spacing-large) * 1.5);
+}
+
+.add-calendar-btn {
+    display: inline-block;
+    background-color: transparent;
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    padding: 12px 30px;
+    font-family: var(--font-primary);
+    font-size: 0.8em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.add-calendar-btn:hover {
+    background-color: var(--color-accent);
+    color: var(--color-background);
+}
 
 /* ==========================================================================
-   6. Responsividad (Media Queries)
+   5. Media Queries y Responsividad
    ========================================================================== */
-@media (max-width: 768px) {
+
+/* Tablets (768px - 1023px) */
+@media screen and (max-width: 768px) {
+    :root {
+        --spacing-section: 40px;
+        --spacing-small: 12px;
+        --spacing-medium: 25px;
+        --spacing-large: 50px;
+    }
+
     .container-content {
+        max-width: 700px;
+        padding: 0 var(--spacing-medium);
+    }
+
+    /* Ajustes de tipografía */
+    h1 {
+        font-size: 3em;
+    }
+
+    .intro-text {
+        font-size: 0.8em;
+        letter-spacing: 3px;
+    }
+
+    /* Ajustes de foto principal */
+    .photo-container {
+        width: 280px;
+    }
+
+    /* Ajustes de galería */
+    .gallery-image {
+        width: 75%;
+    }
+
+    /* Ajustes de itinerario */
+    .itinerary-list {
+        padding-left: 0;
+    }
+
+    .itinerary-item {
+        margin-bottom: var(--spacing-medium);
+    }
+
+    /* Ajustes de ubicaciones */
+    .location-block {
+        flex-direction: column;
+    }
+
+    .location-block.layout-reversed {
+        flex-direction: column;
+    }
+
+    .location-image-container {
+        width: 100%;
+        max-width: 400px;
+        height: 220px;
+        margin: 0 auto;
+    }
+
+    .location-details {
+        text-align: center;
+        padding: var(--spacing-medium) 0;
+    }
+
+    .location-time {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin: var(--spacing-small) auto;
+    }
+
+    /* Ajustes de regalos */
+    .registry-links {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .registry-block {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+/* Móviles grandes (576px - 767px) */
+@media screen and (max-width: 576px) {
+    :root {
+        --spacing-section: 35px;
+        --spacing-small: 10px;
+        --spacing-medium: 20px;
+        --spacing-large: 40px;
+    }
+
+    .container-content {
+        max-width: 100%;
         width: 95%;
         padding: 0 var(--spacing-small);
     }
 
-    .section-background-wrapper {
-        padding-top: var(--spacing-medium);
-        padding-bottom: var(--spacing-medium);
+    /* Ajustes de tipografía */
+    h1 {
+        font-size: 2.5em;
     }
 
-    .section-title-container {
-        max-width: 95%;
-        gap: var(--spacing-small);
+    .intro-text {
+        font-size: 0.7em;
+        letter-spacing: 2px;
     }
 
     .section-title {
         font-size: 0.8em;
         letter-spacing: 3px;
-        line-height: 1.8;
-        white-space: normal;
-        max-width: 130px;
     }
 
-    /* Ajustes específicos por sección para la responsividad de títulos */
-    .gifts-section .section-title,
-    .dress-code-section .section-title,
-    .rsvp-section .section-title {
-        font-size: 0.8em;
-        letter-spacing: 3px;
-        margin: 0;
-        padding: 0;
-        position: relative;
-        display: inline-block;
-        text-transform: uppercase;
-        font-family: var(--font-primary);
-        color: var(--color-text);
-        line-height: 1.8;
-        white-space: normal;
-    }
-
-    .gifts-section .section-title { max-width: 128px; }
-    .dress-code-section .section-title { max-width: 115px; }
-    .rsvp-section .section-title { max-width: 128px; }
-
-    .container-content section {
-        margin-bottom: var(--spacing-medium);
-        padding: 0;
-    }
-
-    .container-content section:last-child {
-        margin-bottom: 0;
-    }
-
-    .dress-code-section {
-        margin-top: var(--spacing-medium);
-        margin-bottom: var(--spacing-medium);
-    }
-
-    .gallery-bg {
-        padding-bottom: var(--spacing-medium);
-    }
-
-    .rsvp-bg {
-        padding-bottom: var(--spacing-small);
-    }
-
-    .footer-wrapper {
-        padding-top: var(--spacing-small);
-        padding-bottom: var(--spacing-medium);
-    }
-
-    .title-section {
-        width: 95%;
-        margin-bottom: var(--spacing-medium);
-    }
-
-    .intro-text::before, .intro-text::after {
-        width: 3rem;
-    }
-
-    h1 {
-        font-size: 2.8em;
-    }
-
-    .main-content {
-        width: 95%;
-        height: auto;
-        flex-direction: column;
-        gap: var(--spacing-medium);
-        margin-bottom: var(--spacing-medium);
-    }
-
+    /* Ajustes de foto principal */
     .photo-container {
-        position: static;
-        left: 10%;
-        transform: none;
-        max-width: 80%;
-        width: 280px;
+        width: 240px;
     }
 
-    .date-info {
-        position: static;
-        transform: none;
-        writing-mode: horizontal-tb;
-        padding: 0;
-        display: block;
-        text-align: center;
-        margin-top: var(--spacing-medium);
-        font-size: 0.8em;
-        letter-spacing: 0.2rem;
-    }
-
-    .date-info span {
-        display: inline-block;
-        margin: 0 var(--spacing-small);
-    }
-
-    .details-section {
-        margin-bottom: var(--spacing-medium);
-    }
-
-    .guest-passes-line {
-        font-size: 0.75em;
-        gap: var(--spacing-small);
-    }
-
-    /* Ajustes para la cuenta regresiva en pantallas pequeñas */
+    /* Ajustes de cuenta regresiva */
     .countdown-timer {
-        gap: 10px; /* Reduce el espacio entre unidades */
+        gap: 10px;
     }
 
     .time-unit {
-        min-width: 60px; /* Reduce el ancho mínimo de cada unidad */
+        min-width: 50px;
     }
 
-    /* Ajustes adicionales para la fuente de la cuenta regresiva en pantallas pequeñas */
     .time-unit .number {
-        font-size: 2.5em; /* Reduce el tamaño de la fuente de los números */
+        font-size: 2.5em;
     }
 
-    .time-unit .label {
-        font-size: 0.6em; /* Reduce el tamaño de la fuente de las etiquetas */
-    }
-
-    .gallery-container {
-        width: 100%;
-        aspect-ratio: 2 / 3;
-        border-top-left-radius: 8rem;
-        border-top-right-radius: 8rem;
-    }
-
+    /* Ajustes de galería */
     .gallery-image {
-        width: 100%; /* Reduce el ancho de la imagen de la galería */
-        height: 100%;
-        border-top-left-radius: 4rem;
-        border-top-right-radius: 4rem;
+        width: 90%;
     }
 
-    .gallery-prev {
-        left: 5px;
-        width: 35px;
-        height: 35px;
-        font-size: 1.2em;
-        line-height: 35px;
+    .gallery-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5em;
     }
 
-    .gallery-next {
-        right: 5px;
-        width: 35px;
-        height: 35px;
-        font-size: 1.2em;
-        line-height: 35px;
-    }
-
-    .itinerary-list {
-        padding-left: 5%;
-    }
-
-    .itinerary-item {
-        margin-bottom: var(--spacing-small);
-    }
-
-    .itinerary-icon {
-        margin-right: var(--spacing-small);
-    }
-
+    /* Ajustes de dress code */
     .dress-code-container {
         flex-direction: column;
         align-items: center;
-        margin-top: var(--spacing-medium);
-        padding: var(--spacing-medium) var(--spacing-small);
+        gap: var(--spacing-medium);
     }
 
     .dress-code-block {
-        max-width: 90%;
+        max-width: none;
         width: 100%;
-        margin-bottom: calc(var(--spacing-medium) * 1.2);
-        padding: var(--spacing-small);
-        background-color: rgba(0, 0, 0, 0.2);
-        border-radius: 15px;
-    }
-    
-    .dress-code-icon {
-        margin-bottom: calc(var(--spacing-medium) * 0.8);
-    }
-    
-    .dress-code-icon img {
-        width: 70px;
-    }
-    
-    .dress-code-name {
-        font-size: 1em;
-    }
-    
-    .dress-code-desc {
-        font-size: 0.6em;
-        letter-spacing: 2px;
     }
 
-    .dress-code-block:last-child {
-        margin-bottom: 0;
-    }
-
-    /* Ajuste del título en dos líneas */
-    .dress-code-section .section-title {
-        font-size: 0.8em;
-        letter-spacing: 3px;
-        margin: 0;
-        padding: 0;
-        position: relative;
-        display: inline-block;
-        text-transform: uppercase;
-        font-family: var(--font-primary);
-        color: var(--color-text);
-        max-width: 115px;
-        line-height: 1.8;
-        white-space: normal;
-    }
-
-    .dress-code-section .section-title-container::before,
-    .dress-code-section .section-title-container::after {
-        width: 40px;
-    }
-
-    .location-block, .location-block.layout-reversed {
+    /* Ajustes de RSVP */
+    .rsvp-options {
         flex-direction: column;
         align-items: center;
-        padding: var(--spacing-small); /* Reduce el padding interno en pantallas pequeñas */
-        gap: var(--spacing-small); /* Reduce el espacio entre elementos en pantallas pequeñas */
     }
 
-    .location-image-container {
+    .rsvp-option {
+        max-width: 100%;
         width: 100%;
-        max-width: 200px; /* Ajusta el tamaño de la imagen en pantallas pequeñas */
-        height: 150px; /* Ajusta el tamaño de la imagen en pantallas pequeñas */
-        margin-bottom: var(--spacing-small); /* Reduce el margen inferior en pantallas pequeñas */
-    }
-
-    .location-details {
-        text-align: center;
-        width: 100%;
-    }
-
-    .location-time {
-        position: static;
-        margin-bottom: var(--spacing-small);
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: fit-content;
-        order: -1;
-        font-size: 0.6em;
-        letter-spacing: 1px;
-        padding: 6px 12px;
-    }
-
-    .location-name {
-        font-size: 1.2em;
-        margin-bottom: var(--spacing-small);
-        line-height: 1.3;
-    }
-
-    .location-event-type {
-        margin: 0 auto var(--spacing-small) auto;
-        font-size: 0.65em;
-        letter-spacing: 2px;
-        padding-bottom: 6px;
-    }
-
-    .location-address {
-        font-size: 0.65em;
-        margin-bottom: var(--spacing-small);
-        line-height: 1.4;
-        letter-spacing: 1px;
-    }
-
-    .location-gps-link {
-        margin: var(--spacing-small) auto 0 auto; /* Reduce el margen superior en pantallas pequeñas */
-        font-size: 0.7em; /* Reduce el tamaño de la fuente en pantallas pequeñas */
-    }
-    /* --- 4.11 Regalos --- */
-    .registry-icon {
-        margin-bottom: 10px; /* Reduce el margen inferior */
-        display: block;
-        width: 60px; /* Reduce el ancho del contenedor */
-        height: 60px; /* Reduce la altura del contenedor */
-    }
-
-    .registry-icon img {
-        display: block;
-        margin: 0 auto;
-    }
-
-    .registry-block:first-child .registry-icon img {
-        width: 90px; /* Reduce el tamaño de la imagen de Liverpool */
-        height: 90px;
-        margin-left: -15px;
-    }
-
-    .registry-block:nth-child(2) .registry-icon img {
-        width: 60px; /* Reduce el tamaño de la imagen de Amazon */
-        height: 60px;
-        margin-right: -2px;
-    }
-
-    .registry-block {
-        padding: 15px 10px; /* Reduce el padding del bloque */
-        margin-bottom: 15px; /* Reduce el margen entre bloques */
     }
 }
 
-/* Media Queries para dispositivos muy pequeños */
-@media (max-width: 320px) {
-    /* Ajuste para el título RSVP */
-    .rsvp-section .section-title {
-        font-size: 0.8em;
-        letter-spacing: 3px;
-        max-width: 128px;
-        line-height: 1.8;
-        white-space: normal;
+/* Móviles pequeños (375px y menos) */
+@media screen and (max-width: 375px) {
+    :root {
+        --spacing-section: 30px;
+        --spacing-small: 8px;
+        --spacing-medium: 15px;
+        --spacing-large: 35px;
     }
 
-    /* Ajustes de fecha e información */
-    .date-info {
-        letter-spacing: 0.1rem;
-        font-size: 0.75rem;
-        gap: 4px;
-        bottom: 1rem;
-    }
-    .date-info .separator {
-        margin: 0 -2px;
+    /* Ajustes de tipografía */
+    h1 {
+        font-size: 2em;
     }
 
-    /* Ajustes de la caja de mensaje */
-    .message-box {
-        padding: 15px 20px;
-        max-width: 300px;
-        margin: var(--spacing-medium) auto 0 auto;
-    }
-    .message-box p {
-        font-size: 0.7em;
-        line-height: 1;
+    .intro-text {
+        font-size: 0.65em;
+        letter-spacing: 1.5px;
     }
 
-    /* Ajustes del itinerario para pantallas muy pequeñas */
-    .itinerary-list {
-        padding-left: 0;
+    .section-title {
+        font-size: 0.75em;
+        letter-spacing: 2px;
     }
-    
-    .itinerary-item {
-        margin-bottom: calc(var(--spacing-medium) * 1.8);
+
+    /* Ajustes de foto principal */
+    .photo-container {
+        width: 200px;
     }
-    
-    .itinerary-icon {
-        font-size: 1.6em;
-        width: 25px;
-        margin-right: var(--spacing-small);
+
+    /* Ajustes de cuenta regresiva */
+    .time-unit .number {
+        font-size: 2em;
     }
-    
+
+    .time-unit .label {
+        font-size: 0.6em;
+    }
+
+    /* Ajustes de galería */
+    .gallery-image {
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    /* Ajustes de itinerario */
     .event-time-name {
         font-size: 1em;
     }
-    
+
     .event-location {
         font-size: 0.8em;
     }
 
-    /* Ajustes de la sección de regalos */
-    .registry-links {
-        gap: 4px;
-        margin: 0;
-        padding: 0;
-    }
-    .registry-block {
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-    .registry-icon {
-        margin-bottom: 8px;
-        width: 60px;
-        height: 60px;
-    }
-    .registry-block:first-child .registry-icon img {
-        width: 90px;
-        height: 90px;
-        margin-left: -15px;
-    }
-    .registry-block:nth-child(2) .registry-icon img {
-        width: 60px;
-        height: 60px;
-        margin-right: -2px;
-    }
-    .bank-details {
-        max-width: 100%;
-        margin-top: var(--spacing-medium);
-        border-radius: 15px;
-    }
-    .bank-detail-item {
-        display: flex;
-        flex-direction: column;
-        padding: var(--spacing-small);
-    }
-    .bank-header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 8px;
-        border-radius: 8px;
-    }
-    .bank-icon {
-        font-size: 1.1em;
-        width: 20px;
-        color: var(--color-accent);
-    }
-    .bank-label {
-        font-size: 0.7em;
-        margin: 0;
-        min-width: auto;
-        color: var(--color-muted);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    .bank-value {
-        font-size: 0.85em;
-        width: 100%;
-        word-break: break-all;
-        text-align: center;
-        border-radius: 8px;
+    /* Ajustes de ubicaciones */
+    .location-name {
+        font-size: 1.5em;
     }
 
-    /* Ajustes para la sección de hospedaje */
-    .lodging-block {
-        padding: 15px;
-        min-width: 100%;
-        margin-bottom: var(--spacing-medium);
+    .location-event-type {
+        font-size: 0.65em;
+        letter-spacing: 2px;
     }
 
-    .lodging-image-container {
-        width: 150px;
-        height: 150px;
-        margin-bottom: var(--spacing-medium);
-    }
-
-    .lodging-name {
-        font-size: 1.3em;
-        margin-bottom: var(--spacing-small);
-        line-height: 1.2;
-    }
-
-    .lodging-info-item {
-        font-size: 0.75em;
-        margin-bottom: 8px;
-        max-width: 100%;
-        gap: 6px;
-    }
-
-    .lodging-info-item i {
-        font-size: 1em;
-        width: 16px;
-    }
-
-    .lodging-button {
-        font-size: 0.7em;
-        padding: 8px 16px;
-        margin-top: var(--spacing-small);
-    }
-
-    .lodging-container {
-        gap: var(--spacing-small);
-    }
-
-    /* Ajustes para la sección RSVP */
-    .rsvp-heading {
-        font-size: 1.1em;
-        letter-spacing: 3px;
-        margin-bottom: var(--spacing-small);
-    }
-
-    .rsvp-deadline {
-        font-size: 0.75em;
-        margin-bottom: var(--spacing-small);
-    }
-
-    .confirm-main-rsvp-button {
-        padding: 8px 30px;
-        font-size: 0.75em;
-        letter-spacing: 1.5px;
-        margin-bottom: var(--spacing-small);
-    }
-
-    .rsvp-contact-prompt {
-        font-size: 0.7em;
-        margin-bottom: var(--spacing-medium);
-        padding: 0 10px;
-    }
-
-    .rsvp-options {
-        gap: var(--spacing-small);
-        padding-top: var(--spacing-medium);
-    }
-
-    .rsvp-option {
-        min-width: 100%;
-        max-width: 100%;
-        padding: var(--spacing-small);
-    }
-
-    .rsvp-icon {
-        font-size: 2.2em;
-        margin-bottom: var(--spacing-small);
-    }
-
-    .rsvp-method-title {
-        font-size: 1.2em;
-        margin-bottom: var(--spacing-medium);
-    }
-
-    .rsvp-button {
-        font-size: 0.7em;
-        padding: 8px 20px;
-        letter-spacing: 1px;
-        min-width: 130px;
-    }
-
-    #qr-code-display {
-        margin-top: var(--spacing-medium);
-        padding: var(--spacing-medium) var(--spacing-small);
-    }
-
-    .qr-code-intro {
-        font-size: 0.75em;
-        margin-bottom: var(--spacing-small);
-    }
-
+    /* Ajustes de QR */
     #qrcode-target {
         width: 150px;
         height: 150px;
-        padding: 8px;
     }
 
-    .qr-guest-name {
-        font-size: 0.9em;
-    }
-
-    /* Ajustes para la sección de sugerencias de regalo */
-    .gifts-section .section-title-container {
-        margin-bottom: var(--spacing-medium);
-    }
-
-    .gifts-section .section-title {
+    .qr-code-intro {
         font-size: 0.8em;
-        letter-spacing: 3px;
-        margin: 0;
-        padding: 0;
-        position: relative;
-        display: inline-block;
-        text-transform: uppercase;
-        font-family: var(--font-primary);
-        color: var(--color-text);
-        max-width: 128px;
-        line-height: 1.8;
-        white-space: normal;
-    }
-
-    .gifts-section .section-title-container::before,
-    .gifts-section .section-title-container::after {
-        width: 40px;
-    }
-
-    .registry-block {
-        padding: var(--spacing-small);
-        margin-bottom: var(--spacing-small);
-    }
-
-    .registry-store {
-        font-size: 1.2em;
-        margin: var(--spacing-small) 0;
-    }
-
-    .registry-code {
-        font-size: 0.7em;
-        letter-spacing: 1px;
-        margin-bottom: var(--spacing-small);
-    }
-
-    .registry-button {
-        font-size: 0.6em;
-        padding: 8px 20px;
-        letter-spacing: 1px;
-    }
-
-    .bank-details {
-        padding: var(--spacing-small);
-        margin-top: var(--spacing-medium);
-    }
-
-    .bank-detail-item {
-        padding: 8px;
-        margin-bottom: 8px;
-    }
-
-    .bank-header {
-        margin-bottom: 4px;
-    }
-
-    .bank-icon {
-        font-size: 0.9em;
-        margin-right: 6px;
-    }
-
-    .bank-label {
-        font-size: 0.7em;
-    }
-
-    .bank-value {
-        font-size: 0.75em;
-        padding: 6px 8px;
-        letter-spacing: 0.5px;
     }
 }
