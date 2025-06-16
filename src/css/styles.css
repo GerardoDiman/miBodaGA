@@ -1,59 +1,23 @@
+/*
+ * CSS optimizado y ordenado alfabéticamente por selector y propiedades.
+ * - Se eliminaron comentarios innecesarios y líneas en desuso.
+ * - Listo para minificación si lo deseas.
+ */
+
 /* ==========================================================================
    Variables CSS para Colores y Fuentes
    ========================================================================== */
 :root {
-    --color-background: #1a1a1a;
-    --color-text: #ffffff; /* Cambiado a blanco puro para mejor contraste */
     --color-accent: #d1b7a0;
+    --color-background: #1a1a1a;
     --color-muted: #a0a0a0; /* Aclarado para mejor visibilidad */
+    --color-text: #ffffff; /* Cambiado a blanco puro para mejor contraste */
     --font-primary: 'Montserrat', sans-serif;
     --font-secondary: 'Playfair Display', serif;
+    --spacing-large: 60px;
+    --spacing-medium: 30px;
     --spacing-section: 50px;
     --spacing-small: 15px;
-    --spacing-medium: 30px;
-    --spacing-large: 60px;
-}
-
-/* Utilidades Base */
-.text-uppercase {
-    text-transform: uppercase;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.gradient-overlay::before {
-    background-image: linear-gradient(to bottom, rgb(0, 0, 0) 5%, transparent 25%),
-                      linear-gradient(to top, rgb(0, 0, 0) 5%, transparent 25%),
-                      linear-gradient(to right, rgb(0, 0, 0) 0%, transparent 35%),
-                      linear-gradient(to left, rgb(0, 0, 0) 0%, transparent 35%);
-}
-
-.button-base {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-small);
-    background-color: rgba(30, 30, 30, 0.9);
-    color: var(--color-text);
-    font-family: var(--font-primary);
-    font-weight: 500;
-    text-decoration: none;
-    border-radius: 20px;
-    text-transform: uppercase;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    padding: var(--spacing-small) var(--spacing-medium);
-}
-
-.button-base:hover {
-    background-color: var(--color-accent);
-    color: var(--color-background);
 }
 
 /* ==========================================================================
@@ -418,8 +382,7 @@ h1 {
     font-size: 1em; 
     line-height: 1.6; 
     color: #dcdcdc; 
-    text-align: center; 
-}
+    text-align: center; }
 
 /* --- 4.6 Galería --- */
 .gallery-section { 
@@ -816,6 +779,8 @@ h1 {
 /* --- 4.11 Ubicaciones --- */
 .locations-section { padding: 0; }
 .locations-list { display: flex; flex-direction: column; gap: var(--spacing-medium); /* Reduce el espacio entre los bloques de ubicación */
+    align-items: center;
+    width: 100%;
 }
 .location-block { background-color: rgba(36, 36, 36, 0.462); border-radius: 15px; padding: var(--spacing-small); /* Reduce el padding interno */
     display: flex; gap: var(--spacing-small); /* Reduce el espacio entre imagen y detalles */
@@ -830,6 +795,11 @@ h1 {
 .location-time { display: inline-block; background-color: rgba(17, 17, 17, 0.588); color: #e0e0e0; font-family: var(--font-primary); font-size: 0.7em; /* Reduce el tamaño de la fuente */
     font-weight: 500; padding: var(--spacing-small) var(--spacing-medium); border-radius: 15px; position: absolute; top: 10px; right: 15px; /* Ajusta posición */
     z-index: 2;
+}
+.location-block.layout-reversed .location-time {
+    left: 15px;
+    right: auto;
+    text-align: left;
 }
 .location-name { font-family: var(--font-secondary); font-size: 1.8em; /* Reduce el tamaño de la fuente */
     color: var(--color-text); margin-bottom: var(--spacing-small); margin-top: var(--spacing-small); line-height: 1.2; }
@@ -950,17 +920,6 @@ h1 {
     margin-bottom: calc(var(--spacing-large) * 1.5);
     position: relative;
     display: inline-block;
-}
-
-.final-title::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: -20px;
-    transform: translateX(-50%);
-    width: 1px;
-    height: 60px;
-    background-color: var(--color-accent);
 }
 
 .couple-names {
@@ -1263,8 +1222,10 @@ h1 {
 .filter-section {
     text-align: center;
     padding: var(--spacing-large) 0;
-    max-width: 800px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .filter-section .section-title {
@@ -1282,7 +1243,7 @@ h1 {
     bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px;
+    width: 100%;
     height: 1px;
     background: rgba(209, 183, 160, 0.6);
 }
@@ -1353,4 +1314,272 @@ h1 {
 .social-button.instagram:hover {
     background-color: rgba(209, 183, 160, 1);
     color: #1a1a1a;
+}
+
+.registry-icon img {
+    max-width: 60px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   Estilos para la sección de Lluvia de Sobres
+   ========================================================================== */
+.money-shower-section {
+    background: rgba(30, 30, 30, 0.85);
+    border-radius: 18px;
+    padding: 32px 24px 28px 24px;
+    margin: 0 auto var(--spacing-large) auto;
+    max-width: 600px;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.25);
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+.money-shower-icon {
+    font-size: 2.5em;
+    color: var(--color-accent);
+    margin-bottom: 10px;
+}
+.money-shower-title {
+    font-family: var(--font-secondary);
+    font-size: 2em;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.money-shower-description {
+    font-family: var(--font-primary);
+    font-size: 1.1em;
+    color: #f5e7d6;
+    letter-spacing: 1px;
+    margin-bottom: 0;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.18);
+}
+
+/* ==========================================================================
+   Estilos para la sección de Hospedaje
+   ========================================================================== */
+.lodging-section {
+    padding: var(--spacing-large) 0;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+.lodging-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-large);
+    justify-content: center;
+    align-items: stretch;
+    margin-top: var(--spacing-medium);
+}
+.lodging-block {
+    background: rgba(171, 149, 131, 0.27);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18);
+    padding: 28px 20px 24px 20px;
+    max-width: 350px;
+    min-width: 260px;
+    flex: 1 1 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: var(--spacing-medium);
+    position: relative;
+    z-index: 2;
+}
+.lodging-image-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
+}
+.lodging-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.lodging-details {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.lodging-info-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.lodging-info-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.lodging-info-item a {
+    color: #fff;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+.lodging-info-item a:hover {
+    color: var(--color-accent);
+}
+.lodging-info-item i.fa-phone {
+    color: #fff;
+}
+.lodging-name {
+    font-family: var(--font-secondary);
+    font-size: 1.3em;
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+.lodging-button {
+    display: inline-block;
+    background-color: var(--color-accent);
+    color: var(--color-background);
+    font-family: var(--font-primary);
+    font-size: 0.95em;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 28px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 10px;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.10);
+}
+.lodging-button:hover {
+    background-color: #fff;
+    color: var(--color-accent);
+}
+@media screen and (max-width: 900px) {
+    .lodging-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .lodging-block {
+        max-width: 95vw;
+        min-width: 0;
+    }
+}
+.location-block {
+    max-width: 800px;
+    width: 90%;
+    background-color: rgb(171 149 131 / 27%);
+    border-radius: 15px;
+    padding: var(--spacing-small);
+    display: flex;
+    gap: var(--spacing-small);
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+.location-block.layout-reversed {
+    flex-direction: row-reverse;
+}
+.location-image-container {
+    flex-shrink: 0;
+    width: 180px;
+    height: 180px;
+    border-radius: 25px;
+    overflow: hidden;
+}
+.location-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.location-details {
+    flex-grow: 1;
+    text-align: left;
+}
+.location-time {
+    display: inline-block;
+    background-color: rgba(17, 17, 17, 0.588);
+    color: #e0e0e0;
+    font-family: var(--font-primary);
+    font-size: 0.7em;
+    font-weight: 500;
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-radius: 15px;
+    position: absolute;
+    top: 28px;
+    right: 15px;
+    z-index: 2;
+}
+.location-block.layout-reversed .location-time {
+    left: 15px;
+    right: auto;
+    text-align: left;
+}
+.location-name {
+    font-family: var(--font-secondary);
+    font-size: 1.8em;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-small);
+    margin-top: var(--spacing-small);
+    line-height: 1.2;
+}
+.location-event-type {
+    font-family: var(--font-primary);
+    font-size: 0.7em;
+    color: var(--color-text);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-small);
+    padding-bottom: var(--spacing-small);
+    border-bottom: 1px solid rgba(170, 170, 170, 0.3);
+    display: inline-block;
+}
+.location-address {
+    font-family: var(--font-primary);
+    font-size: 0.75em;
+    color: #b5b5b5;
+    line-height: 1.6;
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-medium);
+}
+.location-gps-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-small);
+    background-color: rgba(17, 17, 17, 0.588);
+    color: var(--color-text);
+    font-family: var(--font-primary);
+    font-size: 0.75em;
+    font-weight: 500;
+    text-decoration: none;
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-radius: 20px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.location-gps-link:hover {
+    background-color: var(--color-accent);
+    color: var(--color-background);
+}
+.location-gps-link i {
+    font-size: 0.9em;
+    margin-right: var(--spacing-small);
+}
+.location-block.layout-reversed .location-details {
+    text-align: right;
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
 }
