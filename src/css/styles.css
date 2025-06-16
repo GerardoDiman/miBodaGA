@@ -158,7 +158,7 @@ body {
                       linear-gradient(to top, rgb(0, 0, 0) 5%, transparent 25%),
                       linear-gradient(to right, rgb(0, 0, 0) 0%, transparent 35%),
                       linear-gradient(to left, rgb(0, 0, 0) 0%, transparent 35%),
-                      url('../../assets/images/img10.JPG');
+                      url('../../assets/images/tulipanes.JPG');
 }
 .locations-bg::before {
     background-image: linear-gradient(to bottom, rgb(0, 0, 0) 0%, transparent 100%),
@@ -251,7 +251,7 @@ body {
     padding: 0; 
     flex-shrink: 0; 
     font-family: var(--font-primary); 
-    font-size: 0.9em; 
+    font-size: 1.5em; 
     letter-spacing: 4px; 
     color: var(--color-text); 
     text-transform: uppercase; 
@@ -705,27 +705,56 @@ h1 {
 
 /* --- 4.9 Itinerario --- */
 .itinerary-section { padding: 0; }
-.itinerary-list { padding-left: 22.4%; width: 100%; box-sizing: border-box; margin: 0; }
+.itinerary-list { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-large);
+    max-width: 600px;
+    margin: 0 auto;
+}
 .itinerary-item { 
     display: flex; 
-    align-items: flex-start; 
-    margin-bottom: calc(var(--spacing-large) * 0.8); 
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
 }
 .itinerary-icon { 
-    font-size: 1.8em; 
-    color: var(--color-accent); 
-    margin-right: var(--spacing-medium); 
-    width: 30px; 
-    text-align: center; 
-    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-small);
 }
-.itinerary-details { 
-    flex: 1; 
-    text-align: left; 
+.itinerary-icon .icon-image {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin: 0;
+    filter: brightness(0) invert(1);
 }
-.event-time-name { font-family: var(--font-secondary); font-size: 1.1em; color: #e0e0e0; margin-bottom: var(--spacing-small); }
-.event-time-name strong { font-weight: 500; }
-.event-location { font-family: var(--font-primary); font-size: 0.9em; color: #b0b0b0; }
+.itinerary-icon i {
+    font-size: 3rem;
+}
+.itinerary-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+.event-time-name {
+    font-family: var(--font-secondary);
+    font-size: 1.3rem;
+    color: var(--color-text);
+}
+.event-location {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: var(--color-accent);
+    letter-spacing: 1px;
+}
 
 /* --- 4.10 Dress Code --- */
 .dress-code-section { 
