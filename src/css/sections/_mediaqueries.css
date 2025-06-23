@@ -1,0 +1,69 @@
+/* ===========================================================================
+   5. Media Queries y Responsividad
+   =========================================================================== */
+
+/* Media queries y responsividad */
+@media screen and (max-width: 768px) {
+    :root {
+        --spacing-section: 40px;
+        --spacing-small: 12px;
+        --spacing-medium: 25px;
+        --spacing-large: 50px;
+    }
+    .container-content { max-width: 700px; padding: 0 var(--spacing-medium); }
+    h1 { font-size: 3em; }
+    .intro-text { font-size: 0.8em; letter-spacing: 3px; }
+    .photo-container { width: 280px; }
+    .gallery-image { width: 75%; }
+    .itinerary-list { padding-left: 0; }
+    .itinerary-item { margin-bottom: var(--spacing-medium); }
+    .location-block, .location-block.layout-reversed { flex-direction: column; }
+    .location-image-container { width: 100%; max-width: 400px; height: 220px; margin: 0 auto; }
+    .location-details { text-align: center; padding: var(--spacing-medium) 0; }
+    .location-time { position: relative; top: 0; right: 0; margin: var(--spacing-small) auto; }
+    .registry-links { flex-direction: column; align-items: center; }
+    .registry-block { max-width: 100%; width: 100%; }
+}
+@media screen and (max-width: 576px) {
+    :root {
+        --spacing-section: 35px;
+        --spacing-small: 10px;
+        --spacing-medium: 20px;
+        --spacing-large: 40px;
+    }
+    .container-content { max-width: 100%; width: 95%; padding: 0 var(--spacing-small); }
+    h1 { font-size: 2.5em; }
+    .intro-text { font-size: 0.7em; letter-spacing: 2px; }
+    .section-title { font-size: 0.8em; letter-spacing: 3px; }
+    .photo-container { width: 240px; }
+    .countdown-timer { gap: 10px; }
+    .time-unit { min-width: 50px; }
+    .time-unit .number { font-size: 2.5em; }
+    .gallery-image { width: 90%; }
+    .gallery-arrow { width: 40px; height: 40px; font-size: 1.5em; }
+    .dress-code-container { flex-direction: column; align-items: center; gap: var(--spacing-medium); }
+    .dress-code-block { max-width: none; width: 100%; }
+    .rsvp-options { flex-direction: column; align-items: center; }
+    .rsvp-option { max-width: 100%; width: 100%; }
+}
+@media screen and (max-width: 375px) {
+    :root {
+        --spacing-section: 30px;
+        --spacing-small: 8px;
+        --spacing-medium: 15px;
+        --spacing-large: 35px;
+    }
+    h1 { font-size: 2em; }
+    .intro-text { font-size: 0.65em; letter-spacing: 1.5px; }
+    .section-title { font-size: 0.75em; letter-spacing: 2px; }
+    .photo-container { width: 200px; }
+    .time-unit .number { font-size: 2em; }
+    .time-unit .label { font-size: 0.6em; }
+    .gallery-image { width: 100%; border-radius: 10px; }
+    .event-time-name { font-size: 1em; }
+    .event-location { font-size: 0.8em; }
+    .location-name { font-size: 1.5em; }
+    .location-event-type { font-size: 0.65em; letter-spacing: 2px; }
+    #qrcode-target { width: 150px; height: 150px; }
+    .qr-code-intro { font-size: 0.8em; }
+}

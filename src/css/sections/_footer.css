@@ -1,0 +1,12 @@
+/* Footer y sección final */
+.footer-section { padding: var(--spacing-small) 0; text-align: center; margin: 0; }
+.copyright-text { font-family: var(--font-primary); font-size: 0.8em; color: var(--color-muted); letter-spacing: 1px; text-align: center; }
+.final-bg { position: relative; background-color: var(--color-background); color: var(--color-text); overflow: hidden; isolation: isolate; }
+.final-bg::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../../assets/images/img14.JPG'); background-size: cover; background-position: center; background-repeat: no-repeat; z-index: -1; opacity: 1; }
+.final-section { text-align: center; padding: calc(var(--spacing-large) * 3) 0; margin: 0; min-height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.final-title { font-family: var(--font-primary); font-size: 1em; letter-spacing: 4px; color: var(--color-text); text-transform: uppercase; margin-bottom: calc(var(--spacing-large) * 1.5); position: relative; display: inline-block; }
+.couple-names { margin: calc(var(--spacing-large) * 1.5) auto; max-width: 800px; }
+.bride-name, .groom-name { font-family: var(--font-secondary); font-size: 3em; color: var(--color-text); line-height: 1.4; font-weight: 400; }
+.wedding-date { font-family: var(--font-primary); font-size: 1.1em; letter-spacing: 3px; color: var(--color-text); margin-top: calc(var(--spacing-large) * 1.5); margin-bottom: calc(var(--spacing-large) * 1.5); }
+.add-calendar-btn { display: inline-block; background-color: transparent; border: 1px solid var(--color-accent); color: var(--color-accent); padding: 12px 30px; font-family: var(--font-primary); font-size: 0.8em; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; text-decoration: none; }
+.add-calendar-btn:hover { background-color: var(--color-accent); color: var(--color-background); }

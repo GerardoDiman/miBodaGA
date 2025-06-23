@@ -1,0 +1,8 @@
+/* Sección Dress Code */
+.dress-code-section { margin-top: var(--spacing-medium); padding: 0; }
+.dress-code-container { display: flex; justify-content: space-around; align-items: stretch; gap: 8px;}
+.dress-code-block { flex: 1; max-width: 300px; text-align: center; display: flex; flex-direction: column; padding: 8px; }
+.dress-code-icon { margin-bottom: 8px; display: inline-block; }
+.dress-code-icon img { width: 70px; height: auto; }
+.dress-code-desc { font-family: var(--font-primary); font-size: 0.75em; line-height: 1.4; letter-spacing: 1px; color: var(--color-accent); text-transform: uppercase; margin-top: auto; padding-top: 8px; }
+.dress-code-name { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--color-text); text-align: center; margin: 2rem 0 1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding-bottom: 0.5rem; display: inline-block; }

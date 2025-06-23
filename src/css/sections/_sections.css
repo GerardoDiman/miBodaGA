@@ -1,0 +1,39 @@
+/* ===========================================================================
+   4. Estilos de Secciones y Componentes
+   =========================================================================== */
+
+/* 4.1 Reproductor de Audio */
+#audio-controls-container {
+    position: fixed; top: var(--spacing-small); left: var(--spacing-small); z-index: 100; display: flex;
+    align-items: center; background-color: rgba(0, 0, 0, 0.5); border-radius: 25px;
+    padding: var(--spacing-small); transition: background-color 0.3s ease;
+}
+#audio-controls-container:hover { background-color: rgba(0, 0, 0, 0.7); }
+#audio-toggle-button { background-color: transparent; color: var(--color-text); border: none; border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9em; }
+#play-pause-icon { font-size: inherit; }
+#volume-control { display: flex; align-items: center; overflow: hidden; width: 0; opacity: 0; transition: width 0.4s ease, opacity 0.4s ease; margin-left: var(--spacing-small); }
+#audio-controls-container:hover #volume-control { width: 130px; opacity: 1; }
+#volume-icon { color: var(--color-text); font-size: 0.9em; margin: 0 8px 0 var(--spacing-small); cursor: pointer; flex-shrink: 0; }
+#volume-slider { flex-grow: 1; height: 5px; cursor: pointer; background: rgba(255, 255, 255, 0.3); border-radius: 5px; -webkit-appearance: none; appearance: none; min-width: 50px; }
+#volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 12px; height: 12px; background: var(--color-text); border-radius: 50%; cursor: pointer; }
+#volume-slider::-moz-range-thumb { width: 12px; height: 12px; background: var(--color-text); border-radius: 50%; cursor: pointer; border: none; }
+#background-audio { display: none; }
+
+/* 4.2 Secciones dentro de .container-content */
+.container-content section {
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    position: relative;
+    opacity: 1;
+    animation: fadeInPage 1s ease-out 0.2s forwards;
+    z-index: 3;
+    padding: var(--spacing-medium);
+    border-radius: 10px;
+}
+
+.details-section, .gallery-section, .itinerary-section, .locations-section,
+.filter-section, .gifts-section, .lodging-section, .rsvp-section {
+    margin-bottom: var(--spacing-section);
+}
+.dress-code-section { margin-top: var(--spacing-large); }

@@ -1,0 +1,58 @@
+/* Utilidades y animaciones globales */
+.container-content section {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
+    opacity: 1;
+    animation: fadeInPage 1s ease-out 0.2s forwards;
+    z-index: 3;
+    padding: var(--spacing-medium);
+    border-radius: 10px;
+}
+.details-section, .gallery-section, .itinerary-section, .locations-section,
+.filter-section, .gifts-section, .lodging-section, .rsvp-section {
+    margin-bottom: var(--spacing-section);
+}
+.dress-code-section { margin-top: var(--spacing-large); }
+.section-title-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-medium);
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto var(--spacing-section) auto;
+}
+.section-title {
+    padding: 0;
+    flex-shrink: 0;
+    font-family: var(--font-primary);
+    font-size: 1.5em;
+    letter-spacing: 4px;
+    color: var(--color-text);
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+.section-title-container::before, .section-title-container::after {
+    content: '';
+    height: 1px;
+    background-color: var(--color-text);
+    opacity: 0.5;
+    display: block;
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 50px;
+}
+.section-title-container.simple-title {
+    gap: 0;
+    justify-content: center;
+    max-width: none;
+}
+.section-title-container.simple-title::before, .section-title-container.simple-title::after {
+    display: none;
+}
+.section-title-container.simple-title .section-title {
+    flex-grow: 0;
+}

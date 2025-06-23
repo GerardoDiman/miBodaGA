@@ -1,0 +1,20 @@
+/* Sección Lluvia de Sobres y Hospedaje */
+.money-shower-section { background: rgba(30, 30, 30, 0.85); border-radius: 18px; padding: 32px 24px 28px 24px; margin: 0 auto var(--spacing-large) auto; max-width: 600px; box-shadow: 0 4px 24px 0 rgba(0,0,0,0.25); text-align: center; position: relative; z-index: 2; }
+.money-shower-icon { font-size: 2.5em; color: var(--color-accent); margin-bottom: 10px; }
+.money-shower-title { font-family: var(--font-secondary); font-size: 2em; color: #fff; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.25); }
+.money-shower-description { font-family: var(--font-primary); font-size: 1.1em; color: #f5e7d6; letter-spacing: 1px; margin-bottom: 0; text-shadow: 0 1px 6px rgba(0,0,0,0.18); }
+.lodging-section { padding: var(--spacing-large) 0; max-width: 900px; margin: 0 auto; text-align: center; }
+.lodging-container { display: flex; flex-wrap: wrap; gap: var(--spacing-large); justify-content: center; align-items: stretch; margin-top: var(--spacing-medium); }
+.lodging-block { background: rgba(171, 149, 131, 0.27); border-radius: 18px; box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18); padding: 28px 20px 24px 20px; max-width: 350px; min-width: 260px; flex: 1 1 320px; display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: var(--spacing-medium); position: relative; z-index: 2; }
+.lodging-image-container { width: 150px; height: 150px; border-radius: 16px; overflow: hidden; margin-bottom: 18px; box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18); }
+.lodging-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lodging-details { width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.lodging-info-content { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.lodging-info-item { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.lodging-info-item a { color: #fff; text-decoration: underline; transition: color 0.2s; }
+.lodging-info-item a:hover { color: var(--color-accent); }
+.lodging-info-item i.fa-phone { color: #fff; }
+.lodging-name { font-family: var(--font-secondary); font-size: 1.3em; color: #fff; font-weight: 600; margin-bottom: 10px; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+.lodging-button { display: inline-block; background-color: var(--color-accent); color: var(--color-background); font-family: var(--font-primary); font-size: 0.95em; font-weight: 600; text-decoration: none; padding: 10px 28px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1.5px; transition: background-color 0.3s, color 0.3s; margin-top: 10px; box-shadow: 0 2px 8px 0 rgba(0,0,0,0.10); }
+.lodging-button:hover { background-color: #fff; color: var(--color-accent); }
+@media screen and (max-width: 900px) { .lodging-container { flex-direction: column; align-items: center; } .lodging-block { max-width: 95vw; min-width: 0; } }

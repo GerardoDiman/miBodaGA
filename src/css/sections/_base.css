@@ -1,0 +1,16 @@
+/* Variables, reset y tipografía base */
+:root {
+    --color-accent: #d1b7a0;
+    --color-background: #1a1a1a;
+    --color-muted: #a0a0a0;
+    --color-text: #ffffff;
+    --font-primary: 'Montserrat', sans-serif;
+    --font-secondary: 'Playfair Display', serif;
+    --spacing-large: 60px;
+    --spacing-medium: 30px;
+    --spacing-section: 50px;
+    --spacing-small: 15px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow-x: hidden; }
+body { font-family: var(--font-primary); background-color: var(--color-background); min-height: 100vh; position: relative; z-index: 0; }
