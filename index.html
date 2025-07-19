@@ -31,7 +31,7 @@
     <link rel="preload" href="src/css/styles.css" as="style">
     
     <!-- Estilos -->
-    <link rel="stylesheet" href="src/css/styles.css?v=1.2">
+    <link rel="stylesheet" href="src/css/styles.css?v=1.7">
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/171beeb065.js" crossorigin="anonymous"></script>
     <!-- Favicon -->
@@ -315,25 +315,47 @@
             </div>
         </div>
 
-        <!-- Dresscode Mejorado -->
+        <!-- Dresscode Mejorado con Scroll Progresivo -->
         <div class="section-background-wrapper dresscode-bg">
           <div class="container-content dresscode-block-wrapper">
             <div class="section-title-container"><h3 class="section-title">CÓDIGO DE VESTIMENTA</h3></div>
-            <div class="dresscode-block-container">
-              <div class="dresscode-block-col">
-                <h3>Caballeros</h3>
-                <ul class="dresscode-block-list">
+            
+            <!-- Sección Hombres -->
+            <div class="dresscode-progressive-section">
+              <div class="dresscode-gender-title animate-on-scroll" data-delay="0">
+                <h2>HOMBRES</h2>
+              </div>
+              
+              <div class="dresscode-icon-container animate-on-scroll" data-delay="300">
+                <img src="assets/images/smoking-no-bg.png" alt="Traje formal para caballeros" class="dresscode-icon">
+              </div>
+              
+              <div class="dresscode-requirements animate-on-scroll" data-delay="600">
+                <ul class="dresscode-list">
                   <li>Esmóquin o traje en tonos oscuros</li>
                   <li>Moño o corbata</li>
                   <li>Zapatos formales</li>
                 </ul>
               </div>
-              <div class="dresscode-block-img">
-                <img src="assets/images/pareja-no-bg.png" alt="Código de vestimenta Black Tie">
+            </div>
+            
+            <!-- Separador visual -->
+            <div class="dresscode-separator animate-on-scroll" data-delay="700">
+              <div class="separator-line"></div>
+            </div>
+            
+            <!-- Sección Mujeres -->
+            <div class="dresscode-progressive-section">
+              <div class="dresscode-gender-title animate-on-scroll" data-delay="900">
+                <h2>MUJERES</h2>
               </div>
-              <div class="dresscode-block-col">
-                <h3>Damas</h3>
-                <ul class="dresscode-block-list">
+              
+              <div class="dresscode-icon-container animate-on-scroll" data-delay="1100">
+                <img src="assets/images/dress-no-bg.png" alt="Vestido de noche para damas" class="dresscode-icon">
+              </div>
+              
+              <div class="dresscode-requirements animate-on-scroll" data-delay="1300">
+                <ul class="dresscode-list">
                   <li>Vestido de noche largo (evitando blanco y tonos crema)</li>
                   <li>Bolso o cartera</li>
                   <li>Zapatos de tacón</li>
@@ -480,6 +502,7 @@
     <script src="src/js/player.js" defer></script>
     <script src="src/js/invitation.js" defer></script>
     <script src="src/js/animations.js" defer></script>
+    <script src="src/js/dresscode-scroll.js" defer></script>
     <script src="src/js/pwa.js" defer></script>
 </body>
 </html>

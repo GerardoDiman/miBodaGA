@@ -1,8 +1,8 @@
 /* ========================================
-   ANIMACIONES Y EFECTOS VISUALES
+   ANIMACIONES PRINCIPALES
    ======================================== */
 
-/* Keyframes para animaciones */
+/* Fade in desde abajo */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -14,6 +14,7 @@
     }
 }
 
+/* Fade in desde la izquierda */
 @keyframes fadeInLeft {
     from {
         opacity: 0;
@@ -25,6 +26,7 @@
     }
 }
 
+/* Fade in desde la derecha */
 @keyframes fadeInRight {
     from {
         opacity: 0;
@@ -36,6 +38,7 @@
     }
 }
 
+/* Escala suave */
 @keyframes scaleIn {
     from {
         opacity: 0;
@@ -47,6 +50,7 @@
     }
 }
 
+/* Slide desde arriba */
 @keyframes slideInFromTop {
     from {
         opacity: 0;
@@ -56,19 +60,6 @@
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-/* Animaciones de parallax */
-@keyframes parallax-slow {
-    transform: translateY(calc(var(--parallax-depth) * 0.1px));
-}
-
-@keyframes parallax-medium {
-    transform: translateY(calc(var(--parallax-depth) * 0.2px));
-}
-
-@keyframes parallax-fast {
-    transform: translateY(calc(var(--parallax-depth) * 0.3px));
 }
 
 /* Efectos 3D */
@@ -213,18 +204,8 @@
     animation: fadeInUp 1s ease-out 0.7s both;
 }
 
-/* Efectos de fondo */
-.section-background-wrapper::before {
-    animation: parallax-slow 20s infinite linear;
-}
-
-.gallery-bg::before {
-    animation: parallax-medium 15s infinite linear;
-}
-
-.details-bg::before {
-    animation: parallax-fast 10s infinite linear;
-}
+/* Efectos de fondo - REMOVIDOS para mejor rendimiento */
+/* Las animaciones de parallax han sido deshabilitadas para evitar lag */
 
 /* Contenedores principales */
 .section-background-wrapper {

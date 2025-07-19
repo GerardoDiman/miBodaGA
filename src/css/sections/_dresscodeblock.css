@@ -1,139 +1,309 @@
-/* Dresscode: formato unificado con detalles de color/acento */
-.dresscode-block-section {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
+/* ========================================
+   CÓDIGO DE VESTIMENTA - SCROLL PROGRESIVO
+   ======================================== */
+
 .dresscode-block-wrapper {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: var(--spacing-large) 0;
-  position: relative;
-  z-index: 2;
+    padding: var(--spacing-large) 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--spacing-large);
 }
-.dresscode-block-title-main {
-  width: 100%;
-  text-align: center;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.5em;
-  font-weight: 700;
-  letter-spacing: 4px;
-  color: var(--color-text);
-  text-transform: uppercase;
-  margin-bottom: var(--spacing-section);
-  position: relative;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-medium);
-}
-.dresscode-block-title-main::before,
-.dresscode-block-title-main::after {
-  content: '';
-  flex: 1 1 0;
-  height: 1px;
-  background: linear-gradient(90deg, #d1b7a0 0%, #fff 100%);
-  opacity: 0.5;
-  min-width: 50px;
-}
-.dresscode-block-container {
-  background: linear-gradient(120deg, rgba(30,30,30,0.92) 80%, rgba(209,183,160,0.10) 100%);
-  border-radius: 15px;
-  padding: var(--spacing-medium) var(--spacing-medium) var(--spacing-medium) var(--spacing-medium);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: var(--spacing-large);
-  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18);
-  border: 1px solid rgba(209,183,160,0.18);
-  position: relative;
-  overflow: hidden;
-}
-.dresscode-block-container::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 8px;
-  background: linear-gradient(90deg, #d1b7a0 0%, transparent 100%);
-  opacity: 0.7;
-  border-radius: 15px 15px 0 0;
-  z-index: 1;
-}
-.dresscode-block-col {
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 180px;
-  color: var(--color-text);
-}
-.dresscode-block-col h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.7em;
-  font-weight: 400;
-  margin-bottom: var(--spacing-small);
-  color: #d1b7a0;
-  letter-spacing: 0.04em;
-  text-align: center;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.18);
-}
-.dresscode-block-list {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.1em;
-  color: #e0e0e0;
-  text-align: left;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.dresscode-block-list li {
-  margin-bottom: 10px;
-  line-height: 1.6;
-  position: relative;
-  padding-left: 18px;
-}
-.dresscode-block-list li::before {
-  content: '\2022';
-  color: #d1b7a0;
-  position: absolute;
-  left: 0;
-  font-size: 1.2em;
-  top: 0.1em;
-}
-.dresscode-block-img {
-  flex: 0 0 180px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  margin: 0 18px;
-  z-index: 2;
-}
-.dresscode-block-img img {
-  width: 250px;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 4px 24px rgba(209,183,160,0.18));
-}
-@media (max-width: 900px) {
-  .dresscode-block-wrapper {
-    padding: var(--spacing-medium) 0;
-  }
-  .dresscode-block-container {
-    gap: var(--spacing-medium);
-    padding: var(--spacing-medium) var(--spacing-small) var(--spacing-large) var(--spacing-small);
-  }
-  .dresscode-block-img img {
-    width: 120px;
-  }
-}
-@media (max-width: 700px) {
-  .dresscode-block-container {
+
+/* Secciones progresivas */
+.dresscode-progressive-section {
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--spacing-medium);
-    padding: var(--spacing-medium) var(--spacing-small);
-  }
-  .dresscode-block-img {
-    margin: 18px 0;
-  }
+    padding: var(--spacing-large) 0;
+    min-height: 300px;
+}
+
+/* Títulos de género */
+.dresscode-gender-title {
+    text-align: center;
+    margin-bottom: var(--spacing-medium);
+}
+
+.dresscode-gender-title h2 {
+    font-family: var(--font-secondary);
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+
+.dresscode-gender-title.visible h2 {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Contenedores de iconos */
+.dresscode-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: var(--spacing-medium) 0;
+    opacity: 0;
+    transform: scale(0.8) rotate(-10deg);
+    transition: all 0.8s ease;
+}
+
+.dresscode-icon-container.visible {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    animation: iconPulse 2s ease-out;
+}
+
+.dresscode-icon {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+}
+
+.dresscode-icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(209, 183, 160, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: all 0.4s ease;
+    z-index: -1;
+}
+
+.dresscode-icon:hover {
+    transform: scale(1.15) rotate(5deg);
+    filter: drop-shadow(0 8px 16px rgba(209, 183, 160, 0.5)) brightness(1.1);
+}
+
+.dresscode-icon:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+    background: radial-gradient(circle, rgba(209, 183, 160, 0.25) 0%, transparent 70%);
+}
+
+.dresscode-icon:active {
+    transform: scale(0.95);
+    transition: all 0.1s ease;
+}
+
+/* Lista de requisitos */
+.dresscode-requirements {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease;
+}
+
+.dresscode-requirements.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dresscode-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dresscode-list li {
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 8px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    border: 1px solid rgba(209, 183, 160, 0.15);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateX(-20px);
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.dresscode-list li:nth-child(1) { transition-delay: 0.1s; }
+.dresscode-list li:nth-child(2) { transition-delay: 0.2s; }
+.dresscode-list li:nth-child(3) { transition-delay: 0.3s; }
+
+.dresscode-requirements.visible .dresscode-list li {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.dresscode-list li:hover {
+    background: rgba(209, 183, 160, 0.08);
+    border-color: rgba(209, 183, 160, 0.25);
+    transform: translateX(3px);
+    color: rgba(255, 255, 255, 1);
+}
+
+/* Separador visual */
+.dresscode-separator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: var(--spacing-large) 0;
+    opacity: 0;
+    transform: scaleX(0);
+    transition: all 1s ease;
+}
+
+.dresscode-separator.visible {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+.separator-line {
+    width: 200px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+    border-radius: 1px;
+    box-shadow: 0 2px 4px rgba(209, 183, 160, 0.3);
+}
+
+/* ========================================
+   MEDIA QUERIES RESPONSIVAS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .dresscode-block-wrapper {
+        padding: var(--spacing-medium) 0;
+        gap: var(--spacing-medium);
+    }
+    
+    .dresscode-progressive-section {
+        gap: var(--spacing-small);
+        padding: var(--spacing-medium) 0;
+        min-height: 250px;
+    }
+    
+    .dresscode-gender-title h2 {
+        font-size: 2rem;
+        letter-spacing: 2px;
+    }
+    
+    .dresscode-icon {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .dresscode-list li {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+    
+    .separator-line {
+        width: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dresscode-block-wrapper {
+        padding: var(--spacing-small) 0;
+        gap: var(--spacing-small);
+    }
+    
+    .dresscode-progressive-section {
+        gap: var(--spacing-small);
+        padding: var(--spacing-small) 0;
+        min-height: 200px;
+    }
+    
+    .dresscode-gender-title h2 {
+        font-size: 1.5rem;
+        letter-spacing: 1.5px;
+    }
+    
+    .dresscode-icon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .dresscode-list li {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+        margin-bottom: 6px;
+    }
+    
+    .separator-line {
+        width: 120px;
+    }
+}
+
+/* ========================================
+   ANIMACIONES ESPECÍFICAS
+   ======================================== */
+
+@keyframes dresscodeFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes dresscodeScaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) rotate(-10deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+@keyframes dresscodeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes dresscodeSeparator {
+    from {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+@keyframes iconPulse {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    50% {
+        transform: scale(1.05) rotate(0deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
 }
