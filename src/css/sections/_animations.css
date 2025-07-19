@@ -1,5 +1,5 @@
 /* ===========================================================================
-   ANIMACIONES Y EFECTOS DINÁMICOS
+   ANIMACIONES Y EFECTOS DINÁMICOS AVANZADOS
    =========================================================================== */
 
 /* Animaciones de entrada para elementos */
@@ -58,6 +58,29 @@
     }
 }
 
+/* Efectos de parallax avanzados */
+@keyframes parallax-slow {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-30px); }
+}
+
+@keyframes parallax-medium {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-20px); }
+}
+
+@keyframes parallax-fast {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-10px); }
+}
+
+/* Efecto de profundidad 3D */
+@keyframes depth-3d {
+    0% { transform: translateZ(0px) rotateX(0deg); }
+    50% { transform: translateZ(20px) rotateX(2deg); }
+    100% { transform: translateZ(0px) rotateX(0deg); }
+}
+
 /* Animación de flotación para elementos */
 @keyframes float {
     0%, 100% {
@@ -101,14 +124,78 @@
     }
 }
 
-/* Efecto de parallax suave */
-@keyframes parallax {
-    from {
-        transform: translateY(0px);
+/* Efectos de texto elegantes */
+@keyframes elegantGlow {
+    0% { 
+        text-shadow: 0 0 5px rgba(209, 183, 160, 0.3);
+        transform: scale(1);
     }
-    to {
-        transform: translateY(-20px);
+    50% { 
+        text-shadow: 0 0 15px rgba(209, 183, 160, 0.6);
+        transform: scale(1.02);
     }
+    100% { 
+        text-shadow: 0 0 5px rgba(209, 183, 160, 0.3);
+        transform: scale(1);
+    }
+}
+
+@keyframes subtleFade {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+@keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink {
+    0%, 50% { border-color: transparent; }
+    51%, 100% { border-color: var(--color-accent); }
+}
+
+/* Animaciones de galería avanzadas */
+@keyframes kenBurns {
+    0% { transform: scale(1) translate(0, 0); }
+    50% { transform: scale(1.1) translate(-2%, -1%); }
+    100% { transform: scale(1) translate(0, 0); }
+}
+
+@keyframes slide3D {
+    0% { transform: perspective(1000px) rotateY(0deg) translateX(0); }
+    100% { transform: perspective(1000px) rotateY(10deg) translateX(20px); }
+}
+
+/* Animaciones de contador regresivo */
+@keyframes numberDrop {
+    0% { 
+        transform: translateY(-50px) rotateX(90deg);
+        opacity: 0;
+    }
+    50% { 
+        transform: translateY(10px) rotateX(45deg);
+        opacity: 0.5;
+    }
+    100% { 
+        transform: translateY(0) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes countdownExplosion {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes celebration {
+    0% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(5deg); }
+    50% { transform: scale(1.2) rotate(-5deg); }
+    75% { transform: scale(1.1) rotate(3deg); }
+    100% { transform: scale(1) rotate(0deg); }
 }
 
 /* Aplicar animaciones a elementos específicos */
@@ -128,7 +215,20 @@
     animation: fadeInRight 1s ease-out 0.7s both;
 }
 
-/* Animaciones para secciones */
+/* Efectos parallax para imágenes de fondo */
+.section-background-wrapper::before {
+    animation: parallax-slow 20s ease-in-out infinite alternate;
+}
+
+.gallery-bg::before {
+    animation: parallax-medium 15s ease-in-out infinite alternate;
+}
+
+.details-bg::before {
+    animation: parallax-fast 18s ease-in-out infinite alternate;
+}
+
+/* Animaciones para secciones con scroll */
 .section-background-wrapper {
     opacity: 0;
     transform: translateY(50px);
@@ -205,6 +305,10 @@
     animation: scaleIn 0.6s ease-out;
 }
 
+.gallery-slide img {
+    animation: kenBurns 8s ease-in-out infinite;
+}
+
 /* Efectos para las tarjetas de regalos */
 .registry-block,
 .sponsor-card,
@@ -217,16 +321,12 @@
 .lodging-block:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    animation: depth-3d 0.6s ease-out;
 }
 
 /* Animación para el logo */
 .wedding-logo img {
     animation: pulse 2s ease-in-out infinite;
-}
-
-/* Efecto de parallax para imágenes de fondo */
-.section-background-wrapper::before {
-    animation: parallax 20s ease-in-out infinite alternate;
 }
 
 /* Animaciones para elementos de navegación */
@@ -254,15 +354,20 @@
 }
 
 /* Efecto de typing para el nombre del invitado */
-@keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-}
-
 .guest-name {
     overflow: hidden;
     white-space: nowrap;
-    animation: typing 2s steps(40, end) 0.5s both;
+    animation: typewriter 2s steps(40, end) 0.5s both;
+}
+
+/* Efecto elegante para títulos importantes */
+h1, h2 {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+h1:hover, h2:hover {
+    animation: elegantGlow 2s ease-in-out infinite;
 }
 
 /* Animaciones para elementos de ubicación */
@@ -273,6 +378,7 @@
 .location-block:hover {
     transform: translateX(10px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    animation: slide3D 0.6s ease-out;
 }
 
 /* Efecto de brillo para elementos especiales */
@@ -299,24 +405,6 @@
 
 .final-section .wedding-date {
     animation: fadeInUp 1s ease-out 0.6s both;
-}
-
-/* Efecto de partículas flotantes */
-@keyframes particleFloat {
-    0% {
-        transform: translateY(100vh) rotate(0deg);
-        opacity: 0;
-    }
-    10% {
-        opacity: 1;
-    }
-    90% {
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(-100px) rotate(360deg);
-        opacity: 0;
-    }
 }
 
 /* Clases utilitarias para animaciones */
@@ -355,6 +443,329 @@
     .sponsor-card:hover,
     .lodging-block:hover {
         transform: translateY(-5px) scale(1.01);
+    }
+    
+    /* Mejoras para la fecha en móviles */
+    .date-info {
+        position: absolute !important;
+        right: 4rem !important;
+        bottom: -10% !important;
+        transform: translateY(-50%) rotate(0deg) !important;
+        font-size: 0.8rem !important;
+        letter-spacing: 0.2rem !important;
+        gap: 0.5rem !important;
+        flex-direction: row !important;
+    }
+    
+    .date-info .day,
+    .date-info .month {
+        flex-direction: row !important;
+        gap: 0.2rem !important;
+    }
+    
+    .date-info .day span,
+    .date-info .month span {
+        font-size: 0.9rem !important;
+        line-height: 1.2 !important;
+        display: inline !important;
+    }
+    
+    .date-info .date-num {
+        font-size: 1.2rem !important;
+        font-weight: bold !important;
+    }
+    
+    .date-info .separator {
+        font-size: 0.7rem !important;
+        margin: 0 0.3rem !important;
+    }
+    
+    /* Centrado mejorado para títulos de sección en tablets */
+    .section-title-container {
+        justify-content: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 90% !important;
+        margin: 0 auto var(--spacing-section) auto !important;
+        padding: 0 var(--spacing-small) !important;
+    }
+    
+    .section-title {
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        hyphens: auto !important;
+        line-height: 1.2 !important;
+        margin: 0 auto !important;
+    }
+    
+    .section-title-container::before,
+    .section-title-container::after {
+        min-width: 20px !important;
+        max-width: 60px !important;
+        flex-grow: 0 !important;
+        flex-basis: auto !important;
+    }
+    
+    /* Títulos específicos que necesitan ajuste */
+    .parent-title,
+    .sponsor-names,
+    .money-shower-title,
+    .rsvp-heading,
+    .final-title {
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.3 !important;
+        margin: 0 auto !important;
+        padding: 0 var(--spacing-small) !important;
+    }
+    
+    /* Ajuste para títulos de dress code */
+    .dress-code-container h3 {
+        text-align: center !important;
+        width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.3 !important;
+        margin: 0 auto !important;
+    }
+    
+    /* Ajuste para nombres de hoteles */
+    .lodging-name {
+        text-align: center !important;
+        width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.3 !important;
+        margin: 0 auto !important;
+    }
+    
+    /* Ajuste para hashtag */
+    .wedding-hashtag {
+        text-align: center !important;
+        width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.3 !important;
+        margin: 0 auto !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .date-info {
+        right: 0.5rem !important;
+        font-size: 0.7rem !important;
+        letter-spacing: 0.1rem !important;
+        gap: 0.3rem !important;
+        flex-direction: row !important;
+        transform: translateY(-50%) rotate(0deg) !important;
+    }
+    
+    .date-info .day,
+    .date-info .month {
+        flex-direction: row !important;
+        gap: 0.1rem !important;
+    }
+    
+    .date-info .day span,
+    .date-info .month span {
+        font-size: 0.8rem !important;
+        display: inline !important;
+    }
+    
+    .date-info .date-num {
+        font-size: 1rem !important;
+    }
+    
+    .date-info .separator {
+        font-size: 0.6rem !important;
+        margin: 0 0.2rem !important;
+    }
+    
+    /* Centrado mejorado para títulos de sección en móviles */
+    .section-title-container {
+        justify-content: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 85% !important;
+        margin: 0 auto var(--spacing-section) auto !important;
+        padding: 0 var(--spacing-small) !important;
+    }
+    
+    .section-title {
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        hyphens: auto !important;
+        line-height: 1.2 !important;
+        margin: 0 auto !important;
+    }
+    
+    .section-title-container::before,
+    .section-title-container::after {
+        min-width: 15px !important;
+        max-width: 40px !important;
+        flex-grow: 0 !important;
+        flex-basis: auto !important;
+    }
+    
+    /* Títulos específicos que necesitan ajuste */
+    .parent-title,
+    .sponsor-names,
+    .money-shower-title,
+    .rsvp-heading,
+    .final-title {
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.3 !important;
+        margin: 0 auto !important;
+        padding: 0 var(--spacing-small) !important;
+    }
+    
+    /* Ajuste para títulos de dress code */
+    .dress-code-container h3 {
+        text-align: center !important;
+        width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.3 !important;
+        margin: 0 auto !important;
+    }
+    
+    /* Ajuste para nombres de hoteles */
+    .lodging-name {
+        text-align: center !important;
+        width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.3 !important;
+        margin: 0 auto !important;
+    }
+    
+    /* Ajuste para hashtag */
+    .wedding-hashtag {
+        text-align: center !important;
+        width: 100% !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.3 !important;
+        margin: 0 auto !important;
+    }
+}
+
+/* Estilos específicos para títulos largos en móviles */
+@media (max-width: 768px) {
+    /* Títulos que necesitan saltos de línea */
+    .section-title-container .section-title {
+        padding: 0 15px !important;
+        font-size: 0.9rem !important;
+        letter-spacing: 2px !important;
+        line-height: 1.3 !important;
+    }
+    
+    /* Títulos específicos con saltos de línea */
+    .section-title.long-title {
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+        hyphens: auto !important;
+        max-width: 320px !important;
+        margin: 0 auto !important;
+        line-height: 1.4 !important;
+        padding: 0 20px !important;
+        text-align: center !important;
+    }
+    
+    /* Estilo específico para "SUGERENCIAS DE REGALO" */
+    .section-title.gift-title {
+        max-width: 350px !important;
+        padding: 0 25px !important;
+        line-height: 1.5 !important;
+        word-spacing: 0.1em !important;
+        letter-spacing: 2.5px !important;
+    }
+    
+    /* Ajuste para título de código de vestimenta */
+    .dresscode-block-title-main {
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 90% !important;
+        margin: 0 auto var(--spacing-section) auto !important;
+        padding: 0 var(--spacing-small) !important;
+        font-size: 0.9rem !important;
+        letter-spacing: 2px !important;
+        line-height: 1.3 !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+    }
+    
+    .dresscode-block-title-main::before,
+    .dresscode-block-title-main::after {
+        min-width: 20px !important;
+        max-width: 60px !important;
+        flex-grow: 0 !important;
+        flex-basis: auto !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title-container .section-title {
+        padding: 0 10px !important;
+        font-size: 0.8rem !important;
+        letter-spacing: 1.5px !important;
+        line-height: 1.3 !important;
+    }
+    
+    /* Títulos específicos con saltos de línea */
+    .section-title.long-title {
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+        hyphens: auto !important;
+        max-width: 280px !important;
+        margin: 0 auto !important;
+        line-height: 1.4 !important;
+        padding: 0 15px !important;
+        text-align: center !important;
+    }
+    
+    /* Estilo específico para "SUGERENCIAS DE REGALO" */
+    .section-title.gift-title {
+        max-width: 300px !important;
+        padding: 0 20px !important;
+        line-height: 1.5 !important;
+        word-spacing: 0.1em !important;
+        letter-spacing: 2px !important;
+    }
+    
+    /* Ajuste para título de código de vestimenta */
+    .dresscode-block-title-main {
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 85% !important;
+        margin: 0 auto var(--spacing-section) auto !important;
+        padding: 0 var(--spacing-small) !important;
+        font-size: 0.8rem !important;
+        letter-spacing: 1.5px !important;
+        line-height: 1.3 !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+    }
+    
+    .dresscode-block-title-main::before,
+    .dresscode-block-title-main::after {
+        min-width: 15px !important;
+        max-width: 40px !important;
+        flex-grow: 0 !important;
+        flex-basis: auto !important;
     }
 }
 

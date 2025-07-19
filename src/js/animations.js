@@ -1,5 +1,5 @@
 // ===========================================================================
-// SISTEMA DE ANIMACIONES DINÁMICAS
+// SISTEMA DE ANIMACIONES DINÁMICAS AVANZADAS
 // ===========================================================================
 
 (function() {
@@ -25,9 +25,10 @@
             this.setupScrollEffects();
             this.setupHoverEffects();
             this.setupParallaxEffects();
-            this.setupTypingEffect();
-            this.setupParticleSystem();
-            this.setupCountdownAnimation();
+            this.setupTextEffects();
+            this.setupGalleryEffects();
+            this.setupCountdownEffects();
+            this.setupGlitchEffects();
         }
 
         // Configurar Intersection Observer para animaciones de scroll
@@ -50,7 +51,8 @@
                 .location-block,
                 .gallery-slide,
                 .section-title,
-                .countdown-timer .time-unit
+                .countdown-timer .time-unit,
+                h1, h2
             `);
 
             elementsToAnimate.forEach(element => {
@@ -78,6 +80,9 @@
                 case 'stagger':
                     this.animateStaggeredChildren(element);
                     break;
+                case 'depth3D':
+                    element.style.animation = 'depth-3d 0.8s ease-out forwards';
+                    break;
                 default:
                     element.classList.add('animate-in');
             }
@@ -88,13 +93,16 @@
             if (element.classList.contains('registry-block') || 
                 element.classList.contains('sponsor-card') || 
                 element.classList.contains('lodging-block')) {
-                return 'scaleIn';
+                return 'depth3D';
             }
             if (element.classList.contains('location-block')) {
                 return 'fadeInLeft';
             }
             if (element.classList.contains('countdown-timer')) {
                 return 'stagger';
+            }
+            if (element.tagName === 'H1' || element.tagName === 'H2') {
+                return 'scaleIn';
             }
             return 'fadeInUp';
         }
@@ -109,16 +117,16 @@
             });
         }
 
-        // Efectos de scroll
+        // Efectos de scroll avanzados
         setupScrollEffects() {
             let ticking = false;
             
             const updateScrollEffects = () => {
                 const scrolled = window.pageYOffset;
-                const parallaxElements = document.querySelectorAll('.section-background-wrapper::before');
+                const parallaxElements = document.querySelectorAll('.section-background-wrapper');
                 
-                parallaxElements.forEach(element => {
-                    const speed = 0.5;
+                parallaxElements.forEach((element, index) => {
+                    const speed = 0.3 + (index * 0.1);
                     const yPos = -(scrolled * speed);
                     element.style.transform = `translateY(${yPos}px)`;
                 });
@@ -144,7 +152,10 @@
                 .registry-button,
                 .add-calendar-btn,
                 .gallery-arrow,
-                .location-block
+                .location-block,
+                .registry-block,
+                .sponsor-card,
+                .lodging-block
             `);
 
             interactiveElements.forEach(element => {
@@ -159,32 +170,42 @@
         }
 
         addHoverEffect(element) {
-            element.style.transform = 'translateY(-3px) scale(1.02)';
-            element.style.boxShadow = '0 10px 25px rgba(209, 183, 160, 0.3)';
+            if (element.classList.contains('location-block')) {
+                element.style.animation = 'slide3D 0.6s ease-out';
+            } else if (element.classList.contains('registry-block') || 
+                       element.classList.contains('sponsor-card') || 
+                       element.classList.contains('lodging-block')) {
+                element.style.animation = 'depth-3d 0.6s ease-out';
+            } else {
+                element.style.transform = 'translateY(-3px) scale(1.02)';
+                element.style.boxShadow = '0 10px 25px rgba(209, 183, 160, 0.3)';
+            }
         }
 
         removeHoverEffect(element) {
             element.style.transform = '';
             element.style.boxShadow = '';
+            element.style.animation = '';
         }
 
-        // Efectos parallax
+        // Efectos parallax avanzados
         setupParallaxEffects() {
             const parallaxElements = document.querySelectorAll('.section-background-wrapper');
             
             window.addEventListener('scroll', () => {
                 const scrolled = window.pageYOffset;
                 
-                parallaxElements.forEach(element => {
-                    const speed = 0.3;
+                parallaxElements.forEach((element, index) => {
+                    const speed = 0.2 + (index * 0.05);
                     const yPos = -(scrolled * speed);
                     element.style.transform = `translateY(${yPos}px)`;
                 });
             });
         }
 
-        // Efecto de typing para el nombre del invitado
-        setupTypingEffect() {
+        // Efectos de texto avanzados
+        setupTextEffects() {
+            // Efecto typewriter para el nombre del invitado
             const guestName = document.getElementById('guest-name-placeholder');
             if (!guestName) return;
 
@@ -202,63 +223,94 @@
                 }
             };
 
-            // Iniciar typing después de un delay
             setTimeout(typeWriter, 1000);
-        }
 
-        // Sistema de partículas flotantes
-        setupParticleSystem() {
-            const particleContainer = document.createElement('div');
-            particleContainer.className = 'particle-container';
-            particleContainer.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                z-index: 1;
-                overflow: hidden;
-            `;
-            document.body.appendChild(particleContainer);
-
-            // Crear partículas
-            for (let i = 0; i < 20; i++) {
-                this.createParticle(particleContainer);
-            }
-        }
-
-        createParticle(container) {
-            const particle = document.createElement('div');
-            particle.style.cssText = `
-                position: absolute;
-                width: 4px;
-                height: 4px;
-                background: rgba(209, 183, 160, 0.3);
-                border-radius: 50%;
-                animation: particleFloat ${Math.random() * 10 + 10}s linear infinite;
-                left: ${Math.random() * 100}%;
-                animation-delay: ${Math.random() * 10}s;
-            `;
-            container.appendChild(particle);
-
-            // Recrear partícula cuando termine la animación
-            particle.addEventListener('animationend', () => {
-                particle.remove();
-                setTimeout(() => this.createParticle(container), 1000);
+            // Efecto elegante para títulos
+            const titles = document.querySelectorAll('h1, h2');
+            titles.forEach(title => {
+                title.addEventListener('mouseenter', () => {
+                    title.style.animation = 'elegantGlow 2s ease-in-out infinite';
+                });
+                
+                title.addEventListener('mouseleave', () => {
+                    title.style.animation = '';
+                });
             });
         }
 
-        // Animación del contador regresivo
-        setupCountdownAnimation() {
+        // Efectos de galería avanzados
+        setupGalleryEffects() {
+            const galleryImages = document.querySelectorAll('.gallery-slide img');
+            
+            galleryImages.forEach(img => {
+                img.addEventListener('mouseenter', () => {
+                    img.style.animation = 'kenBurns 8s ease-in-out infinite';
+                });
+                
+                img.addEventListener('mouseleave', () => {
+                    img.style.animation = '';
+                });
+            });
+        }
+
+        // Efectos del contador regresivo
+        setupCountdownEffects() {
             const countdownElements = document.querySelectorAll('.time-unit .number');
             
             countdownElements.forEach(element => {
                 element.addEventListener('DOMSubtreeModified', () => {
-                    element.style.animation = 'pulse 0.5s ease-out';
+                    element.style.animation = 'numberDrop 0.5s ease-out';
                     setTimeout(() => {
                         element.style.animation = '';
                     }, 500);
+                });
+            });
+
+            // Efecto de celebración cuando llegue a cero
+            const checkCountdown = () => {
+                const days = document.getElementById('days');
+                const hours = document.getElementById('hours');
+                const minutes = document.getElementById('minutes');
+                const seconds = document.getElementById('seconds');
+                
+                if (days && hours && minutes && seconds) {
+                    const totalSeconds = parseInt(days.textContent) * 86400 + 
+                                       parseInt(hours.textContent) * 3600 + 
+                                       parseInt(minutes.textContent) * 60 + 
+                                       parseInt(seconds.textContent);
+                    
+                    if (totalSeconds <= 0) {
+                        this.triggerCelebration();
+                    }
+                }
+            };
+
+            // Verificar cada segundo
+            setInterval(checkCountdown, 1000);
+        }
+
+        // Efecto de celebración
+        triggerCelebration() {
+            const countdownTimer = document.getElementById('countdown');
+            if (countdownTimer) {
+                countdownTimer.style.animation = 'celebration 2s ease-in-out';
+                setTimeout(() => {
+                    countdownTimer.style.animation = '';
+                }, 2000);
+            }
+        }
+
+        // Efectos elegantes para títulos
+        setupGlitchEffects() {
+            const elegantElements = document.querySelectorAll('h1, h2, .section-title');
+            
+            elegantElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    element.style.animation = 'elegantGlow 2s ease-in-out infinite';
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    element.style.animation = '';
                 });
             });
         }
