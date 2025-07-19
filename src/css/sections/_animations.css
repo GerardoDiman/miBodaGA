@@ -715,6 +715,55 @@ h1:hover, h2:hover {
         flex-grow: 0 !important;
         flex-basis: auto !important;
     }
+    
+    /* Mejoras para la galería en tablets */
+    .gallery-section {
+        min-height: 550px !important;
+        padding: var(--spacing-large) 0 !important;
+    }
+    
+    .gallery-container {
+        min-height: 450px !important;
+        max-height: 650px !important;
+    }
+    
+    .gallery-image {
+        width: 75% !important;
+        min-height: 400px !important;
+    }
+    
+    .gallery-arrow {
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 1.8em !important;
+        line-height: 50px !important;
+    }
+    
+    /* Posición de flechas en tablets */
+    .gallery-prev {
+        left: 2% !important;
+    }
+    
+    .gallery-next {
+        right: 2% !important;
+    }
+    
+    /* Mejoras para indicadores en tablets */
+    .gallery-indicators {
+        bottom: 60px !important;
+        transform: translateX(-50%) !important;
+        gap: 6px !important;
+        padding: 8px !important;
+        width: auto !important;
+        min-width: 180px !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+    
+    .gallery-indicator {
+        width: 10px !important;
+        height: 10px !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -766,6 +815,125 @@ h1:hover, h2:hover {
         max-width: 40px !important;
         flex-grow: 0 !important;
         flex-basis: auto !important;
+    }
+    
+    /* Mejoras para la galería en móviles */
+    .gallery-section {
+        min-height: 450px !important;
+        padding: var(--spacing-medium) 0 !important;
+    }
+    
+    .gallery-container {
+        min-height: 400px !important;
+        max-height: 550px !important;
+    }
+    
+    .gallery-image {
+        width: 100% !important;
+        min-height: 350px !important;
+        border-radius: 10px !important;
+    }
+    
+    .gallery-arrow {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 1.5em !important;
+        line-height: 45px !important;
+    }
+    
+    /* En móviles, las flechas van debajo de las imágenes */
+    .gallery-wrapper {
+        position: relative !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: var(--spacing-medium) !important;
+    }
+    
+    .gallery-container {
+        width: 100% !important;
+        order: 1 !important;
+    }
+    
+    .gallery-arrow {
+        position: static !important;
+        transform: none !important;
+        order: 2 !important;
+        margin: 0 var(--spacing-small) !important;
+        border-radius: 50% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .gallery-arrow:hover {
+        transform: scale(1.05) !important;
+        border-radius: 50% !important;
+    }
+    
+    .gallery-arrow:active {
+        transform: scale(1.02) !important;
+        background-color: rgba(0, 0, 0, 0.95) !important;
+        border-color: rgba(255, 255, 255, 0.8) !important;
+        border-radius: 50% !important;
+    }
+    
+    .gallery-arrow:focus {
+        outline: none !important;
+        border-radius: 50% !important;
+    }
+    
+    /* Asegurar que las flechas móviles mantengan su forma en todos los estados */
+    .gallery-arrow,
+    .gallery-arrow:hover,
+    .gallery-arrow:active,
+    .gallery-arrow:focus,
+    .gallery-arrow:visited {
+        border-radius: 50% !important;
+        box-sizing: border-box !important;
+        width: 45px !important;
+        height: 45px !important;
+    }
+    
+    .gallery-prev {
+        left: auto !important;
+    }
+    
+    .gallery-next {
+        right: auto !important;
+    }
+    
+    /* Controles de navegación en móviles */
+    .gallery-navigation {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: var(--spacing-medium) !important;
+        order: 2 !important;
+        width: 100% !important;
+        margin-top: var(--spacing-small) !important;
+        padding: 0 var(--spacing-small) !important;
+    }
+    
+    /* Indicadores en móviles */
+    .gallery-indicators {
+        position: absolute !important;
+        bottom: 60px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        gap: 5px !important;
+        padding: 6px !important;
+        z-index: 10 !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: auto !important;
+        min-width: 160px !important;
+        background: rgba(0, 0, 0, 0.6) !important;
+        border-radius: 20px !important;
+        backdrop-filter: blur(10px) !important;
+    }
+    
+    .gallery-indicator {
+        width: 8px !important;
+        height: 8px !important;
     }
 }
 

@@ -128,7 +128,11 @@
                 <section class="gallery-section" id="gallery">
                     <div class="section-title-container"><h3 class="section-title">GALERÍA</h3></div>
                     <div class="gallery-wrapper">
-                        <button class="gallery-arrow gallery-prev" aria-label="Foto anterior">&lt;</button>
+                        <button class="gallery-arrow gallery-prev" aria-label="Foto anterior">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                         <div class="gallery-container">
                             <div class="gallery-slide active"><img src="assets/images/img02.JPG" alt="Pareja disfrutando de la naturaleza" class="gallery-image" loading="lazy"></div>
                             <div class="gallery-slide"><img src="assets/images/img03.JPG" alt="Alejandra y Gerardo en un momento romántico" class="gallery-image" loading="lazy"></div>
@@ -144,7 +148,42 @@
                             <div class="gallery-slide"><img src="assets/images/img13.JPG" alt="Pareja en un campo" class="gallery-image" loading="lazy"></div>
                             <div class="gallery-slide"><img src="assets/images/img14.JPG" alt="Alejandra y Gerardo en un bosque" class="gallery-image" loading="lazy"></div>
                         </div>
-                        <button class="gallery-arrow gallery-next" aria-label="Foto siguiente">></button>
+                        <button class="gallery-arrow gallery-next" aria-label="Foto siguiente">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        
+                        <!-- Controles de navegación para móviles -->
+                        <div class="gallery-navigation">
+                            <button class="gallery-arrow gallery-prev-mobile" aria-label="Foto anterior">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button class="gallery-arrow gallery-next-mobile" aria-label="Foto siguiente">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Indicadores de navegación -->
+                        <div class="gallery-indicators">
+                            <div class="gallery-indicator active" data-slide="0"></div>
+                            <div class="gallery-indicator" data-slide="1"></div>
+                            <div class="gallery-indicator" data-slide="2"></div>
+                            <div class="gallery-indicator" data-slide="3"></div>
+                            <div class="gallery-indicator" data-slide="4"></div>
+                            <div class="gallery-indicator" data-slide="5"></div>
+                            <div class="gallery-indicator" data-slide="6"></div>
+                            <div class="gallery-indicator" data-slide="7"></div>
+                            <div class="gallery-indicator" data-slide="8"></div>
+                            <div class="gallery-indicator" data-slide="9"></div>
+                            <div class="gallery-indicator" data-slide="10"></div>
+                            <div class="gallery-indicator" data-slide="11"></div>
+                            <div class="gallery-indicator" data-slide="12"></div>
+                        </div>
                     </div>
                 </section>
             </div>

@@ -14,7 +14,10 @@
     h1 { font-size: 3em; }
     .intro-text { font-size: 0.8em; letter-spacing: 3px; }
     .photo-container { width: 280px; }
-    .gallery-image { width: 75%; }
+    .gallery-image { 
+        width: 75%; 
+        min-height: 450px;
+    }
     .itinerary-list { padding-left: 0; }
     .itinerary-item { margin-bottom: var(--spacing-medium); }
     .location-block, .location-block.layout-reversed { flex-direction: column; }
@@ -39,7 +42,11 @@
     .countdown-timer { gap: 10px; }
     .time-unit { min-width: 50px; }
     .time-unit .number { font-size: 2.5em; }
-    .gallery-image { width: 90%; }
+    .gallery-image { 
+        width: 100%; 
+        border-radius: 10px;
+        min-height: 350px;
+    }
     .gallery-arrow { width: 40px; height: 40px; font-size: 1.5em; }
     .dress-code-container { flex-direction: column; align-items: center; gap: var(--spacing-medium); }
     .dress-code-block { max-width: none; width: 100%; }
