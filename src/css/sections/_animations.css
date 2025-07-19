@@ -187,22 +187,8 @@
    APLICACIÓN DE ANIMACIONES
    ======================================== */
 
-/* Animaciones para sección de título */
-.title-section h1 {
-    animation: fadeInUp 1s ease-out;
-}
-
-.title-section .intro-text {
-    animation: fadeInUp 1s ease-out 0.3s both;
-}
-
-.photo-container {
-    animation: scaleIn 1.2s ease-out 0.5s both;
-}
-
-.date-info {
-    animation: fadeInUp 1s ease-out 0.7s both;
-}
+/* Animaciones para sección de título - REMOVIDAS para evitar doble carga */
+/* Las animaciones de carga inicial han sido deshabilitadas para mejor experiencia */
 
 /* Efectos de fondo - REMOVIDOS para mejor rendimiento */
 /* Las animaciones de parallax han sido deshabilitadas para evitar lag */
@@ -317,17 +303,17 @@
 
 /* Controles de audio */
 #audio-controls-container {
-    animation: fadeInUp 1s ease-out 1s both;
+    /* Animación removida para evitar doble carga */
 }
 
 /* Títulos de sección */
 .section-title {
-    animation: fadeInUp 0.8s ease-out;
+    /* Animación removida para evitar doble carga */
 }
 
 /* Nombres de invitados */
 .guest-name {
-    animation: fadeInUp 0.6s ease-out;
+    /* Animación removida para evitar doble carga */
 }
 
 .guest-name {

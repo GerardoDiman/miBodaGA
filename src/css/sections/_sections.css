@@ -26,7 +26,6 @@
     box-sizing: border-box; 
     position: relative;
     opacity: 1;
-    animation: fadeInPage 1s ease-out 0.2s forwards;
     z-index: 3;
     padding: var(--spacing-medium);
     border-radius: 10px;
