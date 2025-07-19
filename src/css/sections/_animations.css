@@ -708,6 +708,10 @@ h1:hover, h2:hover {
         letter-spacing: 2.5px !important;
     }
     
+    .section-title.gift-title br {
+        display: none !important;
+    }
+    
     /* Ajuste para título de código de vestimenta */
     .dresscode-block-title-main {
         text-align: center !important;
@@ -808,6 +812,26 @@ h1:hover, h2:hover {
         word-spacing: 0.1em !important;
         letter-spacing: 2px !important;
     }
+    
+    .section-title.gift-title br {
+        display: none !important;
+    }
+    
+    /* Media query específica para pantallas de 375px */
+    @media (max-width: 375px) {
+        .section-title.gift-title br {
+            display: block !important;
+        }
+    }
+    
+    /* Media query para pantallas muy pequeñas */
+    @media (max-width: 320px) {
+        .section-title.gift-title br {
+            display: block !important;
+        }
+    }
+    
+
     
     /* Ajuste para título de código de vestimenta */
     .dresscode-block-title-main {
@@ -948,6 +972,38 @@ h1:hover, h2:hover {
     .gallery-indicator {
         width: 8px !important;
         height: 8px !important;
+    }
+}
+
+/* Media query específica para pantallas de 375px */
+@media (max-width: 375px) {
+    .section-title.gift-title {
+        max-width: 280px !important;
+        padding: 0 15px !important;
+        line-height: 1.4 !important;
+        word-spacing: 0.05em !important;
+        letter-spacing: 1.5px !important;
+        font-size: 0.75rem !important;
+        white-space: normal !important;
+        word-wrap: normal !important;
+        overflow-wrap: normal !important;
+        hyphens: none !important;
+    }
+}
+
+/* Media query para pantallas muy pequeñas */
+@media (max-width: 320px) {
+    .section-title.gift-title {
+        max-width: 260px !important;
+        padding: 0 10px !important;
+        line-height: 1.3 !important;
+        word-spacing: 0.02em !important;
+        letter-spacing: 1px !important;
+        font-size: 0.7rem !important;
+        white-space: normal !important;
+        word-wrap: normal !important;
+        overflow-wrap: normal !important;
+        hyphens: none !important;
     }
 }
 

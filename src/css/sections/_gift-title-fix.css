@@ -1,0 +1,41 @@
+/* Fix específico para el título de regalos */
+.section-title.gift-title {
+    white-space: normal !important;
+    word-wrap: normal !important;
+    overflow-wrap: normal !important;
+    hyphens: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0 !important;
+}
+
+.gift-title-line1,
+.gift-title-line2 {
+    display: block !important;
+    line-height: 1.2 !important;
+}
+
+/* En pantallas grandes, mostrar en una línea */
+@media (min-width: 481px) {
+    .section-title.gift-title {
+        flex-direction: row !important;
+        gap: 5px !important;
+    }
+    
+    .gift-title-line1::after {
+        content: " " !important;
+    }
+}
+
+/* En pantallas pequeñas, mantener en dos líneas */
+@media (max-width: 480px) {
+    .section-title.gift-title {
+        flex-direction: column !important;
+        gap: 0 !important;
+    }
+    
+    .gift-title-line1::after {
+        content: "" !important;
+    }
+} 
