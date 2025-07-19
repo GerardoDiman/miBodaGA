@@ -12,10 +12,17 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.container-content section:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+/* Eliminado efecto hover de secciones para títulos estáticos */
+
+/* Deshabilitar efectos hover en títulos de sección */
+.section-title-container:hover,
+.section-title:hover,
+.section-title-container .section-title:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    transition: none !important;
 }
+
 .details-section, .gallery-section, .itinerary-section, .locations-section,
 .filter-section, .gifts-section, .lodging-section, .rsvp-section {
     margin-bottom: var(--spacing-section);

@@ -1,17 +1,5 @@
 /* Sección RSVP */
 .rsvp-section { padding: 0; text-align: center; margin-bottom: 0; }
-.rsvp-section .section-title { 
-    font-size: 0.9em; 
-    letter-spacing: 3px; 
-    color: var(--color-text); 
-    text-transform: uppercase; 
-    white-space: normal; 
-    text-align: center; 
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
-}
 .rsvp-heading { 
     font-family: var(--font-primary); 
     font-size: 1.4em; 
@@ -96,11 +84,6 @@
 
 /* Media queries para pantallas pequeñas */
 @media (max-width: 480px) {
-    .rsvp-section .section-title {
-        font-size: 0.8em;
-        letter-spacing: 2px;
-        padding: 0 10px;
-    }
     
     .rsvp-heading {
         font-size: 1.2em;
@@ -144,11 +127,6 @@
 
 /* Media queries para pantallas muy pequeñas */
 @media (max-width: 360px) {
-    .rsvp-section .section-title {
-        font-size: 0.75em;
-        letter-spacing: 1.5px;
-        padding: 0 5px;
-    }
     
     .rsvp-heading {
         font-size: 1.1em;

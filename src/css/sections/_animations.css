@@ -358,9 +358,7 @@ h1, h2 {
     transition: all 0.3s ease;
 }
 
-h1:hover, h2:hover {
-    transform: scale(1.02);
-}
+/* Eliminado efecto hover de títulos para mantenerlos estáticos */
 
 /* Bloques de ubicación */
 .location-block {

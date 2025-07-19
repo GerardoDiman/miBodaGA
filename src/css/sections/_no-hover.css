@@ -1,0 +1,44 @@
+/* ========================================
+   ELIMINACIÓN DE EFECTOS HOVER EN TÍTULOS
+   ======================================== */
+
+/* Forzar eliminación de efectos hover en títulos de sección */
+.section-title-container,
+.section-title,
+.section-title-container .section-title,
+h1, h2, h3 {
+    transition: none !important;
+}
+
+.section-title-container:hover,
+.section-title:hover,
+.section-title-container .section-title:hover,
+h1:hover, h2:hover, h3:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Eliminar efectos hover de secciones que contienen títulos */
+.container-content section:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+}
+
+/* Asegurar que los títulos permanezcan estáticos */
+.section-title-container,
+.section-title {
+    pointer-events: none;
+}
+
+/* Permitir interacción solo en elementos que realmente la necesitan */
+.rsvp-button,
+.registry-button,
+.lodging-button,
+.social-button,
+.gallery-arrow,
+.location-gps-link {
+    pointer-events: auto;
+} 

@@ -38,3 +38,6 @@
 /* Animaciones y media queries */
 @import url('./sections/_animations.css');
 @import url('./sections/_mediaqueries.css');
+
+/* Eliminación de efectos hover en títulos */
+@import url('./sections/_no-hover.css');
