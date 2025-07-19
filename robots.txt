@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+
+# Permitir indexación de recursos importantes
+Allow: /index.html
+Allow: /manifest.json
+Allow: /assets/images/
+Allow: /src/css/
+Allow: /src/js/
+
+# Bloquear acceso a datos privados
+Disallow: /data/
+Disallow: /qrcodes/
+Disallow: /validar.html
+
+# Bloquear archivos de configuración
+Disallow: /package.json
+Disallow: /README.md
+Disallow: /src/python/
+
+# Sitemap
+Sitemap: https://mibodaag.netlify.app/sitemap.xml
+
+# Crawl-delay para ser respetuoso con el servidor
+Crawl-delay: 1 
