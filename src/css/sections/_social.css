@@ -8,5 +8,42 @@
 .social-button.facebook { background-color: rgba(209, 183, 160, 0.9); color: #1a1a1a; box-shadow: 0 4px 15px rgba(209, 183, 160, 0.2); border: 1px solid rgba(255, 255, 255, 0.2); }
 .social-button.instagram { background: rgba(209, 183, 160, 0.8); color: #1a1a1a; box-shadow: 0 4px 15px rgba(209, 183, 160, 0.2); border: 1px solid rgba(255, 255, 255, 0.2); }
 .social-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(209, 183, 160, 0.3); background-color: rgba(209, 183, 160, 1); }
-.wedding-hashtag { font-family: var(--font-secondary); font-size: 2rem; color: rgba(209, 183, 160, 0.9); margin-top: var(--spacing-large); font-weight: 400; letter-spacing: 2px; opacity: 0.9; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); }
+.wedding-hashtag { 
+    font-family: var(--font-secondary); 
+    font-size: 2rem; 
+    color: rgba(209, 183, 160, 0.9); 
+    margin-top: var(--spacing-large); 
+    font-weight: 400; 
+    letter-spacing: 2px; 
+    opacity: 0.9; 
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); 
+    text-align: center;
+    width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+    padding: 0 var(--spacing-small);
+    box-sizing: border-box;
+}
 .social-button.facebook:hover, .social-button.instagram:hover { background-color: rgba(209, 183, 160, 1); color: #1a1a1a; }
+
+/* Media queries para hashtag responsive */
+@media (max-width: 768px) {
+    .wedding-hashtag {
+        font-size: 1.6rem !important;
+        letter-spacing: 1.5px !important;
+        padding: 0 var(--spacing-medium) !important;
+        line-height: 1.4 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .wedding-hashtag {
+        font-size: 1.4rem !important;
+        letter-spacing: 1px !important;
+        padding: 0 var(--spacing-small) !important;
+        line-height: 1.5 !important;
+        margin-top: var(--spacing-medium) !important;
+    }
+}

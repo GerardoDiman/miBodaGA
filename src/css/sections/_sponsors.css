@@ -2,20 +2,23 @@
 .sponsors-section { padding: 0; }
 .sponsors-container { display: flex; flex-direction: column; align-items: center; }
 .sponsor-card { display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 600px; margin: 0 auto; padding: var(--spacing-medium); }
-.icon-image { width: 100px; height: 100px; object-fit: contain; margin-bottom: var(--spacing-small); }
+.icon-image { width: 80px; height: 80px; object-fit: contain; margin-bottom: var(--spacing-small); }
 .sponsor-info { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-small); }
-.sponsor-names { font-family: var(--font-secondary); font-size: 1.8rem; color: var(--color-text); margin-bottom: 5px; text-align: center; }
-.sponsor-role { font-family: var(--font-primary); font-size: 0.9rem; letter-spacing: 2px; color: var(--color-accent); text-align: center; }
+.sponsor-names { font-family: var(--font-secondary); font-size: 1.5rem; color: var(--color-text); margin-bottom: 5px; text-align: center; }
+.sponsor-role { font-family: var(--font-primary); font-size: 0.8rem; letter-spacing: 2px; color: var(--color-accent); text-align: center; }
 @media (max-width: 1200px) {
     .sponsors-container { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-large); }
-    .sponsor-names { font-size: 2.2em; }
+    .sponsor-names { font-size: 1.8em; }
+    .icon-image { width: 70px; height: 70px; }
 }
 @media (max-width: 768px) {
-    .sponsor-names { font-size: 2em; }
+    .sponsor-names { font-size: 1.6em; }
+    .icon-image { width: 65px; height: 65px; }
 }
 @media (max-width: 576px) {
     .sponsors-container { grid-template-columns: 1fr; gap: calc(var(--spacing-medium) * 1.2); }
     .sponsor-card { padding: var(--spacing-medium); }
-    .sponsor-names { font-size: 1.8em; }
+    .sponsor-names { font-size: 1.4em; }
     .sponsor-role { font-size: 0.7em; letter-spacing: 2px; }
+    .icon-image { width: 60px; height: 60px; }
 }

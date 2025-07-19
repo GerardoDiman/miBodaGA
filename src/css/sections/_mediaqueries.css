@@ -50,8 +50,15 @@
     .gallery-arrow { width: 40px; height: 40px; font-size: 1.5em; }
     .dress-code-container { flex-direction: column; align-items: center; gap: var(--spacing-medium); }
     .dress-code-block { max-width: none; width: 100%; }
-    .rsvp-options { flex-direction: column; align-items: center; }
-    .rsvp-option { max-width: 100%; width: 100%; }
+    .rsvp-options { 
+        flex-direction: row; 
+        justify-content: center; 
+        gap: var(--spacing-medium); 
+    }
+    .rsvp-option { 
+        max-width: 150px; 
+        min-width: 140px; 
+    }
 }
 @media screen and (max-width: 375px) {
     :root {

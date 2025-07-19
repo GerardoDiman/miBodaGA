@@ -316,16 +316,34 @@
         }
     }
 
-    // Efectos de cursor personalizado
+    // Efectos de cursor personalizado (solo para dispositivos de escritorio)
     class CustomCursor {
         constructor() {
             this.cursor = null;
+            this.isTouchDevice = this.detectTouchDevice();
             this.init();
         }
 
+        detectTouchDevice() {
+            // Detectar dispositivos táctiles
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            // Detectar dispositivos móviles por tamaño de pantalla
+            const isMobile = window.innerWidth <= 768;
+            
+            // Detectar si es un dispositivo móvil por User Agent
+            const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            return hasTouch || isMobile || isMobileUA;
+        }
+
         init() {
-            this.createCursor();
-            this.setupCursorEvents();
+            // Solo inicializar en dispositivos de escritorio
+            if (!this.isTouchDevice) {
+                this.createCursor();
+                this.setupCursorEvents();
+                this.setupCursorVisibility();
+            }
         }
 
         createCursor() {
@@ -339,27 +357,52 @@
                 border-radius: 50%;
                 pointer-events: none;
                 z-index: 9999;
-                transition: transform 0.1s ease;
+                transition: transform 0.1s ease, opacity 0.3s ease;
                 mix-blend-mode: difference;
+                opacity: 0;
             `;
             document.body.appendChild(this.cursor);
         }
 
         setupCursorEvents() {
             document.addEventListener('mousemove', (e) => {
-                this.cursor.style.left = e.clientX - 10 + 'px';
-                this.cursor.style.top = e.clientY - 10 + 'px';
+                if (this.cursor) {
+                    this.cursor.style.left = e.clientX - 10 + 'px';
+                    this.cursor.style.top = e.clientY - 10 + 'px';
+                    this.cursor.style.opacity = '1';
+                }
             });
 
             // Efecto hover en elementos interactivos
             const interactiveElements = document.querySelectorAll('button, a, .interactive');
             interactiveElements.forEach(element => {
                 element.addEventListener('mouseenter', () => {
-                    this.cursor.style.transform = 'scale(2)';
+                    if (this.cursor) {
+                        this.cursor.style.transform = 'scale(2)';
+                    }
                 });
                 element.addEventListener('mouseleave', () => {
-                    this.cursor.style.transform = 'scale(1)';
+                    if (this.cursor) {
+                        this.cursor.style.transform = 'scale(1)';
+                    }
                 });
+            });
+        }
+
+        setupCursorVisibility() {
+            let timeout;
+            
+            document.addEventListener('mousemove', () => {
+                if (this.cursor) {
+                    this.cursor.style.opacity = '1';
+                    clearTimeout(timeout);
+                    
+                    timeout = setTimeout(() => {
+                        if (this.cursor) {
+                            this.cursor.style.opacity = '0';
+                        }
+                    }, 3000); // Ocultar después de 3 segundos sin movimiento
+                }
             });
         }
     }

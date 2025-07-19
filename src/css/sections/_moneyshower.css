@@ -11,13 +11,13 @@
     z-index: 2;
 }
 .money-shower-icon {
-    font-size: 2.5em;
+    font-size: 2em;
     color: var(--color-accent);
     margin-bottom: 10px;
 }
 .money-shower-title {
     font-family: var(--font-secondary);
-    font-size: 2em;
+    font-size: 1.6em;
     color: #fff;
     font-weight: 700;
     margin-bottom: 8px;
@@ -26,9 +26,34 @@
 }
 .money-shower-description {
     font-family: var(--font-primary);
-    font-size: 1.1em;
+    font-size: 0.95em;
     color: #f5e7d6;
     letter-spacing: 1px;
     margin-bottom: 0;
     text-shadow: 0 1px 6px rgba(0,0,0,0.18);
+}
+
+/* Media queries para responsive */
+@media (max-width: 768px) {
+    .money-shower-title {
+        font-size: 1.4em !important;
+    }
+    .money-shower-description {
+        font-size: 0.9em !important;
+    }
+    .money-shower-icon {
+        font-size: 1.8em !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .money-shower-title {
+        font-size: 1.2em !important;
+    }
+    .money-shower-description {
+        font-size: 0.85em !important;
+    }
+    .money-shower-icon {
+        font-size: 1.6em !important;
+    }
 }
