@@ -1,10 +1,10 @@
 /* Reproductor de Audio */
 #audio-controls-container {
     position: fixed; top: var(--spacing-small); left: var(--spacing-small); z-index: 100; display: flex;
-    align-items: center; background-color: rgba(0, 0, 0, 0.5); border-radius: 25px;
+    align-items: center; background-color: transparent; border-radius: 25px;
     padding: var(--spacing-small); transition: background-color 0.3s ease;
 }
-#audio-controls-container:hover { background-color: rgba(0, 0, 0, 0.7); }
+#audio-controls-container:hover { background-color: transparent; }
 #audio-toggle-button { background-color: transparent; color: var(--color-text); border: none; border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9em; }
 #play-pause-icon { font-size: inherit; }
 #volume-control { display: flex; align-items: center; overflow: hidden; width: 0; opacity: 0; transition: width 0.4s ease, opacity 0.4s ease; margin-left: var(--spacing-small); }

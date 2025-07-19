@@ -1,5 +1,7 @@
 @import url('./sections/_base.css');
 @import url('./sections/_accessibility.css');
+@import url('./sections/_audio.css');
+@import url('./sections/_animations.css');
 @import url('./sections/_layout.css');
 @import url('./sections/_backgrounds.css');
 @import url('./sections/_header.css');
@@ -15,7 +17,6 @@
 @import url('./sections/_social.css');
 @import url('./sections/_hospedaje.css');
 @import url('./sections/_mediaqueries.css');
-@import url('./sections/_audio.css');
 @import url('./sections/_parents.css');
 @import url('./sections/_sponsors.css');
 @import url('./sections/_final.css');

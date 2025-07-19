@@ -9,6 +9,12 @@
     z-index: 3;
     padding: var(--spacing-medium);
     border-radius: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.container-content section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 .details-section, .gallery-section, .itinerary-section, .locations-section,
 .filter-section, .gifts-section, .lodging-section, .rsvp-section {

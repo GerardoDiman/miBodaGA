@@ -6,8 +6,23 @@
 .intro-text::before, .intro-text::after { content: ''; height: 1px; background-color: #c5c5c5; opacity: 0.5; flex-grow: 1; min-width: 50px; }
 h1 { font-family: var(--font-secondary); font-size: 4em; font-weight: 400; line-height: 1.1; color: var(--color-text); }
 .ampersand { font-family: var(--font-secondary); font-style: italic; font-weight: 400; color: var(--color-accent); font-size: 0.9em; margin: 0 var(--spacing-small); }
-.photo-container { width: 330px; max-width: 70%; aspect-ratio: 3 / 4; overflow: hidden; margin: 0 auto; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -58%); z-index: 1; border-radius: 150px 150px 150px 0; }
-.photo-container img { display: block; width: 110%; height: 110%; object-fit: cover; object-position: 15% 30%; margin: -10%; }
-.date-info { position: absolute; right: 14rem; top: 75%; transform: translateY(-50%) rotate(90deg); letter-spacing: 0.3rem; font-size: 1rem; color: var(--color-muted); z-index: 0; display: flex; align-items: center; gap: var(--spacing-small); white-space: nowrap; transform-origin: right center; }
-.date-info span { display: inline-block; text-transform: uppercase; }
-.date-info .separator { color: var(--color-muted); }
+.photo-container { width: 330px; max-width: 70%; aspect-ratio: 3 / 4; overflow: hidden; margin: 0 auto; position: absolute; bottom: 10%;; transform: translate(-50%, -58%); z-index: 1; border-radius: 150px 150px 150px 0; }
+.photo-container img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center center; margin: 0; }
+.date-info { position: absolute; right: 10rem; bottom: 18%; translateY(-50%); letter-spacing: 0.3rem; font-size: 1rem; color: var(--color-muted); z-index: 0; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-small); white-space: nowrap; transform-origin: center center; }
+.date-info span { display: block; text-transform: uppercase; text-align: center; }
+.date-info .separator { color: var(--color-muted); font-size: 0.8em; margin: 2px 0; }
+
+/* Estilos para texto vertical letra por letra */
+.date-info .day,
+.date-info .month {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+}
+
+.date-info .day span,
+.date-info .month span {
+    display: block;
+    line-height: 1;
+}

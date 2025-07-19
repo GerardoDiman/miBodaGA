@@ -1,0 +1,370 @@
+/* ===========================================================================
+   ANIMACIONES Y EFECTOS DINÁMICOS
+   =========================================================================== */
+
+/* Animaciones de entrada para elementos */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animación de flotación para elementos */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Animación de pulso para elementos importantes */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Animación de rotación suave */
+@keyframes gentleRotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animación de brillo */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Efecto de parallax suave */
+@keyframes parallax {
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(-20px);
+    }
+}
+
+/* Aplicar animaciones a elementos específicos */
+.title-section h1 {
+    animation: fadeInUp 1.2s ease-out 0.3s both;
+}
+
+.title-section .intro-text {
+    animation: fadeInLeft 1s ease-out 0.1s both;
+}
+
+.photo-container {
+    animation: scaleIn 1.5s ease-out 0.5s both;
+}
+
+.date-info {
+    animation: fadeInRight 1s ease-out 0.7s both;
+}
+
+/* Animaciones para secciones */
+.section-background-wrapper {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
+}
+
+.section-background-wrapper.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Efectos hover para botones */
+.confirm-main-rsvp-button,
+.rsvp-button,
+.registry-button,
+.add-calendar-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.confirm-main-rsvp-button:hover,
+.rsvp-button:hover,
+.registry-button:hover,
+.add-calendar-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(209, 183, 160, 0.3);
+}
+
+/* Efecto de brillo en hover */
+.confirm-main-rsvp-button::before,
+.rsvp-button::before,
+.registry-button::before,
+.add-calendar-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.confirm-main-rsvp-button:hover::before,
+.rsvp-button:hover::before,
+.registry-button:hover::before,
+.add-calendar-btn:hover::before {
+    left: 100%;
+}
+
+/* Animaciones para el contador regresivo */
+.countdown-timer .time-unit {
+    animation: fadeInUp 0.8s ease-out both;
+    animation-delay: calc(var(--animation-order) * 0.1s);
+}
+
+.time-unit:nth-child(1) { --animation-order: 1; }
+.time-unit:nth-child(2) { --animation-order: 2; }
+.time-unit:nth-child(3) { --animation-order: 3; }
+.time-unit:nth-child(4) { --animation-order: 4; }
+
+/* Efecto de flotación para iconos */
+.icon-image {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Animación para la galería */
+.gallery-slide {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-slide.active {
+    animation: scaleIn 0.6s ease-out;
+}
+
+/* Efectos para las tarjetas de regalos */
+.registry-block,
+.sponsor-card,
+.lodging-block {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.registry-block:hover,
+.sponsor-card:hover,
+.lodging-block:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+/* Animación para el logo */
+.wedding-logo img {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Efecto de parallax para imágenes de fondo */
+.section-background-wrapper::before {
+    animation: parallax 20s ease-in-out infinite alternate;
+}
+
+/* Animaciones para elementos de navegación */
+.gallery-arrow {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-arrow:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Efecto de entrada para el reproductor de audio */
+#audio-controls-container {
+    animation: slideInFromTop 0.8s ease-out 1s both;
+}
+
+/* Animaciones para elementos de texto */
+.section-title {
+    animation: fadeInUp 0.8s ease-out both;
+}
+
+.guest-name {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+/* Efecto de typing para el nombre del invitado */
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+.guest-name {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 2s steps(40, end) 0.5s both;
+}
+
+/* Animaciones para elementos de ubicación */
+.location-block {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.location-block:hover {
+    transform: translateX(10px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Efecto de brillo para elementos especiales */
+.money-shower-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.money-shower-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(209, 183, 160, 0.1), transparent);
+    animation: shimmer 3s infinite;
+}
+
+/* Animaciones para elementos finales */
+.final-section .couple-names {
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.final-section .wedding-date {
+    animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+/* Efecto de partículas flotantes */
+@keyframes particleFloat {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Clases utilitarias para animaciones */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Efectos de carga */
+@keyframes loadingPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+/* Animaciones responsivas */
+@media (max-width: 768px) {
+    .section-background-wrapper {
+        transform: translateY(30px);
+    }
+    
+    .registry-block:hover,
+    .sponsor-card:hover,
+    .lodging-block:hover {
+        transform: translateY(-5px) scale(1.01);
+    }
+}
+
+/* Preferencias de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+} 
