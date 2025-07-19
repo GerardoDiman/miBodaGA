@@ -1,12 +1,25 @@
+/* ========================================
+   ARCHIVO PRINCIPAL DE ESTILOS
+   ======================================== */
+
+/* Base y utilidades */
 @import url('./sections/_base.css');
+@import url('./sections/_utilities.css');
+
+/* Accesibilidad y audio */
 @import url('./sections/_accessibility.css');
 @import url('./sections/_audio.css');
-@import url('./sections/_animations.css');
+
+/* Layout y estructura */
 @import url('./sections/_layout.css');
 @import url('./sections/_backgrounds.css');
+
+/* Componentes principales */
 @import url('./sections/_header.css');
 @import url('./sections/_footer.css');
 @import url('./sections/_galeria.css');
+
+/* Secciones de contenido */
 @import url('./sections/_detalles.css');
 @import url('./sections/_itinerario.css');
 @import url('./sections/_dresscode.css');
@@ -17,9 +30,11 @@
 @import url('./sections/_gift-title-fix.css');
 @import url('./sections/_social.css');
 @import url('./sections/_hospedaje.css');
-@import url('./sections/_mediaqueries.css');
 @import url('./sections/_parents.css');
 @import url('./sections/_sponsors.css');
 @import url('./sections/_final.css');
 @import url('./sections/_moneyshower.css');
-@import url('./sections/_utilities.css');
+
+/* Animaciones y media queries */
+@import url('./sections/_animations.css');
+@import url('./sections/_mediaqueries.css');

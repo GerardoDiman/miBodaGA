@@ -1,1 +1,97 @@
-node_modules
+# Dependencias
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+
+# Archivos de sistema
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+.cache/
+
+# Archivos de build
+dist/
+build/
+out/
+
+# Archivos de configuración local
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Archivos de datos sensibles
+data/invitados_backup.csv
+data/invitados_private.csv
+*.key
+*.pem
+
+# Archivos de prueba
+coverage/
+.nyc_output/
+
+# Archivos de respaldo
+*.bak
+*.backup
+*_backup.*
+
+# Archivos de exportación temporales
+61b47a04-51bf-44c7-bb15-17f696603ba9_Export-*/
+
+# Archivos de audio temporales
+*.wav.tmp
+*.mp3.tmp
+
+# Archivos de imagen temporales
+*.jpg.tmp
+*.png.tmp
+*.gif.tmp
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+
+# Archivos de Windows
+*.lnk
+
+# Archivos de macOS
+.AppleDouble
+.LSOverride
+
+# Archivos de Linux
+*~
+
+# Archivos de respaldo de editor
+*.orig
+*.rej
