@@ -80,4 +80,332 @@
     .location-event-type { font-size: 0.65em; letter-spacing: 2px; }
     #qrcode-target { width: 150px; height: 150px; }
     .qr-code-intro { font-size: 0.8em; }
+    
+    /* Optimizaciones para pantallas muy pequeñas */
+    .container-content { 
+        width: 98%; 
+        padding: 0 var(--spacing-small); 
+    }
+    
+    /* Reducir espaciado en secciones */
+    .section-background-wrapper {
+        padding: var(--spacing-small) 0;
+    }
+    
+    /* Optimizar botones */
+    .social-button, .rsvp-button, .lodging-button {
+        padding: 8px 16px;
+        font-size: 0.7em;
+        min-width: 100px;
+    }
+    
+    /* Optimizar opciones RSVP */
+    .rsvp-options { 
+        gap: var(--spacing-small); 
+        flex-direction: row !important;
+        justify-content: center !important;
+    }
+    .rsvp-option { 
+        max-width: 130px; 
+        min-width: 120px; 
+    }
+    
+    /* Optimizar bloques de hospedaje */
+    .lodging-block { 
+        width: 240px; 
+        height: 280px; 
+        padding: 16px 12px 12px 12px;
+    }
+    .lodging-image-container { 
+        width: 100px; 
+        height: 100px; 
+    }
+    .lodging-name { 
+        font-size: 1em; 
+    }
+    
+    /* Optimizar galería */
+    .gallery-arrow { 
+        width: 35px; 
+        height: 35px; 
+        font-size: 1.2em; 
+        min-height: 44px; /* Mínimo para toque */
+        touch-action: manipulation;
+    }
+    .gallery-indicators { 
+        bottom: 50px !important; 
+        gap: 4px !important; 
+    }
+    .gallery-indicator { 
+        width: 8px !important; 
+        height: 8px !important; 
+        min-height: 24px; /* Mínimo para toque */
+        touch-action: manipulation;
+    }
+    
+    /* Optimizaciones táctiles */
+    .social-button, .rsvp-button, .lodging-button {
+        min-height: 40px; /* Mínimo para toque */
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Mejorar legibilidad */
+    body {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+    
+    /* Optimizar scroll */
+    html, body {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Media query intermedia para pantallas entre 375px y 320px */
+@media screen and (max-width: 350px) {
+    :root {
+        --spacing-section: 28px;
+        --spacing-small: 7px;
+        --spacing-medium: 14px;
+        --spacing-large: 32px;
+    }
+    
+    .container-content { 
+        width: 98.5%; 
+        padding: 0 6px; 
+    }
+    
+    h1 { font-size: 1.9em; }
+    .intro-text { font-size: 0.62em; letter-spacing: 1.2px; }
+    .section-title { font-size: 0.72em; letter-spacing: 1.8px; }
+    .photo-container { width: 190px; }
+    
+    /* Contador regresivo intermedio */
+    .countdown-timer { 
+        gap: 8px; 
+    }
+    .time-unit { 
+        min-width: 45px; 
+    }
+    .time-unit .number { 
+        font-size: 1.9em; 
+    }
+    .time-unit .label { 
+        font-size: 0.55em; 
+    }
+    
+    /* Botones intermedios */
+    .social-button, .rsvp-button, .lodging-button {
+        padding: 7px 14px;
+        font-size: 0.68em;
+        min-width: 95px;
+        min-height: 38px;
+        touch-action: manipulation;
+    }
+    
+    /* Opciones RSVP intermedias */
+    .rsvp-options { 
+        gap: 10px; 
+        flex-direction: row !important;
+        justify-content: center !important;
+    }
+    .rsvp-option { 
+        max-width: 120px; 
+        min-width: 110px; 
+    }
+    .rsvp-icon { 
+        font-size: 1.9em; 
+    }
+    .rsvp-method-title { 
+        font-size: 0.95em; 
+    }
+    
+    /* Bloques de hospedaje intermedios */
+    .lodging-block { 
+        width: 230px; 
+        height: 270px; 
+        padding: 14px 10px 10px 10px;
+    }
+    .lodging-image-container { 
+        width: 95px; 
+        height: 95px; 
+    }
+    .lodging-name { 
+        font-size: 0.95em; 
+    }
+    
+    /* Galería intermedia */
+    .gallery-arrow { 
+        width: 32px; 
+        height: 32px; 
+        font-size: 1.1em; 
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+    .gallery-indicators { 
+        bottom: 45px !important; 
+        gap: 3.5px !important; 
+    }
+    .gallery-indicator { 
+        width: 7px !important; 
+        height: 7px !important; 
+        min-height: 24px;
+        touch-action: manipulation;
+    }
+    
+    /* QR code intermedio */
+    #qrcode-target { 
+        width: 135px; 
+        height: 135px; 
+    }
+    .qr-code-intro { 
+        font-size: 0.75em; 
+    }
+    
+    /* Textos intermedios */
+    .event-time-name { font-size: 0.95em; }
+    .event-location { font-size: 0.75em; }
+    .location-name { font-size: 1.4em; }
+    .location-event-type { font-size: 0.62em; letter-spacing: 1.8px; }
+    
+    /* Optimizaciones táctiles */
+    button, a, .interactive {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+    
+    html, body {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Media query para dispositivos extremadamente pequeños */
+@media screen and (max-width: 320px) {
+    :root {
+        --spacing-section: 25px;
+        --spacing-small: 6px;
+        --spacing-medium: 12px;
+        --spacing-large: 30px;
+    }
+    
+    .container-content { 
+        width: 99%; 
+        padding: 0 4px; 
+    }
+    
+    h1 { font-size: 1.8em; }
+    .intro-text { font-size: 0.6em; letter-spacing: 1px; }
+    .section-title { font-size: 0.7em; letter-spacing: 1.5px; }
+    .photo-container { width: 180px; }
+    
+    /* Contador regresivo más compacto */
+    .countdown-timer { 
+        gap: 6px; 
+    }
+    .time-unit { 
+        min-width: 40px; 
+    }
+    .time-unit .number { 
+        font-size: 1.8em; 
+    }
+    .time-unit .label { 
+        font-size: 0.5em; 
+    }
+    
+    /* Botones más pequeños pero táctiles */
+    .social-button, .rsvp-button, .lodging-button {
+        padding: 6px 12px;
+        font-size: 0.65em;
+        min-width: 90px;
+        min-height: 36px; /* Mínimo para toque */
+        touch-action: manipulation;
+    }
+    
+    /* Opciones RSVP ultra compactas */
+    .rsvp-options { 
+        gap: 8px; 
+        flex-direction: row !important;
+        justify-content: center !important;
+    }
+    .rsvp-option { 
+        max-width: 110px; 
+        min-width: 100px; 
+    }
+    .rsvp-icon { 
+        font-size: 1.8em; 
+    }
+    .rsvp-method-title { 
+        font-size: 0.9em; 
+    }
+    
+    /* Bloques de hospedaje ultra compactos */
+    .lodging-block { 
+        width: 220px; 
+        height: 260px; 
+        padding: 12px 8px 8px 8px;
+    }
+    .lodging-image-container { 
+        width: 90px; 
+        height: 90px; 
+    }
+    .lodging-name { 
+        font-size: 0.9em; 
+    }
+    
+    /* Galería ultra compacta */
+    .gallery-arrow { 
+        width: 30px; 
+        height: 30px; 
+        font-size: 1em; 
+        min-height: 44px; /* Mínimo para toque */
+        touch-action: manipulation;
+    }
+    .gallery-indicators { 
+        bottom: 40px !important; 
+        gap: 3px !important; 
+    }
+    .gallery-indicator { 
+        width: 6px !important; 
+        height: 6px !important; 
+        min-height: 24px; /* Mínimo para toque */
+        touch-action: manipulation;
+    }
+    
+    /* QR code más pequeño */
+    #qrcode-target { 
+        width: 120px; 
+        height: 120px; 
+    }
+    .qr-code-intro { 
+        font-size: 0.7em; 
+    }
+    
+    /* Textos más compactos */
+    .event-time-name { font-size: 0.9em; }
+    .event-location { font-size: 0.7em; }
+    .location-name { font-size: 1.3em; }
+    .location-event-type { font-size: 0.6em; letter-spacing: 1.5px; }
+    
+    /* Optimizaciones táctiles generales */
+    button, a, .interactive {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Mejorar legibilidad en pantallas pequeñas */
+    body {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+    
+    /* Optimizar scroll */
+    html, body {
+        -webkit-overflow-scrolling: touch;
+    }
 }
