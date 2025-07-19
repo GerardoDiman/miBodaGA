@@ -42,18 +42,62 @@
                 });
             }, animationConfig);
 
-            // Observar elementos que necesitan animación
-            const elementsToAnimate = document.querySelectorAll(`
-                .section-background-wrapper,
-                .registry-block,
-                .sponsor-card,
-                .lodging-block,
-                .location-block,
-                .gallery-slide,
-                .section-title,
-                .countdown-timer .time-unit,
-                h1, h2
-            `);
+                    // Observar elementos que necesitan animación
+        const elementsToAnimate = document.querySelectorAll(`
+            .section-background-wrapper,
+            .registry-block,
+            .sponsor-card,
+            .lodging-block,
+            .location-block,
+            .gallery-slide,
+            .section-title,
+            .section-title-container,
+            .countdown-timer .time-unit,
+            .money-shower-section,
+            .final-section .couple-names,
+            .final-section .wedding-date,
+            .gallery-container,
+            .gallery-indicators,
+            .gallery-navigation,
+            .dress-code-container,
+            .itinerary-section,
+            .locations-section,
+            .gifts-section,
+            .lodging-section,
+            .rsvp-section,
+            .parents-section,
+            .sponsors-section,
+            .filter-section,
+            .itinerary-item,
+            .dresscode-progressive-section,
+            .dresscode-gender-title,
+            .dresscode-icon-container,
+            .dresscode-requirements,
+            .dresscode-separator,
+            .social-filter-buttons,
+            .wedding-hashtag,
+            .registry-links,
+            .money-shower-icon,
+            .money-shower-title,
+            .money-shower-description,
+            .lodging-container,
+            .rsvp-heading,
+            .rsvp-deadline,
+            .confirm-main-rsvp-button,
+            .rsvp-options,
+            .rsvp-option,
+            .final-title,
+            .add-calendar-btn,
+            .guest-info,
+            .wedding-logo,
+            .countdown-intro,
+            .countdown-outro,
+            .message-box,
+            .parents-container,
+            .parent-content,
+            .sponsors-container,
+            h1, h2
+        `);
 
             elementsToAnimate.forEach(element => {
                 this.observer.observe(element);
@@ -64,46 +108,140 @@
         animateElement(element) {
             const animationType = this.getAnimationType(element);
             
+            // Si no debe tener animación por scroll, salir
+            if (animationType === 'none') {
+                return;
+            }
+            
+            // Agregar clase visible para activar la animación CSS
+            element.classList.add('visible');
+            
+            // Para animaciones especiales que requieren JavaScript
             switch(animationType) {
-                case 'fadeInUp':
-                    element.style.animation = 'fadeInUp 0.8s ease-out forwards';
-                    break;
-                case 'fadeInLeft':
-                    element.style.animation = 'fadeInLeft 0.8s ease-out forwards';
-                    break;
-                case 'fadeInRight':
-                    element.style.animation = 'fadeInRight 0.8s ease-out forwards';
-                    break;
-                case 'scaleIn':
-                    element.style.animation = 'scaleIn 0.6s ease-out forwards';
-                    break;
                 case 'stagger':
                     this.animateStaggeredChildren(element);
                     break;
                 case 'depth3D':
-                    element.style.animation = 'depth-3d 0.8s ease-out forwards';
-                    break;
+                case 'fadeInUp':
+                case 'fadeInLeft':
+                case 'fadeInRight':
+                case 'scaleIn':
+                case 'bounceIn':
+                case 'slideUp':
+                case 'rotateIn':
                 default:
-                    element.classList.add('animate-in');
+                    // Las animaciones se manejan automáticamente por CSS
+                    break;
             }
         }
 
         // Determinar tipo de animación basado en la clase del elemento
         getAnimationType(element) {
+            // No agregar animate-on-scroll a elementos que ya tienen animaciones de carga
+            const elementsWithInitialAnimations = [
+                '.photo-container',
+                '.date-info',
+                '.intro-text',
+                'h1',
+                '.guest-info',
+                '.wedding-logo',
+                '.countdown-intro',
+                '.countdown-timer',
+                '.countdown-outro',
+                '.message-box',
+                '.final-section .couple-names',
+                '.final-section .wedding-date'
+            ];
+            
+            const hasInitialAnimation = elementsWithInitialAnimations.some(selector => 
+                element.matches(selector)
+            );
+            
+            if (hasInitialAnimation) {
+                return 'none'; // No aplicar animación por scroll
+            }
+            
+            // Agregar clase animate-on-scroll si no la tiene
+            if (!element.classList.contains('animate-on-scroll')) {
+                element.classList.add('animate-on-scroll');
+            }
+            
+            // Determinar variante de animación
             if (element.classList.contains('registry-block') || 
                 element.classList.contains('sponsor-card') || 
                 element.classList.contains('lodging-block')) {
+                element.classList.add('depth-3d');
                 return 'depth3D';
             }
-            if (element.classList.contains('location-block')) {
+            if (element.classList.contains('location-block') ||
+                element.classList.contains('itinerary-item')) {
+                element.classList.add('fade-in-left');
                 return 'fadeInLeft';
             }
-            if (element.classList.contains('countdown-timer')) {
+            if (element.classList.contains('countdown-timer') ||
+                element.classList.contains('rsvp-options') ||
+                element.classList.contains('sponsors-container') ||
+                element.classList.contains('lodging-container')) {
+                element.classList.add('stagger-children');
                 return 'stagger';
             }
-            if (element.tagName === 'H1' || element.tagName === 'H2') {
+            if (element.classList.contains('section-title-container') ||
+                element.classList.contains('section-title') ||
+                element.classList.contains('rsvp-heading') ||
+                element.classList.contains('final-title')) {
+                element.classList.add('scale-in');
                 return 'scaleIn';
             }
+            if (element.classList.contains('gallery-container') ||
+                element.classList.contains('gallery-indicators') ||
+                element.classList.contains('gallery-navigation') ||
+                element.classList.contains('social-filter-buttons')) {
+                element.classList.add('fade-in-right');
+                return 'fadeInRight';
+            }
+            if (element.classList.contains('dresscode-gender-title') ||
+                element.classList.contains('money-shower-title') ||
+                element.classList.contains('parent-title')) {
+                element.classList.add('scale-in');
+                return 'scaleIn';
+            }
+            if (element.classList.contains('dresscode-icon-container') ||
+                element.classList.contains('money-shower-icon') ||
+                element.classList.contains('wedding-logo')) {
+                element.classList.add('scale-in');
+                return 'scaleIn';
+            }
+            if (element.classList.contains('dresscode-requirements') ||
+                element.classList.contains('money-shower-description') ||
+                element.classList.contains('rsvp-deadline') ||
+                element.classList.contains('message-box')) {
+                element.classList.add('fade-in-left');
+                return 'fadeInLeft';
+            }
+            if (element.classList.contains('confirm-main-rsvp-button') ||
+                element.classList.contains('add-calendar-btn')) {
+                element.classList.add('bounce-in');
+                return 'bounceIn';
+            }
+            if (element.classList.contains('wedding-hashtag')) {
+                element.classList.add('fade-in-right');
+                return 'fadeInRight';
+            }
+            if (element.classList.contains('countdown-intro') ||
+                element.classList.contains('countdown-outro')) {
+                element.classList.add('slide-up');
+                return 'slideUp';
+            }
+            if (element.classList.contains('dresscode-separator')) {
+                element.classList.add('rotate-in');
+                return 'rotateIn';
+            }
+            if (element.tagName === 'H1' || element.tagName === 'H2') {
+                element.classList.add('scale-in');
+                return 'scaleIn';
+            }
+            
+            // Animación por defecto
             return 'fadeInUp';
         }
 

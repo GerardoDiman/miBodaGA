@@ -277,7 +277,7 @@
 .registry-block,
 .lodging-block {
     transition: all 0.3s ease;
-    animation: fadeInUp 0.8s ease-out;
+    /* Animación removida - ahora se maneja por scroll */
 }
 
 .registry-block:hover,
@@ -339,7 +339,7 @@ h1, h2 {
 
 /* Sección de lluvia de sobres */
 .money-shower-section {
-    animation: fadeInUp 0.8s ease-out;
+    /* Animación removida - ahora se maneja por scroll */
 }
 
 .money-shower-section::before {
@@ -362,7 +362,11 @@ h1, h2 {
     animation: fadeInUp 1s ease-out 0.5s both;
 }
 
-/* Animaciones al hacer scroll */
+/* ========================================
+   SISTEMA DE ANIMACIONES POR SCROLL MEJORADO
+   ======================================== */
+
+/* Animaciones base por scroll */
 .animate-on-scroll {
     opacity: 0;
     transform: translateY(30px);
@@ -373,6 +377,131 @@ h1, h2 {
     opacity: 1;
     transform: translateY(0);
 }
+
+/* Variantes de animaciones por scroll */
+.animate-on-scroll.fade-in-left {
+    transform: translateX(-50px);
+}
+
+.animate-on-scroll.fade-in-left.visible {
+    transform: translateX(0);
+}
+
+.animate-on-scroll.fade-in-right {
+    transform: translateX(50px);
+}
+
+.animate-on-scroll.fade-in-right.visible {
+    transform: translateX(0);
+}
+
+.animate-on-scroll.scale-in {
+    transform: scale(0.8);
+}
+
+.animate-on-scroll.scale-in.visible {
+    transform: scale(1);
+}
+
+.animate-on-scroll.depth-3d {
+    transform: perspective(1000px) rotateX(15deg) translateY(30px);
+}
+
+.animate-on-scroll.depth-3d.visible {
+    transform: perspective(1000px) rotateX(0deg) translateY(0);
+}
+
+/* Animaciones escalonadas para elementos hijos */
+.animate-on-scroll.stagger-children > * {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+}
+
+.animate-on-scroll.stagger-children.visible > * {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.animate-on-scroll.stagger-children.visible > *:nth-child(1) { transition-delay: 0.1s; }
+.animate-on-scroll.stagger-children.visible > *:nth-child(2) { transition-delay: 0.2s; }
+.animate-on-scroll.stagger-children.visible > *:nth-child(3) { transition-delay: 0.3s; }
+.animate-on-scroll.stagger-children.visible > *:nth-child(4) { transition-delay: 0.4s; }
+.animate-on-scroll.stagger-children.visible > *:nth-child(5) { transition-delay: 0.5s; }
+.animate-on-scroll.stagger-children.visible > *:nth-child(6) { transition-delay: 0.6s; }
+
+/* Animaciones especiales para elementos específicos */
+.animate-on-scroll.bounce-in {
+    transform: scale(0.3) translateY(50px);
+}
+
+.animate-on-scroll.bounce-in.visible {
+    transform: scale(1) translateY(0);
+    animation: bounceIn 0.8s ease-out;
+}
+
+.animate-on-scroll.slide-up {
+    transform: translateY(60px);
+}
+
+.animate-on-scroll.slide-up.visible {
+    transform: translateY(0);
+}
+
+.animate-on-scroll.rotate-in {
+    transform: rotate(-10deg) scale(0.8);
+}
+
+.animate-on-scroll.rotate-in.visible {
+    transform: rotate(0deg) scale(1);
+}
+
+/* Animación de rebote para botones */
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.3) translateY(50px);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05) translateY(-10px);
+        opacity: 1;
+    }
+    70% {
+        transform: scale(0.9) translateY(0);
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Animación específica para la foto que preserva el centrado */
+@keyframes photoFadeInUp {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0);
+    }
+}
+
+/* Animación específica para la fecha que preserva el centrado */
+@keyframes dateInfoFadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* ========================================
+   ANIMACIONES DE CARGA INICIAL
+   ======================================== */
 
 /* Animación de carga */
 @keyframes loadingPulse {
@@ -386,6 +515,47 @@ h1, h2 {
 
 .loading {
     animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+/* Animaciones que deben ejecutarse al cargar la página */
+.photo-container {
+    animation: photoFadeInUp 1.2s ease-out 0.3s both;
+}
+
+.date-info {
+    animation: dateInfoFadeInUp 1s ease-out 0.8s both;
+}
+
+.intro-text {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+h1 {
+    animation: scaleIn 1s ease-out 0.5s both;
+}
+
+.guest-info {
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.wedding-logo {
+    animation: scaleIn 0.8s ease-out 0.6s both;
+}
+
+.countdown-intro {
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.countdown-timer {
+    animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+.countdown-outro {
+    animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.message-box {
+    animation: fadeInUp 1s ease-out 1s both;
 }
 
 /* ========================================
