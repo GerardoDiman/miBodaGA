@@ -490,6 +490,7 @@ h1, h2 {
         border-radius: 10px;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
+        bottom: -10%;
     }
     
     .date-info .day,
@@ -643,11 +644,11 @@ h1, h2 {
     }
     
     .gallery-prev {
-        order: 2;
+        order: 4;
     }
     
     .gallery-next {
-        order: 3;
+        order: 5;
     }
     
     .gallery-navigation {
@@ -655,8 +656,7 @@ h1, h2 {
         justify-content: center;
         align-items: center;
         gap: var(--spacing-medium);
-        margin-top: var(--spacing-medium);
-        order: 4;
+        order: 6;
     }
     
     .gallery-indicators {
@@ -669,8 +669,8 @@ h1, h2 {
         background: rgba(0, 0, 0, 0.3);
         border-radius: 20px;
         backdrop-filter: blur(10px);
-        order: 5;
-        margin-top: var(--spacing-small);
+        order: 2;
+        margin-bottom: var(--spacing-small);
     }
     
     .gallery-indicator {
