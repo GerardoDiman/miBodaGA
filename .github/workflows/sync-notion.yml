@@ -1,0 +1,42 @@
+name: Sync Notion Database
+
+on:
+  schedule:
+    # Ejecutar cada 6 horas
+    - cron: '0 */6 * * *'
+  workflow_dispatch:  # Permitir ejecución manual
+
+jobs:
+  sync-notion:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        pip install requests python-dotenv qrcode[pil] schedule
+        
+    - name: Create .env file
+      run: |
+        echo "NOTION_API_KEY=${{ secrets.NOTION_API_KEY }}" > .env
+        echo "NOTION_DATABASE_ID=${{ secrets.NOTION_DATABASE_ID }}" >> .env
+        
+    - name: Sync Notion data
+      run: |
+        cd src/python
+        python notion_integration.py
+        
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/ qrcodes/
+        git diff --quiet && git diff --staged --quiet || git commit -m "Auto-sync Notion database"
+        git push 

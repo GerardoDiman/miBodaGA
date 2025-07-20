@@ -282,14 +282,15 @@
 
         // --- Lógica Principal al Cargar la Página ---
         const urlParams = new URLSearchParams(window.location.search);
-        const guestId = urlParams.get('invitado');
+        const guestId = urlParams.get('id') || urlParams.get('invitado'); // Soporte para ambos parámetros
 
         if (!guestId) {
             console.warn("No se especificó ID de invitado.");
             mostrarErrorCarga("Invitación Genérica");
             return;
         }
-        console.log(`ID invitado: ${guestId}`);        fetch('data/invitados.json')
+        console.log(`ID invitado: ${guestId}`);
+        fetch('data/invitados.json')
             .then(response => {
                 if (!response.ok) { throw new Error(`Error ${response.status} cargando data/invitados.json`); }
                 return response.json();
