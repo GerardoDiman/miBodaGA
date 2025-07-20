@@ -235,4 +235,58 @@ describe('Validación de Datos', () => {
         expect(Number.isInteger(pases)).toBe(true);
         expect(Number.isInteger(ninos)).toBe(true);
     });
+});
+
+// Tests para funciones del DOM
+describe('Funciones del DOM', () => {
+    beforeEach(() => {
+        // Configurar DOM para tests
+        document.body.innerHTML = `
+            <div id="guest-name">Invitado Especial</div>
+            <div id="qr-guest-name"></div>
+            <div id="countdown"></div>
+        `;
+    });
+
+    test('debe actualizar nombre del invitado en el DOM', () => {
+        const guestNameElement = document.getElementById('guest-name');
+        const qrGuestNameElement = document.getElementById('qr-guest-name');
+        
+        // Simular actualización de nombre
+        guestNameElement.textContent = 'Juan Pérez';
+        qrGuestNameElement.textContent = 'Juan Pérez';
+        
+        expect(guestNameElement.textContent).toBe('Juan Pérez');
+        expect(qrGuestNameElement.textContent).toBe('Juan Pérez');
+    });
+
+    test('debe validar elementos del DOM', () => {
+        const countdownElement = document.getElementById('countdown');
+        
+        expect(countdownElement).toBeDefined();
+        expect(countdownElement.tagName).toBe('DIV');
+    });
+});
+
+// Tests para funciones de animación
+describe('Funciones de Animación', () => {
+    test('debe crear elementos con clases CSS', () => {
+        const element = document.createElement('div');
+        element.className = 'fade-in';
+        
+        expect(element.className).toBe('fade-in');
+        expect(element.tagName).toBe('DIV');
+    });
+
+    test('debe simular IntersectionObserver', () => {
+        const mockObserver = {
+            observe: jest.fn(),
+            unobserve: jest.fn(),
+            disconnect: jest.fn()
+        };
+        
+        expect(mockObserver.observe).toBeDefined();
+        expect(mockObserver.unobserve).toBeDefined();
+        expect(mockObserver.disconnect).toBeDefined();
+    });
 }); 

@@ -14,6 +14,35 @@ const SITE_URL = 'https://mibodaag.netlify.app'; // Cambia por tu URL
 const SHEET_ID = 'TU_SHEET_ID_AQUI'; // ID de tu Google Sheet
 const SHEET_NAME = 'RSVP_Confirmaciones';
 
+// Rate limiting - máximo 10 requests por minuto por IP
+const RATE_LIMIT = {
+  maxRequests: 10,
+  timeWindow: 60000, // 1 minuto
+  requests: {}
+};
+
+// Función para verificar rate limit
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const windowStart = now - RATE_LIMIT.timeWindow;
+  
+  if (!RATE_LIMIT.requests[ip]) {
+    RATE_LIMIT.requests[ip] = [];
+  }
+  
+  // Limpiar requests antiguos
+  RATE_LIMIT.requests[ip] = RATE_LIMIT.requests[ip].filter(time => time > windowStart);
+  
+  // Verificar límite
+  if (RATE_LIMIT.requests[ip].length >= RATE_LIMIT.maxRequests) {
+    return false;
+  }
+  
+  // Agregar request actual
+  RATE_LIMIT.requests[ip].push(now);
+  return true;
+}
+
 // Función principal que maneja las peticiones
 function doGet(e) {
   return handleRequest(e);
@@ -38,6 +67,12 @@ function handleRequest(e) {
       return ContentService.createTextOutput('')
         .setMimeType(ContentService.MimeType.TEXT)
         .setHeaders(headers);
+    }
+    
+    // Verificar rate limit
+    const clientIP = e.parameter.ip || 'unknown';
+    if (!checkRateLimit(clientIP)) {
+      return createErrorResponse('Demasiadas solicitudes. Intenta de nuevo en 1 minuto.', 429, headers);
     }
     
     const action = e.parameter.action || 'confirm';
