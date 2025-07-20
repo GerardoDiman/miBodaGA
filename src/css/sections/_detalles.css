@@ -2,7 +2,15 @@
 .details-section { text-align: center; }
 .guest-info { margin-bottom: var(--spacing-medium); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--spacing-small); }
 .guest-greeting { order: -2; flex-basis: 100%; margin-bottom: var(--spacing-small); font-family: var(--font-primary); font-size: 0.9em; letter-spacing: 4px; color: #c5c5c5; text-transform: uppercase; }
-.guest-name { order: -1; flex-basis: 100%; font-family: var(--font-secondary); font-size: 1.8em; font-weight: 500; color: #e0e0e0; margin-bottom: var(--spacing-medium); }
+.guest-name { 
+    order: -1; 
+    flex-basis: 100%; 
+    font-family: 'Great Vibes', cursive; 
+    font-size: 2.2em; 
+    font-weight: 400; 
+    color: var(--color-accent); 
+    margin-bottom: var(--spacing-medium); 
+}
 .guest-passes-line { display: flex; justify-content: center; align-items: baseline; gap: 8px; width: 100%; margin-top: 8px; }
 .guest-pass-item { font-family: var(--font-primary); font-size: 0.75em; letter-spacing: 2px; color: #b0b0b0; text-transform: uppercase; white-space: nowrap; }
 .guest-pass-separator { font-family: var(--font-primary); font-size: 0.8em; color: var(--color-muted); padding: 0 var(--spacing-small); }
@@ -15,3 +23,16 @@
 .time-unit .label { display: block; font-family: var(--font-primary); font-size: 0.65em; letter-spacing: 1px; color: #a0a0a0; text-transform: uppercase; margin-top: 4px; }
 .message-box { background-color: rgba(30, 30, 30, 0.722); padding: 25px 30px; margin: var(--spacing-large) auto 0 auto; max-width: 450px; border-radius: 4px; position: relative; z-index: 1; }
 .message-box p { font-family: var(--font-secondary); font-style: italic; font-size: 1em; line-height: 1.6; color: #dcdcdc; text-align: center; }
+
+/* Media queries para responsive */
+@media (max-width: 768px) {
+    .guest-name {
+        font-size: 2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .guest-name {
+        font-size: 1.8em;
+    }
+}
