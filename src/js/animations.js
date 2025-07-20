@@ -130,6 +130,9 @@
                 case 'sponsorCardDeferred':
                     // Las animaciones de sponsor cards se manejan por HonorGuestsAnimation
                     break;
+                case 'itineraryItemDeferred':
+                    // Las animaciones de elementos del itinerario se manejan por ItineraryAnimation
+                    break;
                 case 'depth3D':
                 case 'fadeInUp':
                 case 'fadeInLeft':
@@ -197,14 +200,37 @@
                 return 'sponsorCardDeferred';
             }
             
+            // Animaciones específicas para elementos del itinerario
+            if (element.classList.contains('itinerary-item')) {
+                const itineraryItems = document.querySelectorAll('.itinerary-item');
+                const itemIndex = Array.from(itineraryItems).indexOf(element);
+                
+                // Asignar diferentes animaciones según la posición
+                const animations = [
+                    'slide-in-left',
+                    'slide-in-right', 
+                    'slide-in-bottom',
+                    'slide-in-top',
+                    'zoom-in',
+                    'wave-in',
+                    'bounce-elastic',
+                    'slide-smooth'
+                ];
+                
+                const animationClass = animations[itemIndex % animations.length];
+                element.classList.add(animationClass);
+                
+                // No aplicar animación inmediatamente, se manejará por ItineraryAnimation
+                return 'itineraryItemDeferred';
+            }
+            
             // Determinar variante de animación
             if (element.classList.contains('registry-block') || 
                 element.classList.contains('lodging-block')) {
                 element.classList.add('depth-3d');
                 return 'depth3D';
             }
-            if (element.classList.contains('location-block') ||
-                element.classList.contains('itinerary-item')) {
+            if (element.classList.contains('location-block')) {
                 element.classList.add('fade-in-left');
                 return 'fadeInLeft';
             }
@@ -684,12 +710,59 @@
         }
     }
 
+    // Clase específica para animaciones de elementos del itinerario
+    class ItineraryAnimation {
+        constructor() {
+            this.itinerarySection = null;
+            this.itineraryItems = [];
+            this.hasAnimated = false;
+            this.init();
+        }
+
+        init() {
+            this.itinerarySection = document.querySelector('.itinerary-section');
+            this.itineraryItems = document.querySelectorAll('.itinerary-item');
+            
+            if (this.itinerarySection && this.itineraryItems.length > 0) {
+                this.setupIntersectionObserver();
+            }
+        }
+
+        setupIntersectionObserver() {
+            const options = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3 // Activar cuando el 30% de la sección sea visible
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !this.hasAnimated) {
+                        this.animateItineraryItems();
+                        this.hasAnimated = true; // Evitar que se repita
+                    }
+                });
+            }, options);
+
+            observer.observe(this.itinerarySection);
+        }
+
+        animateItineraryItems() {
+            this.itineraryItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('animate-in');
+                }, index * 400); // Delay escalonado de 400ms entre cada elemento
+            });
+        }
+    }
+
     // Inicializar cuando el DOM esté listo
     document.addEventListener('DOMContentLoaded', () => {
         new AnimationManager();
         new CustomCursor();
         new SoundEffects();
         new HonorGuestsAnimation(); // Inicializar animaciones de invitados de honor
+        new ItineraryAnimation(); // Inicializar animaciones de elementos del itinerario
     });
 
 })(); 

@@ -36,6 +36,12 @@
         padding: 0 var(--spacing-medium) !important;
         line-height: 1.4 !important;
     }
+    
+    .filter-section .section-title {
+        font-size: 1.6rem !important;
+        letter-spacing: 2px !important;
+        margin-bottom: var(--spacing-medium) !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -45,5 +51,15 @@
         padding: 0 var(--spacing-small) !important;
         line-height: 1.5 !important;
         margin-top: var(--spacing-medium) !important;
+    }
+    
+    .filter-section .section-title {
+        font-size: 1.3rem !important;
+        letter-spacing: 1.5px !important;
+        margin-bottom: var(--spacing-small) !important;
+    }
+    
+    .filter-section .section-title::after {
+        bottom: -8px !important;
     }
 }
