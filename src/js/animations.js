@@ -419,25 +419,31 @@
 
         // Efectos de texto avanzados
         setupTextEffects() {
-            // Efecto typewriter para el nombre del invitado
+            // Efecto typewriter para el nombre del invitado (solo si no se ha modificado dinámicamente)
             const guestName = document.getElementById('guest-name-placeholder');
             if (!guestName) return;
 
-            const text = guestName.textContent;
-            guestName.textContent = '';
-            guestName.style.overflow = 'hidden';
-            guestName.style.whiteSpace = 'nowrap';
+            // Solo aplicar el efecto si el texto es el por defecto y no se ha modificado por JavaScript
+            const defaultText = "Invitado Especial";
+            if (guestName.textContent === defaultText) {
+                const text = guestName.textContent;
+                guestName.textContent = '';
+                guestName.style.overflow = 'hidden';
+                guestName.style.whiteSpace = 'nowrap';
 
-            let i = 0;
-            const typeWriter = () => {
-                if (i < text.length) {
+                let i = 0;
+                const typeWriter = () => {
+                    // Verificar que el elemento aún existe y no ha sido modificado por otro script
+                    if (!guestName || guestName.textContent !== '' || i >= text.length) {
+                        return;
+                    }
                     guestName.textContent += text.charAt(i);
                     i++;
                     setTimeout(typeWriter, 100);
-                }
-            };
+                };
 
-            setTimeout(typeWriter, 1000);
+                setTimeout(typeWriter, 1000);
+            }
 
             // Efecto elegante para títulos
             const titles = document.querySelectorAll('h1, h2');

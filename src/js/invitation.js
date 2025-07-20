@@ -30,7 +30,30 @@
         /** Muestra un mensaje de error genérico o específico */
         function mostrarErrorCarga(mensaje = "Error al cargar datos") {
             console.error("Error Carga/Validación:", mensaje);
-            if (guestNameElement) guestNameElement.textContent = mensaje;
+            if (guestNameElement) {
+                // Limpiar completamente el elemento antes de asignar nuevo texto
+                guestNameElement.textContent = '';
+                guestNameElement.textContent = mensaje;
+                console.log("Texto de error asignado:", guestNameElement.textContent);
+                
+                // Aplicar estilos CSS para "Invitación Genérica"
+                if (mensaje === "Invitación Genérica") {
+                    guestNameElement.style.fontFamily = "'Great Vibes', cursive";
+                    guestNameElement.style.fontSize = "2.2em";
+                    guestNameElement.style.fontWeight = "400";
+                    guestNameElement.style.color = "var(--color-accent)";
+                    
+                    // Media queries para responsive
+                    const mediaQuery768 = window.matchMedia("(max-width: 768px)");
+                    const mediaQuery480 = window.matchMedia("(max-width: 480px)");
+                    
+                    if (mediaQuery480.matches) {
+                        guestNameElement.style.fontSize = "1.8em";
+                    } else if (mediaQuery768.matches) {
+                        guestNameElement.style.fontSize = "2em";
+                    }
+                }
+            }
             if (guestDetailsContainer) guestDetailsContainer.style.display = 'none';
             if (confirmButton) confirmButton.style.display = 'none';
             if (!validationViewContainer || validationViewContainer.style.display === 'none') {
@@ -135,7 +158,12 @@
                 }
                 console.log("Datos del invitado cargados:", invitadoActual);
 
-                guestNameElement.textContent = invitadoActual.nombre;
+                // Limpiar cualquier texto anterior y asignar solo el nombre del invitado
+                if (guestNameElement) {
+                    guestNameElement.textContent = '';
+                    guestNameElement.textContent = invitadoActual.nombre;
+                    console.log("Nombre asignado:", guestNameElement.textContent);
+                }
                 guestPassesElement.textContent = invitadoActual.pases;
                 guestKidsElement.textContent = invitadoActual.ninos;
                 guestDetailsContainer.style.display = 'flex';
