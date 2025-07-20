@@ -127,6 +127,9 @@
                 case 'countdownDrop':
                     // La animación se maneja automáticamente por CSS
                     break;
+                case 'sponsorCardDeferred':
+                    // Las animaciones de sponsor cards se manejan por HonorGuestsAnimation
+                    break;
                 case 'depth3D':
                 case 'fadeInUp':
                 case 'fadeInLeft':
@@ -189,12 +192,13 @@
                 
                 const animationClass = animations[cardIndex % animations.length];
                 element.classList.add(animationClass);
-                return 'sponsorCard';
+                
+                // No aplicar animación inmediatamente, se manejará por HonorGuestsAnimation
+                return 'sponsorCardDeferred';
             }
             
             // Determinar variante de animación
             if (element.classList.contains('registry-block') || 
-                element.classList.contains('sponsor-card') || 
                 element.classList.contains('lodging-block')) {
                 element.classList.add('depth-3d');
                 return 'depth3D';
@@ -205,7 +209,6 @@
                 return 'fadeInLeft';
             }
             if (element.classList.contains('rsvp-options') ||
-                element.classList.contains('sponsors-container') ||
                 element.classList.contains('lodging-container')) {
                 element.classList.add('stagger-children');
                 return 'stagger';
@@ -341,7 +344,6 @@
                 .gallery-arrow,
                 .location-block,
                 .registry-block,
-                .sponsor-card,
                 .lodging-block
             `);
 
@@ -360,7 +362,6 @@
             if (element.classList.contains('location-block')) {
                 element.style.animation = 'slide3D 0.6s ease-out';
             } else if (element.classList.contains('registry-block') || 
-                       element.classList.contains('sponsor-card') || 
                        element.classList.contains('lodging-block')) {
                 element.style.animation = 'depth-3d 0.6s ease-out';
             } else {
@@ -637,11 +638,58 @@
         }
     }
 
+    // Clase específica para animaciones de invitados de honor
+    class HonorGuestsAnimation {
+        constructor() {
+            this.sponsorsSection = null;
+            this.sponsorCards = [];
+            this.hasAnimated = false;
+            this.init();
+        }
+
+        init() {
+            this.sponsorsSection = document.querySelector('.sponsors-section');
+            this.sponsorCards = document.querySelectorAll('.sponsor-card');
+            
+            if (this.sponsorsSection && this.sponsorCards.length > 0) {
+                this.setupIntersectionObserver();
+            }
+        }
+
+        setupIntersectionObserver() {
+            const options = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3 // Activar cuando el 30% de la sección sea visible
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !this.hasAnimated) {
+                        this.animateSponsorCards();
+                        this.hasAnimated = true; // Evitar que se repita
+                    }
+                });
+            }, options);
+
+            observer.observe(this.sponsorsSection);
+        }
+
+        animateSponsorCards() {
+            this.sponsorCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('animate-in');
+                }, index * 300); // Delay escalonado de 300ms entre cada tarjeta
+            });
+        }
+    }
+
     // Inicializar cuando el DOM esté listo
     document.addEventListener('DOMContentLoaded', () => {
         new AnimationManager();
         new CustomCursor();
         new SoundEffects();
+        new HonorGuestsAnimation(); // Inicializar animaciones de invitados de honor
     });
 
 })(); 
