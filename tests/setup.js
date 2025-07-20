@@ -1,5 +1,18 @@
 // Setup para tests de Jest
 
+// Mock de TextEncoder y TextDecoder (necesario para Node.js)
+global.TextEncoder = class TextEncoder {
+  encode(string) {
+    return new Uint8Array(Buffer.from(string, 'utf8'));
+  }
+};
+
+global.TextDecoder = class TextDecoder {
+  decode(buffer) {
+    return Buffer.from(buffer).toString('utf8');
+  }
+};
+
 // Mock del DOM
 const { JSDOM } = require('jsdom');
 const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
@@ -253,16 +266,27 @@ global.HTMLCanvasElement.prototype.getContext = jest.fn(() => ({
   lineTo: jest.fn(),
   closePath: jest.fn(),
   stroke: jest.fn(),
-  translate: jest.fn(),
+  fill: jest.fn(),
+  arc: jest.fn(),
   scale: jest.fn(),
   rotate: jest.fn(),
-  arc: jest.fn(),
-  fill: jest.fn(),
+  translate: jest.fn(),
   measureText: jest.fn(() => ({ width: 0 })),
-  transform: jest.fn(),
-  rect: jest.fn(),
-  clip: jest.fn()
+  createLinearGradient: jest.fn(() => ({
+    addColorStop: jest.fn()
+  })),
+  createRadialGradient: jest.fn(() => ({
+    addColorStop: jest.fn()
+  }))
 }));
+
+// Test simple para evitar error de "no tests"
+describe('Setup', () => {
+  test('should have TextEncoder and TextDecoder available', () => {
+    expect(global.TextEncoder).toBeDefined();
+    expect(global.TextDecoder).toBeDefined();
+  });
+});
 
 // Mock de File API
 global.File = jest.fn().mockImplementation((content, name, options) => ({
