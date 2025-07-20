@@ -170,6 +170,28 @@
                 element.classList.add('animate-on-scroll');
             }
             
+            // Animaciones específicas para sponsor cards (invitados de honor)
+            if (element.classList.contains('sponsor-card')) {
+                const sponsorCards = document.querySelectorAll('.sponsor-card');
+                const cardIndex = Array.from(sponsorCards).indexOf(element);
+                
+                // Asignar diferentes animaciones según la posición
+                const animations = [
+                    'slide-in-left',
+                    'slide-in-right', 
+                    'slide-in-bottom',
+                    'slide-in-top',
+                    'zoom-in',
+                    'wave-in',
+                    'bounce-elastic',
+                    'slide-smooth'
+                ];
+                
+                const animationClass = animations[cardIndex % animations.length];
+                element.classList.add(animationClass);
+                return 'sponsorCard';
+            }
+            
             // Determinar variante de animación
             if (element.classList.contains('registry-block') || 
                 element.classList.contains('sponsor-card') || 
@@ -243,16 +265,9 @@
                 element.classList.add('rotate-in');
                 return 'rotateIn';
             }
-            if (element.classList.contains('guest-info')) {
-                element.classList.add('typewriter-effect');
-                return 'typewriter';
-            }
-            if (element.tagName === 'H1' || element.tagName === 'H2') {
-                element.classList.add('scale-in');
-                return 'scaleIn';
-            }
             
-            // Animación por defecto
+            // Por defecto, usar fade-in-up
+            element.classList.add('fade-in-up');
             return 'fadeInUp';
         }
 
