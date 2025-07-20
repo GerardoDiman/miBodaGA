@@ -684,12 +684,12 @@ h1 {
     }
     
     .wedding-hashtag {
-        font-size: 0.8rem;
-        letter-spacing: 2px;
-        padding: var(--spacing-small) var(--spacing-medium);
-        background: rgba(209, 183, 160, 0.1);
-        border-radius: 25px;
-        border: 1px solid rgba(209, 183, 160, 0.3);
+        font-size: 0.7rem;
+        letter-spacing: 1.5px;
+        padding: 0 var(--spacing-small);
+        background: transparent;
+        border-radius: 0;
+        border: none;
     }
 }
 
@@ -764,10 +764,10 @@ h1 {
     .wedding-hashtag {
         font-size: 0.7rem;
         letter-spacing: 1.5px;
-        padding: var(--spacing-small);
-        background: rgba(209, 183, 160, 0.1);
-        border-radius: 20px;
-        border: 1px solid rgba(209, 183, 160, 0.3);
+        padding: 0 var(--spacing-small);
+        background: transparent;
+        border-radius: 0;
+        border: none;
     }
     
     /* Ajustes para título de código de vestimenta */

@@ -43,14 +43,26 @@
 .couple-names {
     margin: calc(var(--spacing-large) * 1.5) auto;
     max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-medium);
 }
 .bride-name,
 .groom-name {
-    font-family: var(--font-secondary);
-    font-size: 3em;
+    font-family: 'Great Vibes', cursive;
+    font-size: 4.5em;
     color: var(--color-text);
-    line-height: 1.4;
+    line-height: 1.3;
     font-weight: 400;
+}
+.ampersand-final {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.5em;
+    color: var(--color-accent);
+    line-height: 1;
+    font-weight: 400;
+    margin: var(--spacing-small) 0;
 }
 .wedding-date {
     font-family: var(--font-primary);
@@ -77,4 +89,27 @@
 .add-calendar-btn:hover {
     background-color: var(--color-accent);
     color: var(--color-background);
+}
+
+/* Media queries para responsive */
+@media (max-width: 768px) {
+    .bride-name,
+    .groom-name {
+        font-size: 3.5em;
+    }
+    
+    .ampersand-final {
+        font-size: 2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .bride-name,
+    .groom-name {
+        font-size: 3em;
+    }
+    
+    .ampersand-final {
+        font-size: 1.8em;
+    }
 }
