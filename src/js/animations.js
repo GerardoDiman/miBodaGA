@@ -52,7 +52,7 @@
             .gallery-slide,
             .section-title,
             .section-title-container,
-            .countdown-timer .time-unit,
+            .countdown-timer,
             .money-shower-section,
             .final-section .couple-names,
             .final-section .wedding-date,
@@ -121,6 +121,12 @@
                 case 'stagger':
                     this.animateStaggeredChildren(element);
                     break;
+                case 'typewriter':
+                    this.animateTypewriter(element);
+                    break;
+                case 'countdownDrop':
+                    // La animación se maneja automáticamente por CSS
+                    break;
                 case 'depth3D':
                 case 'fadeInUp':
                 case 'fadeInLeft':
@@ -143,10 +149,8 @@
                 '.date-info',
                 '.intro-text',
                 'h1',
-                '.guest-info',
                 '.wedding-logo',
                 '.countdown-intro',
-                '.countdown-timer',
                 '.countdown-outro',
                 '.message-box',
                 '.final-section .couple-names',
@@ -178,12 +182,15 @@
                 element.classList.add('fade-in-left');
                 return 'fadeInLeft';
             }
-            if (element.classList.contains('countdown-timer') ||
-                element.classList.contains('rsvp-options') ||
+            if (element.classList.contains('rsvp-options') ||
                 element.classList.contains('sponsors-container') ||
                 element.classList.contains('lodging-container')) {
                 element.classList.add('stagger-children');
                 return 'stagger';
+            }
+            if (element.classList.contains('countdown-timer')) {
+                element.classList.add('countdown-drop');
+                return 'countdownDrop';
             }
             if (element.classList.contains('section-title-container') ||
                 element.classList.contains('section-title') ||
@@ -236,6 +243,10 @@
                 element.classList.add('rotate-in');
                 return 'rotateIn';
             }
+            if (element.classList.contains('guest-info')) {
+                element.classList.add('typewriter-effect');
+                return 'typewriter';
+            }
             if (element.tagName === 'H1' || element.tagName === 'H2') {
                 element.classList.add('scale-in');
                 return 'scaleIn';
@@ -253,6 +264,29 @@
                     child.style.animation = 'fadeInUp 0.6s ease-out forwards';
                 }, index * animationConfig.staggerDelay);
             });
+        }
+
+        // Efecto typewriter para el nombre del invitado
+        animateTypewriter(element) {
+            const guestName = element.querySelector('.guest-name');
+            if (!guestName) return;
+
+            const originalText = guestName.textContent;
+            guestName.textContent = '';
+            guestName.style.overflow = 'hidden';
+            guestName.style.whiteSpace = 'nowrap';
+
+            let i = 0;
+            const typeWriter = () => {
+                if (i < originalText.length) {
+                    guestName.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 100);
+                }
+            };
+
+            // Iniciar el efecto typewriter después de un pequeño delay
+            setTimeout(typeWriter, 200);
         }
 
         // Efectos de scroll avanzados

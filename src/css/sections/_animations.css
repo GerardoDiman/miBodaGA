@@ -456,6 +456,31 @@ h1, h2 {
     transform: rotate(0deg) scale(1);
 }
 
+/* Efecto typewriter para el nombre del invitado */
+.animate-on-scroll.typewriter-effect {
+    opacity: 1;
+    transform: none;
+}
+
+.animate-on-scroll.typewriter-effect .guest-name {
+    /* Sin cursor parpadeante - solo deletreo limpio */
+}
+
+/* Efecto de caída para el countdown */
+.animate-on-scroll.countdown-drop {
+    opacity: 1;
+    transform: none;
+}
+
+.animate-on-scroll.countdown-drop.visible .time-unit {
+    animation: countdownDrop 0.8s ease-out forwards;
+}
+
+.animate-on-scroll.countdown-drop.visible .time-unit:nth-child(1) { animation-delay: 0.1s; }
+.animate-on-scroll.countdown-drop.visible .time-unit:nth-child(2) { animation-delay: 0.2s; }
+.animate-on-scroll.countdown-drop.visible .time-unit:nth-child(3) { animation-delay: 0.3s; }
+.animate-on-scroll.countdown-drop.visible .time-unit:nth-child(4) { animation-delay: 0.4s; }
+
 /* Animación de rebote para botones */
 @keyframes bounceIn {
     0% {
@@ -499,6 +524,25 @@ h1, h2 {
     }
 }
 
+/* Animación de caída para el countdown */
+@keyframes countdownDrop {
+    0% {
+        opacity: 0;
+        transform: translateY(-100px) scale(0.8);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(10px) scale(1.05);
+    }
+    80% {
+        transform: translateY(-5px) scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 /* ========================================
    ANIMACIONES DE CARGA INICIAL
    ======================================== */
@@ -535,7 +579,7 @@ h1 {
 }
 
 .guest-info {
-    animation: fadeInUp 1s ease-out 0.3s both;
+    /* Animación removida - ahora se maneja por scroll */
 }
 
 .wedding-logo {
@@ -547,7 +591,7 @@ h1 {
 }
 
 .countdown-timer {
-    animation: fadeInUp 1s ease-out 0.6s both;
+    /* Animación removida - ahora se maneja por scroll con efecto de caída */
 }
 
 .countdown-outro {
