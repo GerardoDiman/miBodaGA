@@ -1,38 +1,26 @@
 [
   {
-    "id": "ghi789",
-    "nombre": "Carlos Sánchez Martín",
-    "pases": 3,
-    "ninos": 2,
-    "mesa": 0,
-    "email": "carlos.sanchez@example.com",
-    "telefono": "+34 634 567 890",
-    "confirmado": false,
-    "fecha_confirmacion": "2025-07-19",
-    "notas": ""
-  },
-  {
     "id": "def456",
-    "nombre": "María López Rodríguez",
-    "pases": 1,
+    "nombre": "Familia Díaz Mandujano",
+    "pases": 3,
     "ninos": 0,
     "mesa": 0,
-    "email": "maria.lopez@example.com",
-    "telefono": "+34 623 456 789",
+    "email": "",
+    "telefono": "",
     "confirmado": false,
-    "fecha_confirmacion": "2025-07-16",
+    "fecha_confirmacion": null,
     "notas": ""
   },
   {
     "id": "abc123",
-    "nombre": "Mi esposa preciosa",
-    "pases": 2,
-    "ninos": 1,
+    "nombre": "Alejandra Solis",
+    "pases": 1,
+    "ninos": 0,
     "mesa": 0,
-    "email": "juan.perez@example.com",
-    "telefono": "+34 612 345 678",
+    "email": "",
+    "telefono": "",
     "confirmado": false,
-    "fecha_confirmacion": "2025-07-18",
+    "fecha_confirmacion": null,
     "notas": ""
   }
 ]
