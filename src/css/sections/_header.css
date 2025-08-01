@@ -1,6 +1,6 @@
 /* Header y portada principal */
 .title-section, .main-content { max-width: 900px; width: 90%; margin: 0 auto; position: relative; z-index: 1; padding: 0 var(--spacing-small); box-sizing: border-box; }
-.title-section { margin-top: var(--spacing-medium); margin-bottom: var(--spacing-large); text-align: center; }
+.title-section { margin-bottom: var(--spacing-medium); text-align: center; }
 .main-content { margin-bottom: var(--spacing-large); height: 450px; display: flex; justify-content: center; align-items: center;}
 .intro-text { font-size: 0.9em; letter-spacing: 4px; color: #c5c5c5; margin-bottom: var(--spacing-small); position: relative; display: flex; align-items: center; justify-content: center; gap: var(--spacing-small); white-space: nowrap; max-width: 100%; font-weight: normal; font-family: var(--font-primary); }
 .intro-text::before, .intro-text::after { content: ''; height: 1px; background-color: #c5c5c5; opacity: 0.5; flex-grow: 1; min-width: 50px; }
@@ -14,7 +14,7 @@ h1 { font-family: var(--font-secondary); font-size: 4em; font-weight: 400; line-
     margin: 0 auto; 
     position: absolute; 
     left: 50%;
-    top: 50%; 
+    top: 45%; 
     transform: translate(-50%, -50%); 
     z-index: 1; 
     border-radius: 150px 150px 150px 0; 
@@ -23,7 +23,7 @@ h1 { font-family: var(--font-secondary); font-size: 4em; font-weight: 400; line-
 .date-info { 
     position: absolute; 
     left: 50%;
-    bottom: 5%; 
+    bottom: -8%; 
     transform: translateX(-50%); 
     letter-spacing: 2px; 
     font-size: 0.9rem; 
