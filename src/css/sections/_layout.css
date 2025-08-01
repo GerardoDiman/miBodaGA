@@ -74,14 +74,14 @@
 /* Padding específico para la sección de padres solo en móviles */
 @media (max-width: 768px) {
     .parents-bg {
-        padding-top: calc(var(--spacing-large) * 2.5);
-        padding-bottom: calc(var(--spacing-large) * 2.5);
+        padding-top: calc(var(--spacing-large) * 4);
+        padding-bottom: calc(var(--spacing-large) * 4);
     }
 }
 
 @media (max-width: 576px) {
     .parents-bg {
-        padding-top: calc(var(--spacing-large) * 2);
-        padding-bottom: calc(var(--spacing-large) * 2);
+        padding-top: calc(var(--spacing-large) * 3.5);
+        padding-bottom: calc(var(--spacing-large) * 3.5);
     }
 }

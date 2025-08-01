@@ -10,7 +10,7 @@
 .lodging-bg::before { background-image: linear-gradient(to bottom, transparent 0%, transparent 25%),linear-gradient(to top, rgb(78, 78, 78) 5%, transparent 25%),linear-gradient(to right, rgb(78, 78, 78) 0%, transparent 35%),linear-gradient(to left, rgb(78, 78, 78) 0%, transparent 35%),url('/assets/images/img9.png'); }
 .rsvp-bg::before { background-image: linear-gradient(to bottom, transparent 0%, transparent 25%),linear-gradient(to top, rgb(78, 78, 78) 5%, transparent 25%),linear-gradient(to right, rgb(78, 78, 78) 5%, transparent 45%),linear-gradient(to left, rgb(78, 78, 78) 5%, transparent 45%),url('/assets/images/img8.png'); }
 .footer-bg::before { background-image: linear-gradient(to bottom, rgb(0, 0, 0) 0%, rgb(0, 0, 0) 100%); }
-.parents-bg::before { background-image: linear-gradient(to top, rgb(133, 157, 135) 5%, transparent 25%), url('/assets/images/planta.jpg'); }
+.parents-bg::before { background-image: linear-gradient(to top, rgb(133, 157, 135) 0%, transparent 20%), url('/assets/images/planta.jpg'); }
 .sponsors-bg::before { background-image: linear-gradient(to bottom, rgb(133, 157, 135) 0%, rgb(133, 157, 135) 100%); }
 .dresscode-bg::before { background-image: linear-gradient(to bottom, rgb(78, 78, 78) 0%, rgb(78, 78, 78) 100%); }
 
