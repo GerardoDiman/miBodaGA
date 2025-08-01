@@ -48,3 +48,40 @@
     background-position: center center;
     background-repeat: no-repeat;
 }
+
+/* Reducir aún más el padding para la primera sección (header) */
+.section-background-wrapper:first-child {
+    padding-top: var(--spacing-small);
+}
+
+/* Media query para dispositivos grandes */
+@media (min-width: 1200px) {
+    .section-background-wrapper {
+        padding-top: var(--spacing-small);
+    }
+    
+    .section-background-wrapper:first-child {
+        padding-top: 10px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .section-background-wrapper:first-child {
+        padding-top: 5px;
+    }
+}
+
+/* Padding específico para la sección de padres solo en móviles */
+@media (max-width: 768px) {
+    .parents-bg {
+        padding-top: calc(var(--spacing-large) * 2.5);
+        padding-bottom: calc(var(--spacing-large) * 2.5);
+    }
+}
+
+@media (max-width: 576px) {
+    .parents-bg {
+        padding-top: calc(var(--spacing-large) * 2);
+        padding-bottom: calc(var(--spacing-large) * 2);
+    }
+}
