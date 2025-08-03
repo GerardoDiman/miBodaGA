@@ -1,5 +1,5 @@
 /* Sección Dress Code */
-.dress-code-section { margin-top: var(--spacing-medium); padding: 0; }
+.dress-code-section { margin-top: var(--spacing-large) !important; padding: 0; }
 .dress-code-container { display: flex; justify-content: space-around; align-items: stretch; gap: 8px;}
 .dress-code-block { flex: 1; max-width: 300px; text-align: center; display: flex; flex-direction: column; padding: 8px; }
 .dress-code-icon { margin-bottom: 8px; display: inline-block; }

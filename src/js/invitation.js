@@ -367,76 +367,15 @@
                     return;
                 }
 
-                confirmButton.disabled = true;
-                confirmButton.textContent = "Confirmando...";
-                const dataToSend = { id: invitadoActual.id, nombre: invitadoActual.nombre, pases: invitadoActual.pases, ninos: invitadoActual.ninos };
-
-                // Intentar enviar a Google Sheets
-                fetch(GOOGLE_APPS_SCRIPT_URL, { 
-                    method: 'POST', 
-                    mode: 'no-cors', 
-                    cache: 'no-cache', 
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
-                    redirect: 'follow', 
-                    body: JSON.stringify(dataToSend) 
-                })
-                .then(response => {
-                    console.log("Solicitud POST de confirmación enviada (no-cors).");
-                    // Llamamos a displayQrCode para mostrar el QR después de confirmar
-                    updateUIBasedOnConfirmation(true); 
-                    
-                    // Marcar como sincronizada
-                    const syncKey = `boda_confirmado_${invitadoActual.id}_synced`;
-                    try {
-                        localStorage.setItem(syncKey, 'true');
-                    } catch(e) {
-                        console.warn("No se pudo marcar como sincronizada:", e);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error de RED al enviar confirmación POST:', error);
-                    
-                    // Usar fallback local
-                    handleGoogleSheetsFailure();
-                    updateUIBasedOnConfirmation(true);
-                    
-                    // Marcar como NO sincronizada para sincronización futura
-                    const syncKey = `boda_confirmado_${invitadoActual.id}_synced`;
-                    try {
-                        localStorage.setItem(syncKey, 'false');
-                    } catch(e) {
-                        console.warn("No se pudo marcar como no sincronizada:", e);
-                    }
-                    
-                    // Mostrar mensaje de éxito con advertencia
-                    const successMessage = document.createElement('div');
-                    successMessage.style.cssText = `
-                        position: fixed;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        background: #4CAF50;
-                        color: white;
-                        padding: 20px;
-                        border-radius: 10px;
-                        z-index: 1000;
-                        text-align: center;
-                        max-width: 400px;
-                    `;
-                    successMessage.innerHTML = `
-                        <h3>✅ ¡Confirmado!</h3>
-                        <p>Tu confirmación se guardó localmente.</p>
-                        <p><small>Se sincronizará automáticamente cuando sea posible.</small></p>
-                    `;
-                    document.body.appendChild(successMessage);
-                    
-                    // Remover mensaje después de 3 segundos
-                    setTimeout(() => {
-                        if (successMessage.parentNode) {
-                            successMessage.parentNode.removeChild(successMessage);
-                        }
-                    }, 3000);
-                });
+                // Inicializar el formulario RSVP con los datos del invitado
+                if (window.initRsvpForm) {
+                    window.initRsvpForm(invitadoActual);
+                }
+                
+                // Mostrar el formulario RSVP
+                if (window.showRsvpForm) {
+                    window.showRsvpForm();
+                }
             });
         }
 

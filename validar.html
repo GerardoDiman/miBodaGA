@@ -225,6 +225,70 @@
             font-size: 1.05em;
         }
 
+        /* Estilos específicos para estados */
+        .status-confirmed {
+            color: #4CAF50 !important;
+            font-weight: bold !important;
+        }
+
+        .status-pending {
+            color: #ffc107 !important;
+            font-weight: bold !important;
+        }
+
+        /* Estilos para nombres largos */
+        .names-list {
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        /* Estilos para lista de nombres en desktop */
+        .names-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .names-list li {
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(209, 183, 160, 0.2);
+            font-size: 1em;
+            line-height: 1.5;
+        }
+
+        .names-list li:last-child {
+            border-bottom: none;
+        }
+
+        .names-list li:hover {
+            background: rgba(209, 183, 160, 0.1);
+            padding-left: 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        /* Separador visual entre secciones */
+        #confirmation-details {
+            margin-top: 25px;
+            border-top: 2px solid rgba(209, 183, 160, 0.3);
+            padding-top: 25px;
+        }
+
+        #confirmation-details h3 {
+            position: relative;
+        }
+
+        #confirmation-details h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d1b7a0, transparent);
+        }
+
         #validation-form {
             margin-top: 25px;
         }
@@ -326,59 +390,425 @@
             font-style: italic;
         }
 
-        /* Responsive Design */
+        /* Responsive Design - Tablet */
         @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
             .validation-container {
                 padding: 30px 25px;
                 margin: 10px;
+                max-width: 90%;
+                border-radius: 20px;
             }
 
             h2 {
                 font-size: 1.8em;
+                margin-bottom: 25px;
             }
 
             .validation-icon {
                 font-size: 3.5em;
+                margin-bottom: 20px;
             }
 
             .wedding-context {
                 font-size: 1.1em;
+                margin-bottom: 25px;
             }
 
             .guest-details {
                 padding: 20px;
+                margin-bottom: 20px;
             }
 
             .guest-details p {
                 font-size: 1em;
+                line-height: 1.6;
+                margin-bottom: 12px;
+                padding-bottom: 12px;
             }
 
             .guest-details strong {
                 min-width: 70px;
                 font-size: 0.9em;
+                margin-right: 12px;
+            }
+
+            .guest-details span {
+                font-size: 1em;
+            }
+
+            #confirmation-details h3 {
+                font-size: 1.3em;
+                margin-bottom: 15px;
             }
         }
 
+        /* Responsive Design - Mobile */
         @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                min-height: 100vh;
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+
             .validation-container {
                 padding: 25px 20px;
+                margin: 0;
+                max-width: 100%;
+                width: 100%;
+                border-radius: 15px;
+                box-shadow: 
+                    0 15px 30px rgba(0, 0, 0, 0.4),
+                    0 0 0 1px rgba(209, 183, 160, 0.15);
+            }
+
+            .validation-logo img {
+                max-width: 70px;
+            }
+
+            .wedding-context {
+                font-size: 1em;
+                margin-bottom: 20px;
             }
 
             h2 {
                 font-size: 1.6em;
+                margin-bottom: 20px;
+            }
+
+            h2::after {
+                width: 60px;
+                height: 2px;
             }
 
             .validation-icon {
                 font-size: 3em;
+                margin-bottom: 15px;
+            }
+
+            /* Detalles del invitado optimizados para móvil */
+            .guest-details {
+                padding: 18px 15px;
+                margin-bottom: 18px;
+                border-radius: 12px;
+            }
+
+            .guest-details p {
+                font-size: 0.95em;
+                line-height: 1.5;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+            }
+
+            .guest-details p:hover {
+                padding-left: 5px;
+                margin-left: -5px;
+            }
+
+            .guest-details strong {
+                min-width: auto;
+                width: 100%;
+                text-align: left;
+                margin-right: 0;
+                margin-bottom: 4px;
+                font-size: 0.85em;
+                color: #d1b7a0;
+                display: block;
+            }
+
+            .guest-details span {
+                font-size: 1em;
+                font-weight: 600;
+                color: #fff;
+                display: block;
+                padding-left: 0;
+            }
+
+            /* Sección de confirmación optimizada */
+            #confirmation-details {
+                margin-top: 20px;
+                padding-top: 20px;
+                border-top: 1px solid rgba(209, 183, 160, 0.3);
+            }
+
+            #confirmation-details h3 {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            #confirmation-details h3::after {
+                width: 50px;
+                bottom: -8px;
+            }
+
+            /* Estilos para nombres largos en móvil */
+            .names-list {
+                line-height: 1.4;
+                word-break: break-word;
+                hyphens: auto;
+                font-size: 0.95em;
+            }
+
+            /* Estilos para lista de nombres */
+            .names-list ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                width: 100%;
+            }
+
+            .names-list li {
+                padding: 4px 0;
+                border-bottom: 1px solid rgba(209, 183, 160, 0.2);
+                font-size: 0.95em;
+                line-height: 1.4;
+            }
+
+            .names-list li:last-child {
+                border-bottom: none;
+            }
+
+            .names-list li:hover {
+                background: rgba(209, 183, 160, 0.1);
+                padding-left: 8px;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+            }
+
+            /* Formulario optimizado para móvil */
+            .form-group {
+                margin-bottom: 18px;
+            }
+
+            .form-group label {
+                font-size: 0.9em;
+                margin-bottom: 6px;
             }
 
             .form-group input {
-                padding: 12px 15px;
+                padding: 14px 16px;
+                font-size: 1em;
+                border-radius: 10px;
+                min-height: 48px;
+                border: 2px solid rgba(209, 183, 160, 0.4);
+            }
+
+            .form-group input:focus {
+                border-color: #d1b7a0;
+                box-shadow: 0 0 0 2px rgba(209, 183, 160, 0.3);
             }
 
             .submit-btn {
-                padding: 12px 25px;
+                padding: 14px 20px;
                 font-size: 1em;
+                border-radius: 10px;
+                min-height: 48px;
+                letter-spacing: 0.5px;
+                margin-top: 15px;
+            }
+
+            .status-message {
+                margin-top: 20px;
+                font-size: 1em;
+                padding: 12px 16px;
+                border-radius: 10px;
+            }
+
+            /* Estados específicos para móvil */
+            .status-confirmed {
+                font-size: 1em !important;
+            }
+
+            .status-pending {
+                font-size: 1em !important;
+            }
+        }
+
+                /* Responsive Design - Mobile pequeño */
+        @media (max-width: 360px) {
+            .validation-container {
+                padding: 20px 15px;
+            }
+
+            .wedding-context {
+                font-size: 0.95em;
+            }
+
+            h2 {
+                font-size: 1.4em;
+                margin-bottom: 18px;
+            }
+
+            .validation-icon {
+                font-size: 2.8em;
+            }
+
+            .guest-details {
+                padding: 15px 12px;
+            }
+
+            .guest-details p {
+                font-size: 0.9em;
+                margin-bottom: 8px;
+                padding-bottom: 8px;
+            }
+
+            .guest-details strong {
+                font-size: 0.8em;
+                margin-bottom: 3px;
+            }
+
+            .guest-details span {
+                font-size: 0.95em;
+            }
+
+            #confirmation-details h3 {
+                font-size: 1.1em;
+                margin-bottom: 12px;
+            }
+
+            .names-list {
+                font-size: 0.9em;
+                line-height: 1.3;
+            }
+
+            .form-group input {
+                padding: 12px 14px;
+                font-size: 0.95em;
+            }
+
+            .submit-btn {
+                padding: 12px 18px;
+                font-size: 0.95em;
+            }
+
+            .status-message {
+                font-size: 0.95em;
+                padding: 10px 14px;
+            }
+
+            /* Estilos para lista de nombres en móvil pequeño */
+            .names-list ul {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+
+            .names-list li {
+                padding: 3px 0;
+                font-size: 0.9em;
+                line-height: 1.3;
+            }
+
+            .names-list li:hover {
+                padding-left: 6px;
+                border-radius: 3px;
+            }
+        }
+
+        /* Mejoras táctiles para móvil */
+        @media (max-width: 480px) {
+            /* Aumentar área táctil de elementos interactivos */
+            .submit-btn {
+                min-height: 48px;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: rgba(209, 183, 160, 0.3);
+            }
+
+            .form-group input {
+                min-height: 48px;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            /* Mejorar el feedback táctil */
+            .submit-btn:active {
+                transform: translateY(1px) scale(0.98);
+                transition: transform 0.1s ease;
+            }
+
+            .guest-details p:active {
+                background: rgba(209, 183, 160, 0.15);
+                transform: scale(0.98);
+                transition: all 0.1s ease;
+            }
+
+            /* Optimizar el scroll en móvil */
+            body {
+                -webkit-overflow-scrolling: touch;
+                scroll-behavior: smooth;
+            }
+
+            .validation-container {
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* Prevenir zoom accidental */
+            input, button, select, textarea {
+                font-size: 16px !important;
+            }
+
+            /* Mejorar la legibilidad en pantallas pequeñas */
+            .guest-details {
+                box-shadow: 
+                    0 4px 12px rgba(0, 0, 0, 0.15),
+                    0 0 0 1px rgba(209, 183, 160, 0.1);
+            }
+
+            #confirmation-details {
+                box-shadow: 
+                    0 4px 12px rgba(0, 0, 0, 0.15),
+                    0 0 0 1px rgba(209, 183, 160, 0.1);
+            }
+        }
+
+        /* Landscape móvil */
+        @media (max-width: 768px) and (orientation: landscape) {
+            body {
+                padding: 10px;
+                align-items: center;
+            }
+
+            .validation-container {
+                max-width: 600px;
+                padding: 20px 25px;
+            }
+
+            .validation-icon {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+
+            h2 {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+            }
+
+            .guest-details {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            .guest-details p {
+                margin-bottom: 8px;
+                padding-bottom: 8px;
+            }
+
+            #confirmation-details {
+                margin-top: 15px;
+                padding-top: 15px;
+            }
+
+            #confirmation-details h3 {
+                font-size: 1.2em;
+                margin-bottom: 12px;
             }
         }
 
@@ -407,6 +837,13 @@
             height: 100%;
             pointer-events: none;
             z-index: -1;
+        }
+
+        /* Reducir partículas en móvil para mejor rendimiento */
+        @media (max-width: 480px) {
+            .floating-particles {
+                opacity: 0.5;
+            }
         }
 
         .particle {
@@ -446,9 +883,22 @@
         
         <div id="guest-details" class="guest-details" style="display: none;">
             <p><strong>Nombre:</strong> <span id="val-guest-name">---</span></p>
-            <p><strong>Pases:</strong> <span id="val-passes">---</span></p>
-            <p><strong>Niños:</strong> <span id="val-kids">---</span></p>
             <p><strong>ID:</strong> <span id="val-guest-id">---</span></p>
+            <p><strong>Estado:</strong> <span id="val-status">---</span></p>
+            <p><strong>Pases Asignados:</strong> <span id="val-passes">---</span></p>
+            <p><strong>Niños Asignados:</strong> <span id="val-kids">---</span></p>
+            <p id="mesa-row" style="display: none;"><strong>Mesa:</strong> <span id="val-mesa">---</span></p>
+        </div>
+        
+        <div id="confirmation-details" class="guest-details" style="display: none;">
+            <h3 style="color: #d1b7a0; margin-bottom: 20px; font-family: 'Playfair Display', serif; font-size: 1.5em; text-align: center;">Detalles de Confirmación</h3>
+            <p><strong>Pases Utilizados:</strong> <span id="val-passes-used">---</span></p>
+            <p><strong>Niños Utilizados:</strong> <span id="val-kids-used">---</span></p>
+            <p><strong>Nombres Adultos:</strong> <span id="val-adult-names">---</span></p>
+            <p id="kids-names-row" style="display: none;"><strong>Nombres Niños:</strong> <span id="val-kids-names">---</span></p>
+            <p><strong>Teléfono:</strong> <span id="val-phone">---</span></p>
+            <p id="email-row" style="display: none;"><strong>Email:</strong> <span id="val-email">---</span></p>
+            <p><strong>Fecha Confirmación:</strong> <span id="val-confirmation-date">---</span></p>
         </div>
         
         <form id="validation-form">
@@ -468,10 +918,13 @@
 
     <script src="src/js/validar.js"></script>
     <script>
-        // Crear partículas flotantes
+        // Crear partículas flotantes optimizadas para móvil
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
-            const particleCount = 15;
+            
+            // Reducir partículas en móvil para mejor rendimiento
+            const isMobile = window.innerWidth <= 480;
+            const particleCount = isMobile ? 8 : 15;
             
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
@@ -480,12 +933,46 @@
                 particle.style.top = Math.random() * 100 + '%';
                 particle.style.animationDelay = Math.random() * 6 + 's';
                 particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                
+                // Reducir opacidad en móvil
+                if (isMobile) {
+                    particle.style.opacity = '0.3';
+                }
+                
                 particlesContainer.appendChild(particle);
             }
         }
+
+        // Optimizar rendimiento en móvil
+        function optimizeForMobile() {
+            if (window.innerWidth <= 480) {
+                // Reducir animaciones complejas en móvil
+                document.body.style.setProperty('--animation-duration', '0.3s');
+                
+                // Mejorar el scroll suave
+                document.documentElement.style.scrollBehavior = 'smooth';
+            }
+        }
         
-        // Inicializar partículas cuando se carga la página
-        document.addEventListener('DOMContentLoaded', createParticles);
+        // Inicializar partículas y optimizaciones cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            optimizeForMobile();
+        });
+
+        // Re-optimizar si cambia la orientación
+        window.addEventListener('orientationchange', function() {
+            setTimeout(function() {
+                optimizeForMobile();
+                
+                // Recrear partículas si es necesario
+                const particlesContainer = document.getElementById('particles');
+                if (particlesContainer) {
+                    particlesContainer.innerHTML = '';
+                    createParticles();
+                }
+            }, 100);
+        });
     </script>
 </body>
 </html>

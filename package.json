@@ -26,6 +26,7 @@
     "sync-notion-auto": "cd src/python && python auto_sync_notion.py",
     "generate-qr": "cd src/python && python generate_qr_codes.py",
     "clean-qr": "cd src/python && python clean_qr_codes.py",
+    "process-notion-guests": "cd src/python && python process_notion_guests.py",
     "install-notion-deps": "pip install -r requirements.txt",
     "clean": "rm -rf node_modules package-lock.json",
     "install:clean": "npm run clean && npm install",

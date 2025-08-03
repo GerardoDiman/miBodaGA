@@ -1,7 +1,7 @@
 /* Sección Detalles Invitado */
 .details-section { 
     text-align: center; 
-    min-height: 800px;
+    min-height: 690px;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -182,7 +182,7 @@
 /* Mostrar controles móviles solo en pantallas pequeñas */
 @media (max-width: 480px) {
     .gallery-section {
-        min-height: 625px !important;
+        min-height: 335px !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: center !important;
@@ -190,8 +190,8 @@
     }
     
     .gallery-container {
-        min-height: 465px !important;
-        max-height: 625px !important;
+        min-height: 385px !important;
+        max-height: 485px !important;
     }
     
     .gallery-navigation {

@@ -1,0 +1,154 @@
+/* ========================================
+   ESTILOS ULTRA ESPECÍFICOS PARA DROPDOWNS
+   ======================================== */
+
+/* Estilos para el select principal - MÁXIMA ESPECIFICIDAD */
+select.form-group,
+.form-group select,
+#guest-count,
+#kids-count {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    background-size: 16px !important;
+    padding-right: 40px !important;
+    cursor: pointer !important;
+    position: relative !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+    color: var(--color-text) !important;
+    font-family: var(--font-primary) !important;
+    font-size: 0.9em !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Estados de focus para el select */
+select.form-group:focus,
+.form-group select:focus,
+#guest-count:focus,
+#kids-count:focus {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d1b7a0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='18,15 12,9 6,15'%3e%3c/polyline%3e%3c/svg%3e") !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-color: var(--color-accent) !important;
+    box-shadow: 0 4px 20px rgba(209, 183, 160, 0.2) !important;
+}
+
+/* Estilos para TODAS las opciones - ESPECIFICIDAD MÁXIMA */
+select.form-group option,
+.form-group select option,
+#guest-count option,
+#kids-count option,
+option {
+    background-color: rgba(30, 30, 30, 0.95) !important;
+    color: var(--color-text) !important;
+    padding: 12px 16px !important;
+    border: none !important;
+    font-family: var(--font-primary) !important;
+    font-size: 0.9em !important;
+    transition: all 0.2s ease !important;
+    border-radius: 4px !important;
+    margin: 2px 4px !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+
+/* Estados específicos de las opciones */
+select.form-group option:hover,
+.form-group select option:hover,
+#guest-count option:hover,
+#kids-count option:hover,
+option:hover {
+    background-color: var(--color-accent) !important;
+    color: var(--color-background) !important;
+    transform: translateX(4px) !important;
+}
+
+select.form-group option:checked,
+.form-group select option:checked,
+#guest-count option:checked,
+#kids-count option:checked,
+option:checked,
+option:selected {
+    background-color: var(--color-accent) !important;
+    color: var(--color-background) !important;
+    font-weight: 600 !important;
+}
+
+/* Estilos específicos para el dropdown abierto */
+select.form-group:focus option,
+.form-group select:focus option,
+#guest-count:focus option,
+#kids-count:focus option {
+    background-color: rgba(30, 30, 30, 0.95) !important;
+    color: var(--color-text) !important;
+}
+
+/* Mejoras visuales para el dropdown */
+select.form-group::-ms-expand,
+.form-group select::-ms-expand,
+#guest-count::-ms-expand,
+#kids-count::-ms-expand {
+    display: none !important;
+}
+
+/* Estilos específicos para diferentes navegadores */
+select.form-group option::-moz-focus-inner,
+.form-group select option::-moz-focus-inner,
+#guest-count option::-moz-focus-inner,
+#kids-count option::-moz-focus-inner {
+    border: 0 !important;
+}
+
+select.form-group option::-webkit-scrollbar,
+.form-group select option::-webkit-scrollbar,
+#guest-count option::-webkit-scrollbar,
+#kids-count option::-webkit-scrollbar {
+    width: 8px !important;
+}
+
+select.form-group option::-webkit-scrollbar-track,
+.form-group select option::-webkit-scrollbar-track,
+#guest-count option::-webkit-scrollbar-track,
+#kids-count option::-webkit-scrollbar-track {
+    background: rgba(30, 30, 30, 0.95) !important;
+}
+
+select.form-group option::-webkit-scrollbar-thumb,
+.form-group select option::-webkit-scrollbar-thumb,
+#guest-count option::-webkit-scrollbar-thumb,
+#kids-count option::-webkit-scrollbar-thumb {
+    background: var(--color-accent) !important;
+    border-radius: 4px !important;
+}
+
+/* Media queries para móviles */
+@media (max-width: 480px) {
+    select.form-group,
+    .form-group select,
+    #guest-count,
+    #kids-count {
+        font-size: 0.85em !important;
+        padding: 10px 12px !important;
+        padding-right: 35px !important;
+        background-size: 14px !important;
+        min-height: 44px !important;
+    }
+    
+    select.form-group option,
+    .form-group select option,
+    #guest-count option,
+    #kids-count option {
+        font-size: 0.85em !important;
+        padding: 10px 12px !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+} 

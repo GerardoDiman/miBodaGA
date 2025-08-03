@@ -4,16 +4,47 @@
         // --- Referencias a Elementos de validar.html ---
         const statusIcon = document.getElementById('validation-status-icon');
         const guestDetailsDiv = document.getElementById('guest-details');
+        const confirmationDetailsDiv = document.getElementById('confirmation-details');
         const guestNameEl = document.getElementById('val-guest-name');
         const passesEl = document.getElementById('val-passes');
         const kidsEl = document.getElementById('val-kids');
         const guestIdEl = document.getElementById('val-guest-id');
+        const statusEl = document.getElementById('val-status');
+        const mesaEl = document.getElementById('val-mesa');
+        const mesaRow = document.getElementById('mesa-row');
+        const passesUsedEl = document.getElementById('val-passes-used');
+        const kidsUsedEl = document.getElementById('val-kids-used');
+        const adultNamesEl = document.getElementById('val-adult-names');
+        const kidsNamesEl = document.getElementById('val-kids-names');
+        const kidsNamesRow = document.getElementById('kids-names-row');
+        const phoneEl = document.getElementById('val-phone');
+        const emailEl = document.getElementById('val-email');
+        const emailRow = document.getElementById('email-row');
+        const confirmationDateEl = document.getElementById('val-confirmation-date');
         const statusMessageEl = document.getElementById('status-message');
         const validationForm = document.getElementById('validation-form');
         const guestIdInput = document.getElementById('guest-id-input');
 
         // --- URL del Apps Script (¡¡REEMPLAZAR!!) ---
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
+
+        // --- Función para convertir nombres separados por comas en lista HTML ---
+        function formatNamesAsList(namesString) {
+            if (!namesString || namesString.trim() === '') {
+                return '<span style="color: rgba(255, 255, 255, 0.6); font-style: italic;">No especificado</span>';
+            }
+            
+            // Dividir por comas y limpiar espacios
+            const names = namesString.split(',').map(name => name.trim()).filter(name => name.length > 0);
+            
+            if (names.length === 0) {
+                return '<span style="color: rgba(255, 255, 255, 0.6); font-style: italic;">No especificado</span>';
+            }
+            
+            // Crear lista HTML
+            const listItems = names.map(name => `<li>${name}</li>`).join('');
+            return `<ul>${listItems}</ul>`;
+        }
 
         // --- Función para actualizar la UI con animaciones mejoradas ---
         function updateValidationUI(status, message, invitado = null) {
@@ -27,13 +58,36 @@
                 statusMessageEl.textContent = message || "¡Invitado Válido!";
                 statusMessageEl.classList.add('success');
                 
-                // Actualizar detalles del invitado con animación
+                // Actualizar detalles básicos del invitado
                 guestNameEl.textContent = invitado.nombre || 'No disponible';
                 passesEl.textContent = invitado.pases != null ? invitado.pases : '-';
                 kidsEl.textContent = invitado.ninos != null ? invitado.ninos : '-';
                 guestIdEl.textContent = invitado.id || '---';
                 
-                // Mostrar detalles con animación
+                // Mostrar información de mesa si está disponible
+                if (invitado.mesa && invitado.mesa.trim() !== '') {
+                    if (mesaEl) mesaEl.textContent = invitado.mesa;
+                    if (mesaRow) mesaRow.style.display = 'block';
+                } else {
+                    if (mesaRow) mesaRow.style.display = 'none';
+                }
+                
+                // Actualizar estado
+                if (statusEl) {
+                    const estado = invitado.estado || 'Pendiente';
+                    statusEl.textContent = estado;
+                    
+                    // Cambiar el color según el estado
+                    if (estado === 'Confirmado') {
+                        statusEl.style.color = '#4CAF50';
+                        statusEl.style.fontWeight = 'bold';
+                    } else {
+                        statusEl.style.color = '#ffc107';
+                        statusEl.style.fontWeight = 'bold';
+                    }
+                }
+                
+                // Mostrar detalles básicos con animación
                 guestDetailsDiv.style.display = 'block';
                 guestDetailsDiv.style.opacity = '0';
                 guestDetailsDiv.style.transform = 'translateY(20px)';
@@ -43,6 +97,69 @@
                     guestDetailsDiv.style.opacity = '1';
                     guestDetailsDiv.style.transform = 'translateY(0)';
                 }, 100);
+                
+                // Si está confirmado, mostrar detalles de confirmación
+                if (invitado.confirmado && confirmationDetailsDiv) {
+                    // Actualizar detalles de confirmación
+                    if (passesUsedEl) passesUsedEl.textContent = invitado.pasesUtilizados != null ? invitado.pasesUtilizados : '0';
+                    if (kidsUsedEl) kidsUsedEl.textContent = invitado.ninosUtilizados != null ? invitado.ninosUtilizados : '0';
+                    if (adultNamesEl) {
+                        adultNamesEl.innerHTML = formatNamesAsList(invitado.nombresInvitados);
+                        adultNamesEl.classList.add('names-list');
+                    }
+                    
+                    // Mostrar nombres de niños solo si hay niños
+                    if (invitado.nombresNinos && invitado.nombresNinos.trim() !== '') {
+                        if (kidsNamesEl) {
+                            kidsNamesEl.innerHTML = formatNamesAsList(invitado.nombresNinos);
+                            kidsNamesEl.classList.add('names-list');
+                        }
+                        if (kidsNamesRow) kidsNamesRow.style.display = 'block';
+                    } else {
+                        if (kidsNamesRow) kidsNamesRow.style.display = 'none';
+                    }
+                    
+                    if (phoneEl) phoneEl.textContent = invitado.telefono || 'No proporcionado';
+                    
+                    // Mostrar email solo si existe
+                    if (invitado.email && invitado.email.trim() !== '') {
+                        if (emailEl) emailEl.textContent = invitado.email;
+                        if (emailRow) emailRow.style.display = 'block';
+                    } else {
+                        if (emailRow) emailRow.style.display = 'none';
+                    }
+                    
+                    // Formatear fecha de confirmación
+                    if (confirmationDateEl && invitado.fechaConfirmacion) {
+                        const fecha = new Date(invitado.fechaConfirmacion);
+                        const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        confirmationDateEl.textContent = fechaFormateada;
+                    }
+                    
+                    // Mostrar detalles de confirmación con animación retardada
+                    setTimeout(() => {
+                        confirmationDetailsDiv.style.display = 'block';
+                        confirmationDetailsDiv.style.opacity = '0';
+                        confirmationDetailsDiv.style.transform = 'translateY(20px)';
+                        
+                        setTimeout(() => {
+                            confirmationDetailsDiv.style.transition = 'all 0.5s ease';
+                            confirmationDetailsDiv.style.opacity = '1';
+                            confirmationDetailsDiv.style.transform = 'translateY(0)';
+                        }, 100);
+                    }, 300);
+                } else {
+                    // Si no está confirmado, ocultar detalles de confirmación
+                    if (confirmationDetailsDiv) {
+                        confirmationDetailsDiv.style.display = 'none';
+                    }
+                }
                 
                 // Ocultar formulario con animación
                 if (validationForm) {
@@ -59,8 +176,11 @@
                 statusMessageEl.textContent = message || "Invitado no encontrado o error.";
                 statusMessageEl.classList.add('error');
                 
-                // Ocultar detalles
+                // Ocultar todos los detalles
                 guestDetailsDiv.style.display = 'none';
+                if (confirmationDetailsDiv) {
+                    confirmationDetailsDiv.style.display = 'none';
+                }
                 
                 // Mostrar formulario con animación
                 if (validationForm) {
@@ -105,6 +225,9 @@
             statusMessageEl.classList.add('loading-message');
             statusIcon.classList.add('fas', 'fa-spinner', 'fa-spin', 'loading');
             guestDetailsDiv.style.display = 'none';
+            if (confirmationDetailsDiv) {
+                confirmationDetailsDiv.style.display = 'none';
+            }
 
             // --- Llamar al Apps Script usando JSONP ---
             const callbackFunctionName = 'handleValidationResponse' + Date.now();
@@ -167,8 +290,11 @@
             statusMessageEl.classList.remove('loading-message', 'success', 'error');
             statusMessageEl.textContent = "Ingresa tu ID de invitado para validar tu acceso.";
             
-            // Ocultar detalles del invitado
+            // Ocultar todos los detalles del invitado
             guestDetailsDiv.style.display = 'none';
+            if (confirmationDetailsDiv) {
+                confirmationDetailsDiv.style.display = 'none';
+            }
             
             // Mostrar formulario con animación
             if (validationForm) {

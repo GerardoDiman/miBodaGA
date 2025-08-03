@@ -189,8 +189,9 @@
    ======================================== */
 
 @media (max-width: 768px) {
-    .dresscode-block-wrapper {
-        padding: var(--spacing-medium) 0;
+    .dresscode-block-wrapper,
+    .container-content.dresscode-block-wrapper {
+        padding: var(--spacing-large) 0;
         gap: var(--spacing-medium);
     }
     
@@ -223,8 +224,9 @@
 }
 
 @media (max-width: 480px) {
-    .dresscode-block-wrapper {
-        padding: var(--spacing-small) 0;
+    .dresscode-block-wrapper,
+    .container-content.dresscode-block-wrapper {
+        padding: calc(var(--spacing-large) * 0.5) 0 !important;
         gap: var(--spacing-small);
     }
     

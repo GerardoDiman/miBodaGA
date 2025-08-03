@@ -1,95 +1,74 @@
 #!/usr/bin/env python3
 """
-Limpieza de QR codes obsoletos
-Elimina QR codes de invitados que ya no están en Notion
+Script para limpiar y regenerar códigos QR
+Elimina los códigos QR existentes y regenera nuevos
 """
 
 import os
-import json
-from dotenv import load_dotenv
-from notion_integration import NotionIntegration
+import shutil
+import glob
 
-def clean_obsolete_qr_codes():
-    """Limpiar QR codes de invitados que ya no están en Notion"""
-    print("🧹 Limpiando QR codes obsoletos...")
+def limpiar_qr_codes():
+    """Limpia todos los códigos QR existentes."""
+    qr_folder = 'qrcodes'
     
-    # Cargar variables de entorno
-    load_dotenv(os.path.join(os.path.dirname(__file__), '..', '..', '.env'))
+    if os.path.exists(qr_folder):
+        # Eliminar todos los archivos .png en la carpeta
+        png_files = glob.glob(os.path.join(qr_folder, '*.png'))
+        
+        if png_files:
+            print(f"🗑️  Eliminando {len(png_files)} códigos QR existentes...")
+            for file in png_files:
+                try:
+                    os.remove(file)
+                    print(f"  ✅ Eliminado: {os.path.basename(file)}")
+                except Exception as e:
+                    print(f"  ❌ Error eliminando {file}: {e}")
+        else:
+            print("📭 No se encontraron códigos QR para eliminar")
+    else:
+        print("📁 La carpeta qrcodes no existe")
+
+def limpiar_json():
+    """Limpia el archivo JSON de invitados."""
+    json_file = 'data/invitados.json'
     
-    NOTION_API_KEY = os.getenv('NOTION_API_KEY')
-    NOTION_DATABASE_ID = os.getenv('NOTION_DATABASE_ID')
-    
-    if not NOTION_API_KEY or NOTION_API_KEY == 'tu_api_key_aqui':
-        print("❌ Configura tu API key de Notion en el archivo .env")
-        return
-    
-    if not NOTION_DATABASE_ID or NOTION_DATABASE_ID == 'tu_database_id_aqui':
-        print("❌ Configura tu Database ID de Notion en el archivo .env")
-        return
-    
-    # Obtener datos de Notion
-    notion = NotionIntegration(NOTION_API_KEY, NOTION_DATABASE_ID)
-    notion_data = notion.get_database()
-    
-    if not notion_data:
-        print("❌ No se pudieron obtener datos de Notion")
-        return
-    
-    # Parsear invitados
-    guests = notion.parse_guest_data(notion_data)
-    
-    if not guests:
-        print("❌ No se encontraron invitados válidos")
-        return
-    
-    # Obtener lista de IDs actuales de Notion
-    current_ids = {guest['id'] for guest in guests}
-    print(f"📊 Invitados actuales en Notion: {len(current_ids)}")
-    
-    # Obtener todos los archivos QR existentes
-    qr_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'qrcodes')
-    existing_qr_files = []
-    
-    if os.path.exists(qr_dir):
-        for filename in os.listdir(qr_dir):
-            if filename.endswith('.png'):
-                qr_id = filename.replace('.png', '')
-                existing_qr_files.append(qr_id)
-    
-    print(f"📁 QR codes existentes: {len(existing_qr_files)}")
-    
-    # Encontrar QR codes obsoletos
-    obsolete_qr_codes = [qr_id for qr_id in existing_qr_files if qr_id not in current_ids]
-    
-    if not obsolete_qr_codes:
-        print("✅ No hay QR codes obsoletos para eliminar")
-        return
-    
-    print(f"🗑️  QR codes obsoletos encontrados: {len(obsolete_qr_codes)}")
-    
-    # Confirmar eliminación
-    print("\nQR codes que se eliminarán:")
-    for qr_id in obsolete_qr_codes:
-        print(f"  - {qr_id}.png")
-    
-    # Eliminar QR codes obsoletos
-    deleted_count = 0
-    for qr_id in obsolete_qr_codes:
-        qr_path = os.path.join(qr_dir, f"{qr_id}.png")
+    if os.path.exists(json_file):
         try:
-            os.remove(qr_path)
-            print(f"✅ Eliminado: {qr_id}.png")
-            deleted_count += 1
+            os.remove(json_file)
+            print(f"🗑️  Eliminado archivo JSON: {json_file}")
         except Exception as e:
-            print(f"❌ Error eliminando {qr_id}.png: {e}")
-    
-    print(f"\n🎉 Limpieza completada!")
-    print(f"🗑️  QR codes eliminados: {deleted_count}")
-    print(f"📁 QR codes restantes: {len(existing_qr_files) - deleted_count}")
+            print(f"❌ Error eliminando JSON: {e}")
+    else:
+        print("📄 El archivo JSON no existe")
 
 def main():
-    """Función principal"""
-    clean_obsolete_qr_codes()
+    """Función principal."""
+    print("🧹 Limpiador de Códigos QR")
+    print("=" * 30)
+    
+    # Confirmar acción
+    print("⚠️  Esta acción eliminará todos los códigos QR existentes y el archivo JSON")
+    print("   Los nuevos códigos se generarán con IDs diferentes")
+    
+    confirmacion = input("¿Continuar? (s/N): ").strip().lower()
+    
+    if confirmacion in ['s', 'si', 'sí', 'y', 'yes']:
+        print("\n🧹 Iniciando limpieza...")
+        
+        # Limpiar códigos QR
+        limpiar_qr_codes()
+        
+        # Limpiar JSON
+        limpiar_json()
+        
+        print("\n✅ Limpieza completada!")
+        print("\n📋 Próximos pasos:")
+        print("1. Ejecuta el script generate_qr_codes.py para regenerar todo")
+        print("2. Verifica que los nuevos códigos QR se generaron correctamente")
+        print("3. Actualiza tu sitio web con los nuevos archivos")
+    else:
+        print("❌ Operación cancelada")
 
 if __name__ == "__main__":
     main() 
