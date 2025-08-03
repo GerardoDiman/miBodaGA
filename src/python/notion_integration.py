@@ -61,7 +61,9 @@ class NotionIntegration:
                 'telefono': self._extract_phone(properties.get('Teléfono', {})),
                 'confirmado': self._extract_checkbox(properties.get('Confirmado', {})),
                 'fecha_confirmacion': self._extract_date(properties.get('Fecha Confirmación', {})),
-                'notas': self._extract_text(properties.get('Notas', {}))
+                'notas': self._extract_text(properties.get('Notas', {})),
+                'tipo_invitacion': self._extract_select(properties.get('Tipo de Invitación', {})),
+                'enlace_invitacion': self._extract_text(properties.get('Enlace Invitación', {}))
             }
             
             # Solo incluir invitados válidos
@@ -130,6 +132,16 @@ class NotionIntegration:
         if title_array:
             return title_array[0].get('plain_text', '')
         return ""
+    
+    def _extract_select(self, property_data):
+        """Extraer valor de una propiedad Select de Notion"""
+        if not property_data:
+            return "Completo"  # Valor por defecto
+        
+        select_value = property_data.get('select', {})
+        if select_value:
+            return select_value.get('name', 'Completo')
+        return "Completo"
     
     def _is_valid_id(self, text):
         """Verificar si el texto es un ID válido (6 caracteres alfanuméricos)"""
@@ -208,8 +220,8 @@ class NotionIntegration:
                 # Solo generar si no existe
                 if not os.path.exists(qr_path):
                     try:
-                        # URL de la invitación
-                        invitation_url = f"https://mibodaag.netlify.app/?id={invite_id}"
+                        # URL de validación (siempre la misma)
+                        validation_url = f"https://mibodaag.netlify.app/validar.html?id={invite_id}"
                         
                         # Crear QR code
                         qr = qrcode.QRCode(
@@ -218,7 +230,7 @@ class NotionIntegration:
                             box_size=10,
                             border=4,
                         )
-                        qr.add_data(invitation_url)
+                        qr.add_data(validation_url)
                         qr.make(fit=True)
                         
                         # Crear imagen
@@ -261,7 +273,37 @@ class NotionIntegration:
         self.update_guest_files(guests)
         
         print(f"✅ Sincronización completada: {len(guests)} invitados")
+        
+        # Actualizar enlaces de invitación en Notion
+        self.update_invitation_links(guests)
+        
         return True
+    
+    def update_invitation_links(self, guests):
+        """Actualizar enlaces de invitación en Notion según el tipo"""
+        print("🔗 Actualizando enlaces de invitación en Notion...")
+        
+        updated_count = 0
+        
+        for guest in guests:
+            invite_id = guest['id']
+            page_id = guest.get('page_id')  # Necesitamos el page_id de Notion
+            
+            # Generar enlace según tipo
+            if guest.get('tipo_invitacion') == 'Ceremonia':
+                invitation_link = f"https://mibodaag.netlify.app/ceremonia.html?id={invite_id}"
+            else:
+                invitation_link = f"https://mibodaag.netlify.app/?id={invite_id}"
+            
+            # Solo actualizar si el enlace es diferente
+            if guest.get('enlace_invitacion') != invitation_link:
+                # Aquí necesitaríamos actualizar la propiedad en Notion
+                # Por ahora solo mostramos el enlace generado
+                print(f"📧 Enlace para {guest['nombre']}: {invitation_link}")
+                updated_count += 1
+        
+        print(f"✅ Enlaces generados: {updated_count} invitados")
+        print("💡 Copia estos enlaces y pégalos manualmente en Notion")
 
 def main():
     """Función principal"""

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra boda | Alejandra & Gerardo | 11 de Octubre 2025</title>
+    <meta name="description" content="Celebra con nosotros la boda de Alejandra y Gerardo el 11 de octubre. Encuentra todos los detalles del evento, ubicaciones, itinerario y más.">
+    <meta name="keywords" content="boda, invitación, Alejandra, Gerardo, evento, RSVP, Chiapas, fiesta, galería, regalos, hospedaje, dress code">
+    <meta name="author" content="Alejandra & Gerardo">
+    <meta name="theme-color" content="#d1b7a0">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Boda A&G">
+    <link rel="apple-touch-icon" href="/assets/images/logo-192.png">
+    <!-- Sugerencia: agrega sitemap.xml y robots.txt al publicar -->
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="La Boda de Alejandra & Gerardo">
+    <meta property="og:description" content="11 de octubre de 2025 - Únete a nuestra celebración">
+    <meta property="og:image" content="assets/images/imgs23.png">
+    <meta property="og:url" content="https://www.alejandraygerardo.com">
+    <meta property="og:type" content="website">
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- Preload recursos críticos -->
+    <link rel="preload" href="assets/images/imgs23.png" as="image">
+    <link rel="preload" href="assets/audio/unicos.mp3" as="audio">
+    <link rel="preload" href="src/css/styles.css" as="style">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="src/css/styles.css?v=1.38">
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/171beeb065.js" crossorigin="anonymous"></script>
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
+</head>
+<body>
+    <!-- Reproductor de Audio -->
+    <div id="audio-controls-container">
+        <button id="audio-toggle-button" aria-label="Reproducir/Pausar música">
+            <i id="play-pause-icon" class="fas fa-play"></i>
+        </button>
+        <div id="volume-control" class="volume-hidden">
+            <i class="fas fa-volume-high" id="volume-icon"></i>
+            <input type="range" id="volume-slider" min="0" max="100" value="50" aria-label="Control de volumen">
+        </div>
+    </div>
+    <audio id="background-audio" loop>
+        <source src="assets/audio/unicos.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <!-- Contenedor Principal -->
+    <div class="container">
+
+        <!-- 1. Sección Título/Principal -->
+        <div class="section-background-wrapper title-bg">
+            <header class="title-section bw-text-overlay">
+                <h3 class="intro-text">Nuestra boda</h3>
+                <h1>Alejandra <span class="ampersand">&</span> Gerardo</h1>
+            </header>
+            <main class="main-content">
+                <div class="photo-container">
+                    <img src="assets/images/imgs15.png" alt="Alejandra y Gerardo abrazándose al aire libre" loading="eager">
+                </div>
+                <aside class="date-info">
+                    <div class="day">
+                        <span>S</span>
+                        <span>Á</span>
+                        <span>B</span>
+                        <span>A</span>
+                        <span>D</span>
+                        <span>O</span>
+                    </div>
+                    <span class="separator">|</span>
+                    <span class="date-num">11</span>
+                    <span class="separator">|</span>
+                    <div class="month">
+                        <span>O</span>
+                        <span>C</span>
+                        <span>T</span>
+                        <span>U</span>
+                        <span>B</span>
+                        <span>R</span>
+                        <span>E</span>
+                    </div>
+                </aside>
+            </main>
+        </div>
+
+        <!-- 2. Sección Detalles -->
+        <div class="section-background-wrapper details-bg bw-overlay">
+            <div class="container-content">
+                <section class="details-section bw-text-enhancement">
+                    <div class="guest-info">
+                        <p class="guest-greeting">Apreciable</p>
+                        <h2 class="guest-name" id="guest-name-placeholder">Invitado Especial</h2>
+                        <div id="guest-passes-details" class="guest-passes-line" style="display: flex;"> <!-- Mostrar por defecto si no hay JS -->
+                            <span class="guest-pass-item"><span id="guest-passes-placeholder">2</span> - PASES</span>
+                            <span class="guest-pass-separator">|</span>
+                            <span class="guest-pass-item guest-pass-kids"><span id="guest-kids-placeholder">0</span> - NIÑOS</span>
+                        </div>
+                    </div>
+                    <div class="wedding-logo">
+                        <img src="assets/images/logo.png" alt="Logo Boda A&G" loading="lazy">
+                    </div>
+                    <p class="countdown-intro">SOLO FALTAN</p>
+                    <div class="countdown-timer" id="countdown">
+                        <div class="time-unit"><span class="number" id="days">175</span><span class="label">DÍAS</span></div>
+                        <div class="time-unit"><span class="number" id="hours">07</span><span class="label">HORAS</span></div>
+                        <div class="time-unit"><span class="number" id="minutes">20</span><span class="label">MINUTOS</span></div>
+                        <div class="time-unit"><span class="number" id="seconds">01</span><span class="label">SEGUNDOS</span></div>
+                    </div>
+                    <p class="countdown-outro">PARA LA BODA</p>
+                    <div class="message-box">
+                        <p>Nos encantaría compartir nuestra alegría contigo en nuestro día especial. Únete a nosotros para celebrar el amor y la felicidad en nuestra boda. ¡Esperamos verte ahí!</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- 3. Sección Galería -->
+        <div class="section-background-wrapper gallery-bg bw-overlay">
+            <div class="container-content">
+                <section class="gallery-section bw-text-enhancement" id="gallery">
+                    <div class="section-title-container"><h3 class="section-title">GALERÍA</h3></div>
+                    <div class="gallery-wrapper">
+                        <button class="gallery-arrow gallery-prev" aria-label="Foto anterior">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="gallery-container">
+                            <div class="gallery-slide active"><img src="assets/images/imgs5.png" alt="Pareja disfrutando de la naturaleza" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/imgs2.png" alt="Alejandra y Gerardo en un momento romántico" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/imgs10.png" alt="Foto artística de la pareja" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/imgs12.png" alt="Alejandra y Gerardo sonriendo" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/imgs13.png" alt="Pareja en un paisaje" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/imgs19.png" alt="Momento tierno de la pareja" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/imgs20.png" alt="Alejandra y Gerardo en un abrazo" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/imgs22.png" alt="Pareja caminando de la mano" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/imgs27.png" alt="Pareja caminando de la mano" class="gallery-image" loading="lazy"></div>
+                            <div class="gallery-slide"><img src="assets/images/imgs28.png" alt="Pareja caminando de la mano" class="gallery-image" loading="lazy"></div>
+                        </div>
+                        <button class="gallery-arrow gallery-next" aria-label="Foto siguiente">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        
+                        <!-- Controles de navegación para móviles -->
+                        <div class="gallery-navigation">
+                            <button class="gallery-arrow gallery-prev-mobile" aria-label="Foto anterior">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button class="gallery-arrow gallery-next-mobile" aria-label="Foto siguiente">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Indicadores de navegación -->
+                        <div class="gallery-indicators">
+                            <div class="gallery-indicator active" data-slide="0"></div>
+                            <div class="gallery-indicator" data-slide="1"></div>
+                            <div class="gallery-indicator" data-slide="2"></div>
+                            <div class="gallery-indicator" data-slide="3"></div>
+                            <div class="gallery-indicator" data-slide="4"></div>
+                            <div class="gallery-indicator" data-slide="5"></div>
+                            <div class="gallery-indicator" data-slide="6"></div>
+                            <div class="gallery-indicator" data-slide="7"></div>
+                            <div class="gallery-indicator" data-slide="8"></div>
+                            <div class="gallery-indicator" data-slide="9"></div>
+                            <div class="gallery-indicator" data-slide="10"></div>
+                            <div class="gallery-indicator" data-slide="11"></div>
+                            <div class="gallery-indicator" data-slide="12"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Nueva Sección: Nuestros Padres -->
+        <div class="section-background-wrapper parents-bg">
+            <div class="container-content">
+                <section class="parents-section">
+                    <div class="section-title-container"><h3 class="section-title long-title">NUESTROS PADRES</h3></div>
+                    <div class="parents-container">
+                        <div class="parents-group">
+                            <div class="parent-content">
+                                <h3 class="parent-title">Eugenia Mandujano & Alfredo Díaz</h3>
+                                <p class="parent-subtitle">PADRES DE LA NOVIO</p>
+                            </div>
+                        </div>
+                        <div class="parents-group">
+                            <div class="parent-content">
+                                <h3 class="parent-title">Patricia Solis & Artemio Alfonzo</h3>
+                                <p class="parent-subtitle">PADRES DEL NOVIA</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Sección: Madrinas y Padrinos -->
+        <div class="section-background-wrapper sponsors-bg">
+            <div class="container-content">
+                <section class="sponsors-section">
+                    <div class="section-title-container">
+                        <h3 class="section-title long-title">INVITADOS DE HONOR</h3>
+                    </div>
+                    <div class="sponsors-container">
+                        <!-- Pareja 1 -->
+                        <div class="sponsor-card">
+                                <img src="assets/images/vela-no-bg2.png" alt="Velas" class="icon-image" loading="lazy">
+                            <div class="sponsor-info">
+                                <h4 class="sponsor-names">Zeile Vázquez & Alejandro Hernández</h4>
+                                <p class="sponsor-role">PADRINOS DE VELACIÓN</p>
+                            </div>
+                        </div>
+
+                        <!-- Pareja 2 -->
+                        <div class="sponsor-card">
+                                <img src="assets/images/anillos-no-bg.png" alt="Lazo" class="icon-image" loading="lazy">
+                            <div class="sponsor-info">
+                                <h4 class="sponsor-names">Rosa Méndez & Juan Díaz</h4>
+                                <p class="sponsor-role">PADRINOS DE ANILLOS</p>
+                            </div>
+                        </div>
+
+                        <!-- Pareja 3 -->
+                        <div class="sponsor-card">
+                                <img src="assets/images/arras-no-bg.png" alt="Lazo" class="icon-image" loading="lazy">
+                            <div class="sponsor-info">
+                                <h4 class="sponsor-names">Virginia López & Carlos Mandujano</h4>
+                                <p class="sponsor-role">PADRINOS DE ARRAS</p>
+                            </div>
+                        </div>
+
+                        <!-- Pareja 4 -->
+                        <div class="sponsor-card">
+                                <img src="assets/images/lazo2-no-bg.png" alt="Lazo" class="icon-image" loading="lazy">
+                            <div class="sponsor-info">
+                                <h4 class="sponsor-names">Lourdes Mandujano & Armando López</h4>
+                                <p class="sponsor-role">PADRINOS DE LAZO</p>
+                            </div>
+                        </div>
+
+                        <!-- Pareja 5 -->
+                        <div class="sponsor-card">
+                                <img src="assets/images/biblia-no-bg.png" alt="Lazo" class="icon-image" loading="lazy">
+                            <div class="sponsor-info">
+                                <h4 class="sponsor-names">Guadalupe Herrera</h4>
+                                <p class="sponsor-role">MADRINA DE BIBLIA</p>
+                            </div>
+                        </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- 4. Sección Itinerario y Dress Code -->
+        <div class="section-background-wrapper itinerary-bg">
+            <div class="container-content">
+                <section class="itinerary-section">
+                    <div class="section-title-container"><h3 class="section-title">ITINERARIO</h3></div>
+                    <div class="itinerary-list">
+                        <div class="itinerary-item">
+                            <div class="itinerary-icon"><img src="assets/images/iglesia3-no-bg.png" alt="Iglesia" class="icon-image" loading="lazy"></div>
+                            <div class="itinerary-details">
+                                <p class="event-time-name"><strong>16:00 - Ceremonia religiosa</strong></p>
+                                <p class="event-location">Templo de San José</p>
+                                <p class="location-address">Tercera Calle Sur Pte,<br> San José, 30023.<br>Comitán de Domínguez, Chis.</p>
+                                <a href="https://maps.app.goo.gl/cKeMn5YCfgBVzs3w7" class="location-gps-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-paper-plane"></i> VER EN GPS</a>
+                            </div>
+                        </div>
+                        <div class="itinerary-item">
+                            <div class="itinerary-icon"><img src="assets/images/camara-no-bg.png" alt="Camara" class="icon-image" loading="lazy"></div>
+                            <div class="itinerary-details">
+                                <p class="event-time-name"><strong>17:00 - Sesión de fotos</strong></p>
+                                <p class="event-location">Hotel La Casa Del Marqués</p>
+                                <p class="location-address">Av. Central Sur N.º 24,<br> San José, 30000.<br>Comitán de Domínguez, Chis.</p>
+                                <a href="https://maps.app.goo.gl/p1JKsoKMeBz5GtGX8" class="location-gps-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-paper-plane"></i> VER EN GPS</a>
+                            </div>
+                        </div>
+                        <div class="itinerary-item">
+                            <div class="itinerary-icon"><img src="assets/images/copa-no-bg.png" alt="Copa" class="icon-image" loading="lazy"></div>
+                            <div class="itinerary-details">
+                                <p class="event-time-name"><strong>19:00 - Recepción</strong></p>
+                                <p class="event-location">Salón y Jardín El Laurel</p>
+                                <p class="location-address">Sexta Ote. Sur 148b,<br>Col El Bethel, 30039<br>Comitán de Domínguez, Chis.</p>
+                                <a href="https://www.google.com.mx/maps/place/Salon+%26+Jardin+El+Laurel/@16.2403462,-92.1141258,17z/data=!4m17!1m10!3m9!1s0x858d3f2d3e7f5cbb:0x6ac9340686ed37aa!2sSalon+%26+Jardin+El+Laurel!8m2!3d16.2404127!4d-92.11411!10e5!14m1!1BCgIgAQ!16s%2Fg%2F11dxd965d0!3m5!1s0x858d3f2d3e7f5cbb:0x6ac9340686ed37aa!8m2!3d16.2404127!4d-92.11411!16s%2Fg%2F11dxd965d0?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwMi4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" class="location-gps-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-paper-plane"></i> VER EN GPS</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Dresscode Mejorado con Scroll Progresivo -->
+        <div class="section-background-wrapper dresscode-bg">
+          <div class="container-content dresscode-block-wrapper">
+            <div class="section-title-container"><h3 class="section-title">CÓDIGO DE VESTIMENTA</h3></div>
+            
+            <!-- Sección Hombres -->
+            <div class="dresscode-progressive-section">
+              <div class="dresscode-gender-title animate-on-scroll" data-delay="0">
+                <h2>HOMBRES</h2>
+              </div>
+              
+              <div class="dresscode-icon-container animate-on-scroll" data-delay="300">
+                <img src="assets/images/smoking-no-bg.png" alt="Traje formal para caballeros" class="dresscode-icon">
+              </div>
+              
+              <div class="dresscode-requirements animate-on-scroll" data-delay="600">
+                <ul class="dresscode-list">
+                  <li>Esmóquin o traje en tonos oscuros</li>
+                  <li>Moño o corbata</li>
+                  <li>Zapatos formales</li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- Separador visual -->
+            <div class="dresscode-separator animate-on-scroll" data-delay="700">
+              <div class="separator-line"></div>
+            </div>
+            
+            <!-- Sección Mujeres -->
+            <div class="dresscode-progressive-section">
+              <div class="dresscode-gender-title animate-on-scroll" data-delay="900">
+                <h2>MUJERES</h2>
+              </div>
+              
+              <div class="dresscode-icon-container animate-on-scroll" data-delay="1100">
+                <img src="assets/images/dress-no-bg.png" alt="Vestido de noche para damas" class="dresscode-icon">
+              </div>
+              
+              <div class="dresscode-requirements animate-on-scroll" data-delay="1300">
+                <ul class="dresscode-list">
+                  <li>Vestido de noche largo (evitando blanco y tonos crema)</li>
+                  <li>Bolso o cartera</li>
+                  <li>Zapatos de tacón</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Sección Filtro y Hashtag -->
+        <div class="section-background-wrapper locations-bg"> <!-- Usando fondo de ubicaciones -->
+            <div class="container-content">
+                <section class="filter-section">
+                    <div class="section-title-container simple-title"><h3 class="section-title">USA NUESTRO FILTRO</h3></div>
+                    <div class="social-filter-buttons">
+                        <a href="https://www.facebook.com/hashtag/AlejandraYGerardo2025" class="social-button facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i> FACEBOOK</a>
+                        <a href="https://www.instagram.com/explore/tags/AlejandraYGerardo2025/" class="social-button instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i> INSTAGRAM</a>
+                    </div>
+                    <h4 class="wedding-hashtag">#AleGera25</h4>
+                </section>
+            </div>
+        </div>
+
+        <!-- 7. Sección Sugerencias de Regalo -->
+        <div class="section-background-wrapper gifts-bg">
+            <div class="container-content">
+                <section class="gifts-section">
+                    <div class="section-title-container title-adjust-lines">
+                        <h3 class="section-title long-title gift-title">
+                            <span class="gift-title-line1">SUGERENCIAS</span>
+                            <span class="gift-title-line2">DE REGALO</span>
+                        </h3>
+                    </div>
+                    <div class="registry-links">
+                        <div class="registry-block">
+                            <div class="registry-icon"><img src="assets/images/regalo-no-bg.png" alt="Logo Amazon" loading="lazy"></div>
+                            <h4 class="registry-store">Amazon</h4>
+                            <p class="registry-code">EVENTO - 20DIGXGY68HUD</p>
+                            <a href="https://www.amazon.com.mx/wedding/registry/20DIGXGY68HUD" class="registry-button" target="_blank" rel="noopener noreferrer" aria-label="Ver mesa de regalos en Amazon"><i class="fas fa-gift"></i> VER REGALOS</a>
+                        </div>
+                    </div>
+                    <div class="money-shower-section">
+                        <div class="money-shower-icon">
+                            <img src="assets/images/sobre-no-bg.png" alt="Sobre para lluvia de sobres" style="max-width: 60px; height: auto; display: block; margin: 0 auto;" loading="lazy">
+                        </div>
+                        <h3 class="money-shower-title">Lluvia de sobres</h3>
+                        <p class="money-shower-description">Tu presencia es nuestro mejor regalo, pero si está dentro de tus posibilidades y deseas hacernos un presente te dejamos estas opciones:</p>
+                    </div>
+                    
+                    <!-- Sección Hospedaje integrada -->
+                    <div class="lodging-section">
+                        <div class="section-title-container"><h3 class="section-title">HOSPEDAJE</h3></div>
+                        <div class="lodging-container">
+                                                    <div class="lodging-block">
+                            <div class="lodging-details">
+                                <h4 class="lodging-name">Hotel La Casa Del Marqués</h4>
+                                <div class="lodging-info-content">
+                                    <div class="lodging-info-item"><i class="fas fa-phone"></i><a href="tel:+529636367087">+52 963 636 7087</a></div>
+                                    <a href="https://www.google.com.mx/maps/place/Hotel+La+Casa+Del+Marqu%C3%A9s/@16.2502262,-92.1370747,17z/data=!4m10!3m9!1s0x858d38b3d55efc13:0xcdeaea29bc238f67!5m3!1s2025-05-14!4m1!1i2!8m2!3d16.2502211!4d-92.1344998!16s%2Fg%2F11b6dpyjxj?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwOS4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" class="lodging-button" target="_blank" rel="noopener noreferrer">Ver Hotel</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lodging-block">
+                            <div class="lodging-details">
+                                <h4 class="lodging-name">Hotel Posada del Ángel</h4>
+                                <div class="lodging-info-content">
+                                    <div class="lodging-info-item"><i class="fas fa-phone"></i><a href="tel:+529636322313">+52 963 632 2313</a></div>
+                                    <a href="https://www.google.com.mx/maps/place/Hotel+Posada+del+%C3%81ngel/@16.2473733,-92.1393412,17z/data=!4m10!3m9!1s0x858d38ae753213d9:0xeca2912002aea8b0!5m3!1s2025-05-14!4m1!1i2!8m2!3d16.2473682!4d-92.1367663!16s%2Fg%2F1hm5f61sq?hl=es&entry=ttu&g_ep=EgoyMDI1MDQwOS4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D." class="lodging-button" target="_blank" rel="noopener noreferrer">Ver Hotel</a>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- 9. Sección RSVP -->
+        <div class="section-background-wrapper rsvp-bg">
+            <div class="container-content">
+                <section class="rsvp-section">
+                    <div class="section-title-container"><h3 class="section-title">R.S.V.P.</h3></div>
+                    <h2 class="rsvp-heading">CONFIRMA TU ASISTENCIA</h2>
+                    <p class="rsvp-deadline">FAVOR DE CONFIRMAR TU ASISTENCIA ANTES DEL 20 DE SEPTIEMBRE DEL 2025</p>
+                    <button class="confirm-main-rsvp-button" aria-label="Confirmar asistencia a la boda">CONFIRMAR</button>
+                    
+                    <!-- Formulario RSVP integrado -->
+                    <div id="rsvp-form-container" class="rsvp-form-integrated" style="display: none;">
+                        <div class="rsvp-form-content">
+                            <div class="rsvp-form-header">
+                                <h3>Confirmar Asistencia</h3>
+                                <button class="rsvp-form-close" id="rsvp-form-close">&times;</button>
+                            </div>
+                            
+                            <form id="rsvp-form" class="rsvp-form">
+                                    <div class="form-group">
+                                        <label for="guest-count">Número de pases de adultos a utilizar:</label>
+                                        <select id="guest-count" name="guest-count" required style="appearance: none !important; -webkit-appearance: none !important; -moz-appearance: none !important; background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%23ffffff stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3e%3cpolyline points=%226,9 12,15 18,9%22%3e%3c/polyline%3e%3c/svg%3e') !important; background-repeat: no-repeat !important; background-position: right 12px center !important; background-size: 16px !important; padding-right: 40px !important; cursor: pointer !important; position: relative !important; background-color: rgba(255, 255, 255, 0.1) !important; backdrop-filter: blur(10px) !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important; border-radius: 8px !important; color: var(--color-text) !important; font-family: var(--font-primary) !important; font-size: 0.9em !important; transition: all 0.3s ease !important;">
+                                            <option value="" style="background-color: rgba(30, 30, 30, 0.95) !important; color: var(--color-text) !important; padding: 12px 16px !important; border: none !important; font-family: var(--font-primary) !important; font-size: 0.9em !important; border-radius: 4px !important; margin: 2px 4px !important;">Selecciona...</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="guest-names">Nombres de los adultos:</label>
+                                        <div class="guest-names-table-container">
+                                            <div id="table-placeholder" class="table-placeholder">
+                                                <p>Selecciona el número de pases para generar la tabla de nombres</p>
+                                            </div>
+                                            <table id="guest-names-table" class="guest-names-table" style="display: none;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Nombre Completo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="guest-names-tbody">
+                                                    <!-- Las filas se generarán dinámicamente -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group" id="kids-section" style="display: none;">
+                                        <label for="kids-count">Número de pases de niños a utilizar:</label>
+                                        <select id="kids-count" name="kids-count" style="appearance: none !important; -webkit-appearance: none !important; -moz-appearance: none !important; background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%23ffffff stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3e%3cpolyline points=%226,9 12,15 18,9%22%3e%3c/polyline%3e%3c/svg%3e') !important; background-repeat: no-repeat !important; background-position: right 12px center !important; background-size: 16px !important; padding-right: 40px !important; cursor: pointer !important; position: relative !important; background-color: rgba(255, 255, 255, 0.1) !important; backdrop-filter: blur(10px) !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important; border-radius: 8px !important; color: var(--color-text) !important; font-family: var(--font-primary) !important; font-size: 0.9em !important; transition: all 0.3s ease !important;">
+                                            <option value="0" style="background-color: rgba(30, 30, 30, 0.95) !important; color: var(--color-text) !important; padding: 12px 16px !important; border: none !important; font-family: var(--font-primary) !important; font-size: 0.9em !important; border-radius: 4px !important; margin: 2px 4px !important;">0 niños</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group" id="kids-names-section" style="display: none;">
+                                        <label for="kids-names">Nombres de los niños:</label>
+                                        <div class="guest-names-table-container">
+                                            <div id="kids-table-placeholder" class="table-placeholder">
+                                                <p>Selecciona el número de niños para generar la tabla de nombres</p>
+                                            </div>
+                                            <table id="kids-names-table" class="guest-names-table" style="display: none;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Nombre Completo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="kids-names-tbody">
+                                                    <!-- Las filas se generarán dinámicamente -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="guest-phone">Teléfono de contacto:</label>
+                                        <input type="tel" id="guest-phone" name="guest-phone" placeholder="+52 XXX XXX XXXX" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="guest-email">Email (opcional):</label>
+                                        <input type="email" id="guest-email" name="guest-email" placeholder="tu@email.com">
+                                    </div>
+                                    
+                                    <div class="form-actions">
+                                        <button type="button" class="rsvp-form-cancel" id="rsvp-form-cancel">Cancelar</button>
+                                        <button type="submit" class="rsvp-form-submit">Confirmar Asistencia</button>
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div id="qr-code-display" style="display: none;">
+                        <p class="qr-code-intro">¡Gracias por confirmar! Presenta este código QR al ingresar:</p>
+                        <div id="qrcode-target"></div>
+                        <p class="qr-guest-name" id="qr-guest-name-display"></p>
+                    </div>
+                    <div class="rsvp-options">
+                        <div class="rsvp-option">
+                            <div class="rsvp-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                            <div class="rsvp-method-title">Por Whatsapp</div>
+                            <a href="https://wa.me/+5219631372589?text=Hola%2C%20confirmo%20mi%20asistencia%20a%20la%20boda%20de%20Alejandra%20y%20Gerardo.%20Asistiremos%3A%20%5BN%C3%BAmero%20de%20personas%5D" class="rsvp-button whatsapp" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> Chatear</a>
+                        </div>
+                        <div class="rsvp-option">
+                            <div class="rsvp-icon"><i class="fas fa-phone"></i></div>
+                            <div class="rsvp-method-title">Por llamada</div>
+                            <a href="tel:+529631372589" class="rsvp-button call"><i class="fas fa-phone"></i> Llamar</a>
+                        </div>
+                    </div>
+                    
+                </section>
+            </div>
+        </div>
+
+        <!-- Sección Final -->
+        <div class="section-background-wrapper final-bg">
+            <div class="container-content">
+                <section class="final-section">
+                    <h2 class="final-title">¡Te esperamos!</h2>
+                    <div class="couple-names">
+                        <div class="bride-name">Alejandra</div>
+                        <div class="ampersand-final">&</div>
+                        <div class="groom-name">Gerardo</div>
+                        <a href="#" class="add-calendar-btn" id="addToCalendar">Añadir a calendario</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="section-background-wrapper footer-bg footer-wrapper">
+            <div class="container-content">
+                <footer class="footer-section">
+                    <p class="copyright-text">© Alejandra & Gerardo 2025</p>
+                </footer>
+            </div>
+        </div>
+
+    </div> <!-- Fin div.container -->
+
+    <!-- Scripts JS -->
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <script src="src/js/countdown.js" defer></script>
+    <script src="src/js/gallery.js" defer></script>
+    <script src="src/js/player.js" defer></script>
+    <script src="src/js/invitation.js" defer></script>
+    <script src="src/js/rsvp-form.js" defer></script>
+    <script src="src/js/custom-dropdown.js" defer></script>
+    <script src="src/js/dropdown-enhancer.js" defer></script>
+    <script src="src/js/force-dropdown-styles.js" defer></script>
+    <script src="src/js/dropdown-final.js" defer></script>
+    <script src="src/js/animations.js" defer></script>
+    <script src="src/js/dresscode-scroll.js" defer></script>
+    <script src="src/js/pwa.js" defer></script>
+</body>
+</html> 
