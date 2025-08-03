@@ -1,5 +1,12 @@
 /* Sección Detalles Invitado */
-.details-section { text-align: center; }
+.details-section { 
+    text-align: center; 
+    min-height: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .guest-info { margin-bottom: var(--spacing-medium); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--spacing-small); }
 .guest-greeting { order: -2; flex-basis: 100%; margin-bottom: var(--spacing-small); font-family: var(--font-primary); font-size: 0.9em; letter-spacing: 4px; color: #c5c5c5; text-transform: uppercase; }
 .guest-name { 
