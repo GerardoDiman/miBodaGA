@@ -43,3 +43,63 @@
 
 /* Eliminación de efectos hover en títulos */
 @import url('./sections/_no-hover.css');
+
+/* ========================================
+   ANIMACIÓN DE TYPING PARA NOMBRES DE PADRES
+   ======================================== */
+
+.typing-animation {
+    position: relative;
+    overflow: hidden;
+    display: block; /* Cambiar a block para permitir saltos de línea */
+    white-space: normal; /* Permitir saltos de línea */
+    width: 100%; /* Usar todo el ancho disponible */
+    max-width: 600px; /* Ancho máximo más amplio */
+    margin: 0 auto; /* Centrar el elemento */
+    opacity: 0;
+}
+
+.typing-animation.animate {
+    opacity: 1;
+    animation: reveal-text 2.5s steps(30, end);
+}
+
+/* Animación más rápida para subtítulos */
+.parent-subtitle.typing-animation.animate {
+    animation: reveal-text 1.5s steps(20, end);
+}
+
+.typing-animation::after {
+    content: '';
+    position: absolute;
+    right: -2px;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background: #d1b7a0;
+    animation: blink 0.75s infinite;
+    opacity: 0;
+}
+
+.typing-animation.animate::after {
+    opacity: 1;
+}
+
+@keyframes reveal-text {
+    from { 
+        clip-path: inset(0 100% 0 0); /* Ocultar todo el texto */
+    }
+    to { 
+        clip-path: inset(0 0% 0 0); /* Mostrar todo el texto */
+    }
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+.typing-animation.completed {
+    opacity: 1;
+    clip-path: inset(0 0% 0 0); /* Asegurar que esté completamente visible */
+}

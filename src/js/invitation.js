@@ -1,7 +1,10 @@
 // invitation.js
 
+console.log('🎯 invitation.js cargado');
+
 (function() {
     document.addEventListener('DOMContentLoaded', () => {
+        console.log('🎯 DOMContentLoaded ejecutado');
 
         // --- Referencias a Elementos HTML ---
         const guestNameElement = document.getElementById('guest-name-placeholder');
@@ -283,6 +286,78 @@
         // --- Lógica Principal al Cargar la Página ---
         const urlParams = new URLSearchParams(window.location.search);
         const guestId = urlParams.get('id') || urlParams.get('invitado'); // Soporte para ambos parámetros
+
+        // ========================================
+        // ANIMACIÓN DE TYPING PARA NOMBRES DE PADRES
+        // ========================================
+        
+        function initTypingAnimation() {
+            console.log('Inicializando animación de typing...');
+            
+            // Observer para detectar cuando la sección de padres es visible
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    console.log('IntersectionObserver detectado:', entry.isIntersecting, entry.target);
+                    
+                    if (entry.isIntersecting) {
+                        const parentSection = entry.target;
+                        const typingElements = parentSection.querySelectorAll('.typing-animation');
+                        
+                        console.log('Elementos de typing encontrados:', typingElements.length);
+                        
+                        if (typingElements.length === 0) {
+                            console.log('No se encontraron elementos con clase typing-animation');
+                            return;
+                        }
+                        
+                        // Verificar que la sección no esté completamente visible al inicio
+                        const rect = parentSection.getBoundingClientRect();
+                        const isFullyVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+                        
+                        console.log('Sección completamente visible al inicio:', isFullyVisible);
+                        
+                        // Si está completamente visible al inicio, esperar un poco antes de animar
+                        const initialDelay = isFullyVisible ? 2000 : 500;
+                        
+                        console.log('Iniciando animación con delay:', initialDelay);
+                        
+                        // Animar cada elemento con un delay
+                        typingElements.forEach((element, index) => {
+                            setTimeout(() => {
+                                console.log('Añadiendo clase animate al elemento:', index);
+                                element.classList.add('animate');
+                                
+                                // Remover la clase animate después de la animación y añadir completed
+                                setTimeout(() => {
+                                    console.log('Removiendo animate y añadiendo completed al elemento:', index);
+                                    element.classList.remove('animate');
+                                    element.classList.add('completed');
+                                }, element.classList.contains('parent-subtitle') ? 1500 : 2500); // Duración más corta para subtítulos
+                            }, initialDelay + (index * 1200)); // 1.2 segundos entre cada elemento
+                        });
+                        
+                        // Desconectar el observer después de activar la animación
+                        observer.unobserve(parentSection);
+                        console.log('Observer desconectado');
+                    }
+                });
+            }, {
+                threshold: 0.1, // Activar cuando 10% de la sección sea visible (más sensible)
+                rootMargin: '0px 0px -100px 0px' // Más margen para activar antes
+            });
+            
+            // Observar la sección de padres
+            const parentsSection = document.querySelector('.parents-section');
+            if (parentsSection) {
+                console.log('Sección de padres encontrada, iniciando observación');
+                observer.observe(parentsSection);
+            } else {
+                console.log('No se encontró la sección de padres');
+            }
+        }
+        
+        // Inicializar la animación de typing (siempre se ejecuta)
+        initTypingAnimation();
 
         if (!guestId) {
             console.warn("No se especificó ID de invitado.");
