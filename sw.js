@@ -1,5 +1,5 @@
 // Service Worker para miBodaGA
-const VERSION = '2.0.1754289629969';
+const VERSION = '2.0.1754290061955';
 const CACHE_NAME = `miboda-v${VERSION}-${Date.now()}`;
 const STATIC_CACHE = `miboda-static-v${VERSION}-${Date.now()}`;
 const DYNAMIC_CACHE = `miboda-dynamic-v${VERSION}`;
@@ -44,28 +44,22 @@ const DYNAMIC_ASSETS = [
 
 // Instalación del Service Worker
 self.addEventListener('install', event => {
-    console.log('Service Worker: Instalando...');
-    
     event.waitUntil(
         caches.open(STATIC_CACHE)
             .then(cache => {
-                console.log('Service Worker: Cacheando recursos estáticos');
                 return cache.addAll(STATIC_ASSETS);
             })
             .then(() => {
-                console.log('Service Worker: Instalación completada');
                 return self.skipWaiting();
             })
             .catch(error => {
-                console.error('Service Worker: Error en instalación:', error);
+                // Error silencioso
             })
     );
 });
 
 // Activación del Service Worker
 self.addEventListener('activate', event => {
-    console.log('Service Worker: Activando...');
-    
     event.waitUntil(
         caches.keys()
             .then(cacheNames => {
@@ -73,14 +67,12 @@ self.addEventListener('activate', event => {
                     cacheNames.map(cacheName => {
                         // Eliminar caches antiguos
                         if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
-                            console.log('Service Worker: Eliminando cache antiguo:', cacheName);
                             return caches.delete(cacheName);
                         }
                     })
                 );
             })
             .then(() => {
-                console.log('Service Worker: Activación completada');
                 return self.clients.claim();
             })
     );
@@ -100,11 +92,9 @@ self.addEventListener('fetch', event => {
                         if (networkResponse && networkResponse.status === 200) {
                             // Actualizar cache con la nueva versión
                             cache.put(request, networkResponse.clone());
-                            console.log('Service Worker: Actualizando cache para:', request.url);
                         }
                         return networkResponse;
                     }).catch(() => {
-                        console.log('Service Worker: Red no disponible para:', request.url);
                         return cachedResponse;
                     });
                     
@@ -121,7 +111,6 @@ self.addEventListener('fetch', event => {
             caches.match(request)
                 .then(response => {
                     if (response) {
-                        console.log('Service Worker: Sirviendo desde cache:', request.url);
                         return response;
                     }
                     
@@ -265,7 +254,6 @@ self.addEventListener('sync', event => {
 function doBackgroundSync() {
     // Aquí puedes implementar sincronización de datos
     // Por ejemplo, enviar confirmaciones de RSVP pendientes
-    console.log('Service Worker: Sincronización en segundo plano');
     return Promise.resolve();
 }
 

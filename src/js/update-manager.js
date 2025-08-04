@@ -10,25 +10,24 @@ class UpdateManager {
     async init() {
         if ('serviceWorker' in navigator) {
             try {
-                // Registrar service worker
+                // Registrar service worker silenciosamente
                 this.swRegistration = await navigator.serviceWorker.register('/sw.js');
-                console.log('✅ Service Worker registrado');
-
+                
                 // Escuchar mensajes del service worker
                 navigator.serviceWorker.addEventListener('message', (event) => {
                     this.handleServiceWorkerMessage(event);
                 });
 
-                // Verificar actualizaciones cada 30 segundos
+                // Verificar actualizaciones cada 30 segundos (silenciosamente)
                 setInterval(() => {
                     this.checkForUpdates();
                 }, 30000);
 
-                // Verificar inmediatamente
+                // Verificar inmediatamente (silenciosamente)
                 this.checkForUpdates();
 
             } catch (error) {
-                console.error('❌ Error registrando Service Worker:', error);
+                // Error silencioso - no mostrar nada
             }
         }
     }
@@ -56,16 +55,13 @@ class UpdateManager {
                     this.applyUpdateSilently();
                 }
             } catch (error) {
-                console.error('Error verificando actualizaciones:', error);
+                // Error silencioso - no mostrar nada
             }
         }
     }
 
     showUpdateNotification() {
         // Actualización completamente silenciosa - sin notificaciones visibles
-        // Solo log en consola para desarrolladores
-        console.log('🔄 Nueva versión disponible - actualizando automáticamente...');
-        
         // Aplicar actualización automáticamente sin mostrar notificación
         this.applyUpdateSilently();
     }
@@ -89,8 +85,7 @@ class UpdateManager {
                 window.location.reload(true);
             }
         } catch (error) {
-            console.error('Error aplicando actualización silenciosa:', error);
-            // Fallback: recarga normal
+            // Error silencioso - recarga normal sin mostrar nada
             window.location.reload();
         }
     }
