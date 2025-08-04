@@ -18,97 +18,113 @@
         volumeSlider.value = initialVolume * 100; // Sincronizar slider (0 a 100)
         updateVolumeIcon(initialVolume); // Actualizar icono inicial
 
-        // --- ESTRATEGIA ROBUSTA DE AUTOPLAY ---
+        // --- ESTRATEGIA AGRESIVA DE AUTOPLAY ---
         let autoplayAttempted = false;
-        let userInteracted = false;
 
-        // Función para intentar reproducir audio
-        function attemptAutoplay() {
-            if (autoplayAttempted || userInteracted) return;
-            
+        // Función para intentar reproducir audio con múltiples estrategias
+        function attemptAggressiveAutoplay() {
+            if (autoplayAttempted) return;
             autoplayAttempted = true;
             
-            // Estrategia 1: Intentar autoplay directo (con muted para mayor compatibilidad)
-            audio.muted = true; // Comenzar muted para mayor compatibilidad
+            console.log("Iniciando estrategia agresiva de autoplay...");
+            
+            // Estrategia 1: Intentar con muted inmediatamente
+            audio.muted = true;
+            audio.volume = 0;
+            
+            // Intentar reproducir inmediatamente
             audio.play()
                 .then(() => {
-                    audio.muted = false; // Desmutear después de iniciar
-                    audio.volume = initialVolume;
-                    playPauseIcon.classList.remove('fa-play');
-                    playPauseIcon.classList.add('fa-pause');
-                    console.log("Autoplay de audio iniciado correctamente.");
+                    console.log("Autoplay exitoso con muted");
+                    // Desmutear después de un breve delay
+                    setTimeout(() => {
+                        audio.muted = false;
+                        audio.volume = initialVolume;
+                        playPauseIcon.classList.remove('fa-play');
+                        playPauseIcon.classList.add('fa-pause');
+                        console.log("Audio desmutado y reproduciendo");
+                    }, 100);
                 })
                 .catch(error => {
-                    console.warn("Autoplay directo bloqueado:", error);
+                    console.warn("Estrategia 1 falló:", error);
                     
-                    // Estrategia 2: Intentar con volumen 0 y luego subir
-                    audio.volume = 0;
+                    // Estrategia 2: Intentar con preload y user interaction simulation
+                    audio.load();
                     audio.muted = true;
-                    audio.play()
-                        .then(() => {
-                            audio.muted = false;
-                            audio.volume = initialVolume;
-                            playPauseIcon.classList.remove('fa-play');
-                            playPauseIcon.classList.add('fa-pause');
-                            console.log("Autoplay iniciado con estrategia de volumen 0.");
-                        })
-                        .catch(error2 => {
-                            console.warn("Autoplay con volumen 0 también bloqueado:", error2);
-                            
-                            // Estrategia 3: Intentar después de un pequeño delay
-                            setTimeout(() => {
-                                audio.muted = true;
+                    audio.volume = 0;
+                    
+                    // Simular interacción del usuario
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => {
+                                console.log("Autoplay exitoso con preload");
+                                setTimeout(() => {
+                                    audio.muted = false;
+                                    audio.volume = initialVolume;
+                                    playPauseIcon.classList.remove('fa-play');
+                                    playPauseIcon.classList.add('fa-pause');
+                                }, 200);
+                            })
+                            .catch(error2 => {
+                                console.warn("Estrategia 2 falló:", error2);
+                                
+                                // Estrategia 3: Intentar con diferentes configuraciones
+                                audio.muted = false;
                                 audio.volume = initialVolume;
                                 audio.play()
                                     .then(() => {
-                                        audio.muted = false;
+                                        console.log("Autoplay exitoso con volumen normal");
                                         playPauseIcon.classList.remove('fa-play');
                                         playPauseIcon.classList.add('fa-pause');
-                                        console.log("Autoplay iniciado con delay.");
                                     })
                                     .catch(error3 => {
-                                        console.warn("Todas las estrategias de autoplay fallaron:", error3);
-                                        playPauseIcon.classList.remove('fa-pause');
-                                        playPauseIcon.classList.add('fa-play');
+                                        console.warn("Estrategia 3 falló:", error3);
+                                        
+                                        // Estrategia 4: Intentar después de un delay
+                                        setTimeout(() => {
+                                            audio.muted = true;
+                                            audio.volume = 0;
+                                            audio.play()
+                                                .then(() => {
+                                                    console.log("Autoplay exitoso con delay");
+                                                    setTimeout(() => {
+                                                        audio.muted = false;
+                                                        audio.volume = initialVolume;
+                                                        playPauseIcon.classList.remove('fa-play');
+                                                        playPauseIcon.classList.add('fa-pause');
+                                                    }, 300);
+                                                })
+                                                .catch(error4 => {
+                                                    console.warn("Todas las estrategias de autoplay fallaron:", error4);
+                                                    playPauseIcon.classList.remove('fa-pause');
+                                                    playPauseIcon.classList.add('fa-play');
+                                                });
+                                        }, 500);
                                     });
-                            }, 1000);
-                        });
+                            });
+                    }
                 });
         }
 
-        // Intentar autoplay inmediatamente
-        attemptAutoplay();
+        // Intentar autoplay inmediatamente al cargar
+        attemptAggressiveAutoplay();
 
-        // Detectar interacción del usuario para intentar autoplay nuevamente
-        const userInteractionEvents = ['click', 'touchstart', 'keydown', 'scroll'];
-        userInteractionEvents.forEach(eventType => {
-            document.addEventListener(eventType, () => {
-                if (!userInteracted && !audio.paused) {
-                    userInteracted = true;
-                    return; // Ya está reproduciéndose
-                }
-                
-                if (!userInteracted) {
-                    userInteracted = true;
-                    // Intentar reproducir después de la primera interacción del usuario
-                    setTimeout(() => {
-                        if (audio.paused) {
-                            audio.muted = false; // Asegurar que no esté muted
-                            audio.volume = initialVolume;
-                            audio.play()
-                                .then(() => {
-                                    playPauseIcon.classList.remove('fa-play');
-                                    playPauseIcon.classList.add('fa-pause');
-                                    console.log("Audio iniciado después de interacción del usuario.");
-                                })
-                                .catch(error => {
-                                    console.warn("No se pudo iniciar audio después de interacción:", error);
-                                });
-                        }
-                    }, 100);
-                }
-            }, { once: true }); // Solo ejecutar una vez por tipo de evento
-        });
+        // Intentar nuevamente después de un breve delay
+        setTimeout(() => {
+            if (audio.paused) {
+                console.log("Reintentando autoplay después de delay...");
+                attemptAggressiveAutoplay();
+            }
+        }, 1000);
+
+        // Intentar una tercera vez después de más tiempo
+        setTimeout(() => {
+            if (audio.paused) {
+                console.log("Último intento de autoplay...");
+                attemptAggressiveAutoplay();
+            }
+        }, 3000);
 
         // --- Event Listener Botón Play/Pause ---
         toggleButton.addEventListener('click', () => {
@@ -119,7 +135,7 @@
                     .then(() => {
                         playPauseIcon.classList.remove('fa-play');
                         playPauseIcon.classList.add('fa-pause');
-                        console.log("Audio reproduciendo");
+                        console.log("Audio reproduciendo manualmente");
                     })
                     .catch(error => {
                         console.error("Error al intentar reproducir audio:", error);
