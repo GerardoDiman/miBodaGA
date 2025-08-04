@@ -1,7 +1,8 @@
 // Service Worker para miBodaGA
-const CACHE_NAME = 'miboda-v1.0.0';
-const STATIC_CACHE = 'miboda-static-v1.0.0';
-const DYNAMIC_CACHE = 'miboda-dynamic-v1.0.0';
+const VERSION = '2.0.1754289170934';
+const CACHE_NAME = `miboda-v${VERSION}-${Date.now()}`;
+const STATIC_CACHE = `miboda-static-v${VERSION}-${Date.now()}`;
+const DYNAMIC_CACHE = `miboda-dynamic-v${VERSION}`;
 
 // Recursos críticos para cachear inmediatamente
 const STATIC_ASSETS = [
@@ -90,8 +91,32 @@ self.addEventListener('fetch', event => {
     const { request } = event;
     const url = new URL(request.url);
     
-    // Estrategia: Cache First para recursos estáticos
-    if (isStaticAsset(request.url)) {
+    // Estrategia: Stale While Revalidate para recursos principales (HTML, CSS, JS)
+    if (isMainResource(request.url)) {
+        event.respondWith(
+            caches.open(STATIC_CACHE).then(cache => {
+                return cache.match(request).then(cachedResponse => {
+                    const fetchPromise = fetch(request).then(networkResponse => {
+                        if (networkResponse && networkResponse.status === 200) {
+                            // Actualizar cache con la nueva versión
+                            cache.put(request, networkResponse.clone());
+                            console.log('Service Worker: Actualizando cache para:', request.url);
+                        }
+                        return networkResponse;
+                    }).catch(() => {
+                        console.log('Service Worker: Red no disponible para:', request.url);
+                        return cachedResponse;
+                    });
+                    
+                    // Devolver cache inmediatamente si existe, pero seguir actualizando en segundo plano
+                    return cachedResponse || fetchPromise;
+                });
+            })
+        );
+    }
+    
+    // Estrategia: Cache First para recursos pesados (imágenes, audio)
+    else if (isStaticAsset(request.url)) {
         event.respondWith(
             caches.match(request)
                 .then(response => {
@@ -167,13 +192,29 @@ self.addEventListener('fetch', event => {
     }
 });
 
-// Función para determinar si es un recurso estático
-function isStaticAsset(url) {
-    return STATIC_ASSETS.some(asset => url.includes(asset)) ||
+// Función para determinar si es un recurso principal (HTML, CSS, JS que debe actualizarse)
+function isMainResource(url) {
+    return url.endsWith('.html') ||
            url.includes('/src/css/') ||
            url.includes('/src/js/') ||
+           url.includes('/data/invitados.json') ||
+           url === '/' ||
+           url.endsWith('/');
+}
+
+// Función para determinar si es un recurso estático (imágenes, audio)
+function isStaticAsset(url) {
+    return url.includes('/assets/images/') ||
            url.includes('/assets/audio/') ||
-           url.includes('/manifest.json');
+           url.includes('/qrcodes/') ||
+           url.includes('/manifest.json') ||
+           url.includes('.png') ||
+           url.includes('.jpg') ||
+           url.includes('.jpeg') ||
+           url.includes('.gif') ||
+           url.includes('.svg') ||
+           url.includes('.mp3') ||
+           url.includes('.wav');
 }
 
 // Función para determinar si es un recurso dinámico
@@ -194,7 +235,24 @@ self.addEventListener('message', event => {
     if (event.data && event.data.type === 'GET_VERSION') {
         event.ports[0].postMessage({ version: CACHE_NAME });
     }
+    
+    if (event.data && event.data.type === 'CHECK_UPDATE') {
+        checkForUpdates();
+    }
 });
+
+// Función para verificar actualizaciones
+function checkForUpdates() {
+    // Notificar a todos los clientes sobre actualizaciones disponibles
+    self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+            client.postMessage({
+                type: 'UPDATE_AVAILABLE',
+                message: 'Nueva versión disponible'
+            });
+        });
+    });
+}
 
 // Manejo de sincronización en segundo plano
 self.addEventListener('sync', event => {
