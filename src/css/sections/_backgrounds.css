@@ -3,6 +3,8 @@
    =========================================================================== */
 .title-bg::before {background-image: url('/assets/images/imgi14.png'); }
 .details-bg::before { background-image: url('/assets/images/imgi3.png'); }
+.parents-bg::before { background-image: url('/assets/images/planta.jpg'); }
+.sponsors-bg::before { background-image: linear-gradient(to bottom, rgb(98, 117, 85) 0%, rgb(98, 117, 85) 100%); }
 .gallery-bg::before { background-image: url( '/assets/images/imgi6.png'); }
 .itinerary-bg::before { background-image: url('/assets/images/fondo3.jpeg'); }
 .locations-bg::before { background-image: url('/assets/images/hojas.jpeg'); }
@@ -10,8 +12,6 @@
 .lodging-bg::before { background-image: url('/assets/images/hoja_floral2.jpg'); }
 .rsvp-bg::before { background-image: linear-gradient(to bottom, rgb(65, 89, 67) 0%, rgb(65, 89, 67) 100%); }
 .footer-bg::before { background-image: linear-gradient(to bottom, rgb(68, 70, 52)0%, rgb(68, 70, 52) 100%); }
-.parents-bg::before { background-image: url('/assets/images/fondo4.jpeg'); }
-.sponsors-bg::before { background-image: linear-gradient(to bottom, rgb(166, 176, 142) 0%, rgb(166, 176, 142) 100%); }
 .dresscode-bg::before { background-image: linear-gradient(to bottom, rgb(98, 117, 85) 0%, rgb(98, 117, 85) 100%); }
 .final-bg::before { background-image: url('/assets/images/lavanda.jpg'); }
 .gallery-bg { padding-bottom: var(--spacing-large); }
