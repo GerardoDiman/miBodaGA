@@ -1,5 +1,5 @@
 // Service Worker para miBodaGA
-const VERSION = '2.0.1754294380131';
+const VERSION = '2.0.1754370293418';
 const CACHE_NAME = `miboda-v${VERSION}-${Date.now()}`;
 const STATIC_CACHE = `miboda-static-v${VERSION}-${Date.now()}`;
 const DYNAMIC_CACHE = `miboda-dynamic-v${VERSION}`;
