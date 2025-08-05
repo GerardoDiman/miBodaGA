@@ -28,7 +28,7 @@
 .time-unit { text-align: center; min-width: 60px; position: relative; }
 .time-unit .number { display: block; font-family: var(--font-secondary); font-size: 3em; font-weight: 400; color: var(--color-text); line-height: 1; }
 .time-unit .label { display: block; font-family: var(--font-primary); font-size: 0.65em; letter-spacing: 1px; color: #a0a0a0; text-transform: uppercase; margin-top: 4px; }
-.message-box { background-color: rgb(98, 117, 85); padding: 25px 30px; margin: var(--spacing-large) auto 0 auto; max-width: 450px; border-radius: 4px; position: relative; z-index: 1; }
+.message-box { background-color: rgb(65, 89, 67); padding: 25px 30px; margin: var(--spacing-large) auto 0 auto; max-width: 450px; border-radius: 4px; position: relative; z-index: 1; }
 .message-box p { font-family: var(--font-secondary); font-style: italic; font-size: 1em; line-height: 1.6; color: #dcdcdc; text-align: center; }
 
 /* Media queries para responsive */
