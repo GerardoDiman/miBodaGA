@@ -30,18 +30,274 @@ function initializeCalendarFeature() {
         // Crear el evento
         const event = {
             title: 'Boda de Alejandra y Gerardo',
-            description: '¡Celebra con nosotros nuestra boda!',
-            start: '2025-10-11T17:00:00',
+            description: '¡Celebra con nosotros nuestra boda! Ven a compartir este momento especial con nosotros. 👰🤍🤵',
+            start: '2025-10-11T16:00:00',
             end: '2025-10-12T02:00:00',
-            location: 'Parroquia de San Sebastian, Comitán de Domínguez, Chiapas'
+            location: 'Templo de San José, Comitán de Domínguez, Chiapas'
         };
 
-        // Crear el link para Google Calendar
-        const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${event.start.replace(/[-:]/g, '')}/${event.end.replace(/[-:]/g, '')}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+        // Detectar el sistema operativo para mostrar opciones apropiadas
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isIOS = /iphone|ipad|ipod/.test(userAgent);
+        const isAndroid = /android/.test(userAgent);
+        const isMobile = /mobile|android|iphone|ipad/.test(userAgent);
 
-        // Abrir en una nueva ventana
-        window.open(googleCalendarUrl, '_blank');
+        if (isMobile) {
+            // En móviles, mostrar opciones nativas
+            showMobileCalendarOptions(event);
+        } else {
+            // En desktop, abrir Google Calendar directamente
+            openGoogleCalendar(event);
+        }
     });
+}
+
+/**
+ * Mostrar opciones de calendario para móviles
+ */
+function showMobileCalendarOptions(event) {
+    // Crear modal con opciones
+    const modal = document.createElement('div');
+    modal.className = 'calendar-modal';
+    modal.innerHTML = `
+        <div class="calendar-modal-content">
+            <h3>Añadir al calendario</h3>
+            <p>Selecciona tu aplicación de calendario preferida:</p>
+            <div class="calendar-options">
+                <button class="calendar-option" data-type="google">
+                    <i class="fab fa-google"></i> Google Calendar
+                </button>
+                <button class="calendar-option" data-type="outlook">
+                    <i class="fas fa-envelope"></i> Outlook
+                </button>
+                <button class="calendar-option" data-type="apple">
+                    <i class="fab fa-apple"></i> Apple Calendar
+                </button>
+                <button class="calendar-option" data-type="ics">
+                    <i class="fas fa-download"></i> Descargar (.ics)
+                </button>
+            </div>
+            <button class="calendar-modal-close">Cancelar</button>
+        </div>
+    `;
+
+    // Estilos del modal
+    const style = document.createElement('style');
+    style.textContent = `
+        .calendar-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        .calendar-modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        .calendar-modal-content h3 {
+            margin-bottom: 15px;
+            color: #2c3b0e;
+        }
+        .calendar-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .calendar-option {
+            padding: 12px;
+            border: 1px solid #2c3b0e;
+            background: transparent;
+            color: #2c3b0e;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        .calendar-option:hover {
+            background: #2c3b0e;
+            color: white;
+        }
+        .calendar-modal-close {
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            background: transparent;
+            color: #666;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Event listeners
+    modal.querySelector('.calendar-modal-close').addEventListener('click', () => {
+        document.body.removeChild(modal);
+    });
+
+    modal.querySelectorAll('.calendar-option').forEach(button => {
+        button.addEventListener('click', () => {
+            const type = button.dataset.type;
+            handleCalendarSelection(type, event);
+            document.body.removeChild(modal);
+        });
+    });
+
+    // Cerrar al hacer clic fuera del modal
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            document.body.removeChild(modal);
+        }
+    });
+
+    document.body.appendChild(modal);
+}
+
+/**
+ * Manejar la selección de calendario
+ */
+function handleCalendarSelection(type, event) {
+    switch (type) {
+        case 'google':
+            openGoogleCalendar(event);
+            break;
+        case 'outlook':
+            openOutlookCalendar(event);
+            break;
+        case 'apple':
+            openAppleCalendar(event);
+            break;
+        case 'ics':
+            downloadICSFile(event);
+            break;
+    }
+}
+
+/**
+ * Abrir Google Calendar
+ */
+function openGoogleCalendar(event) {
+    // Formatear fechas correctamente para Google Calendar
+    // Google Calendar requiere formato: YYYYMMDDTHHMMSSZ
+    const startDate = new Date(event.start);
+    const endDate = new Date(event.end);
+    
+    // Convertir a formato requerido por Google Calendar
+    const formatDateForGoogle = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        
+        return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
+    };
+    
+    const startDateFormatted = formatDateForGoogle(startDate);
+    const endDateFormatted = formatDateForGoogle(endDate);
+    
+    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${startDateFormatted}/${endDateFormatted}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+    
+    window.open(googleCalendarUrl, '_blank');
+}
+
+/**
+ * Abrir Outlook Calendar
+ */
+function openOutlookCalendar(event) {
+    // Formatear fechas correctamente para Outlook
+    const startDate = new Date(event.start);
+    const endDate = new Date(event.end);
+    
+    // Outlook requiere formato ISO 8601
+    const startDateISO = startDate.toISOString();
+    const endDateISO = endDate.toISOString();
+    
+    const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(event.title)}&startdt=${startDateISO}&enddt=${endDateISO}&body=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+    
+    window.open(outlookUrl, '_blank');
+}
+
+/**
+ * Abrir Apple Calendar (solo en iOS)
+ */
+function openAppleCalendar(event) {
+    // Crear archivo .ics temporal
+    const icsContent = generateICSContent(event);
+    const blob = new Blob([icsContent], { type: 'text/calendar' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'boda-alejandra-gerardo.ics';
+    link.click();
+    
+    URL.revokeObjectURL(url);
+}
+
+/**
+ * Descargar archivo .ics
+ */
+function downloadICSFile(event) {
+    const icsContent = generateICSContent(event);
+    const blob = new Blob([icsContent], { type: 'text/calendar' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'boda-alejandra-gerardo.ics';
+    link.click();
+    
+    URL.revokeObjectURL(url);
+}
+
+/**
+ * Generar contenido del archivo .ics
+ */
+function generateICSContent(event) {
+    const startDate = new Date(event.start).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const endDate = new Date(event.end).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const now = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    
+    // Calcular el recordatorio: un día antes a las 8:00 PM
+    const reminderDate = new Date(event.start);
+    reminderDate.setDate(reminderDate.getDate() - 1);
+    reminderDate.setHours(20, 0, 0, 0); // 8:00 PM
+    const reminderDateISO = reminderDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    
+    return `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Boda Alejandra y Gerardo//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:boda-alejandra-gerardo-${Date.now()}@miBodaGA.com
+DTSTAMP:${now}
+DTSTART:${startDate}
+DTEND:${endDate}
+SUMMARY:${event.title}
+DESCRIPTION:${event.description}
+LOCATION:${event.location}
+STATUS:CONFIRMED
+SEQUENCE:0
+BEGIN:VALARM
+TRIGGER:-P1DT4H
+ACTION:DISPLAY
+DESCRIPTION:Recordatorio: Boda de Alejandra y Gerardo mañana
+END:VALARM
+END:VEVENT
+END:VCALENDAR`;
 }
 
 /**

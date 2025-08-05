@@ -5,7 +5,7 @@
 .details-bg::before { background-image: url('/assets/images/imgi3.png'); }
 .gallery-bg::before { background-image: url( '/assets/images/imgi6.png'); }
 .parents-bg::before { background-image: url('/assets/images/planta.jpg'); }
-.sponsors-bg::before { background-image: linear-gradient(to bottom, rgb(98, 117, 85) 0%, rgb(98, 117, 85) 100%); }
+.sponsors-bg::before { background-image: url('/assets/images/fondo14.jpeg'); }
 .itinerary-bg::before { background-image: url('/assets/images/fondo4.jpeg'); }
 .locations-bg::before { background-image: url('/assets/images/hojas.jpeg'); }
 .gifts-bg::before { background-image: url('/assets/images/fondo8.jpeg'); }
