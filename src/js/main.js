@@ -45,6 +45,10 @@ function initializeCalendarFeature() {
         if (isMobile) {
             // En móviles, mostrar opciones nativas
             showMobileCalendarOptions(event);
+            // Mostrar notificación informativa
+            setTimeout(() => {
+                showNotification('En móviles, recomendamos descargar el archivo .ics', 'info');
+            }, 500);
         } else {
             // En desktop, abrir Google Calendar directamente
             openGoogleCalendar(event);
@@ -167,15 +171,38 @@ function showMobileCalendarOptions(event) {
  * Manejar la selección de calendario
  */
 function handleCalendarSelection(type, event) {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isMobile = /mobile|android|iphone|ipad/.test(userAgent);
+    
     switch (type) {
         case 'google':
-            openGoogleCalendar(event);
+            if (isMobile) {
+                // En móviles, intentar abrir Google Calendar pero con fallback
+                try {
+                    openGoogleCalendar(event);
+                    // Si no funciona después de 2 segundos, descargar .ics
+                    setTimeout(() => {
+                        showNotification('Si no se abrió Google Calendar, descargando archivo .ics...', 'info');
+                        downloadICSFile(event);
+                    }, 2000);
+                } catch (error) {
+                    downloadICSFile(event);
+                }
+            } else {
+                openGoogleCalendar(event);
+            }
             break;
         case 'outlook':
-            openOutlookCalendar(event);
+            if (isMobile) {
+                // En móviles, descargar .ics directamente para Outlook
+                showNotification('Descargando archivo .ics para Outlook...', 'info');
+                downloadICSFile(event);
+            } else {
+                openOutlookCalendar(event);
+            }
             break;
         case 'apple':
-            openAppleCalendar(event);
+            downloadICSFile(event);
             break;
         case 'ics':
             downloadICSFile(event);
@@ -209,7 +236,21 @@ function openGoogleCalendar(event) {
     
     const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${startDateFormatted}/${endDateFormatted}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
     
-    window.open(googleCalendarUrl, '_blank');
+    // Intentar abrir la URL y manejar errores
+    try {
+        const newWindow = window.open(googleCalendarUrl, '_blank');
+        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+            // Si no se pudo abrir, mostrar mensaje y descargar archivo .ics como fallback
+            showNotification('No se pudo abrir Google Calendar. Descargando archivo .ics...', 'info');
+            setTimeout(() => {
+                downloadICSFile(event);
+            }, 1000);
+        }
+    } catch (error) {
+        // Fallback: descargar archivo .ics
+        showNotification('Descargando archivo .ics como alternativa...', 'info');
+        downloadICSFile(event);
+    }
 }
 
 /**
