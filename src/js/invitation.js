@@ -28,6 +28,44 @@ console.log('🎯 invitation.js cargado');
         let confirmacionVerificada = false;
         let yaConfirmoSheet = false;
 
+        // --- Función para generar mensaje de WhatsApp dinámico ---
+        function generateWhatsAppMessage(invitado) {
+            if (!invitado || !invitado.nombre || !invitado.id) {
+                return "Hola Luis, tengo dudas respecto a la confirmación.\n¿Me puedes apoyar?";
+            }
+            
+            const nombre = invitado.nombre.trim();
+            const id = invitado.id.trim();
+            
+            // Validar que nombre e ID no estén vacíos
+            if (!nombre || !id) {
+                return "Hola Luis, tengo dudas respecto a la confirmación.\n¿Me puedes apoyar?";
+            }
+            
+            return `Hola Luis, soy ${nombre} (ID: ${id}).\nTengo dudas respecto a la confirmación.\n¿Me puedes apoyar?`;
+        }
+
+        // --- Función para actualizar enlaces de WhatsApp ---
+        function updateWhatsAppLinks(invitado) {
+            const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
+            const message = generateWhatsAppMessage(invitado);
+            const encodedMessage = encodeURIComponent(message);
+            
+            console.log('Actualizando enlaces de WhatsApp:', {
+                invitado: invitado ? { nombre: invitado.nombre, id: invitado.id } : null,
+                message: message,
+                linksFound: whatsappLinks.length
+            });
+            
+            whatsappLinks.forEach((link, index) => {
+                const currentHref = link.getAttribute('href');
+                const baseUrl = currentHref.split('?')[0];
+                const newHref = `${baseUrl}?text=${encodedMessage}`;
+                link.setAttribute('href', newHref);
+                console.log(`Enlace ${index + 1} actualizado:`, newHref);
+            });
+        }
+
         // --- Funciones Helper ---
 
         /** Muestra un mensaje de error genérico o específico */
@@ -362,6 +400,8 @@ console.log('🎯 invitation.js cargado');
         if (!guestId) {
             console.warn("No se especificó ID de invitado.");
             mostrarErrorCarga("Invitación Genérica");
+            // Actualizar enlaces de WhatsApp con mensaje genérico
+            updateWhatsAppLinks(null);
             return;
         }
         console.log(`ID invitado: ${guestId}`);
@@ -383,6 +423,9 @@ console.log('🎯 invitation.js cargado');
                     guestNameElement.textContent = invitadoActual.nombre;
                     console.log("Nombre asignado:", guestNameElement.textContent);
                 }
+
+                // Actualizar enlaces de WhatsApp con información del invitado
+                updateWhatsAppLinks(invitadoActual);
                 guestPassesElement.textContent = invitadoActual.pases;
                 guestKidsElement.textContent = invitadoActual.ninos;
                 guestDetailsContainer.style.display = 'flex';
