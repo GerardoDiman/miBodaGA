@@ -1,9 +1,9 @@
 /* ===========================================================================
    3. Definiciones de Fondos Específicos por Sección
    =========================================================================== */
-.title-bg::before {background-image: url('/assets/images/imgi11.png'); }
-.details-bg::before { background-image: url('/assets/images/imgi17.png'); }
-.gallery-bg::before { background-image: url( '/assets/images/imgi6.png'); }
+.title-bg::before {background-image: url('/assets/images/img11.jpg'); }
+.details-bg::before { background-image: url('/assets/images/img17.jpg'); }
+.gallery-bg::before { background-image: url( '/assets/images/img6.jpg'); }
 .parents-bg::before { background-image: url('/assets/images/planta.jpg'); }
 .sponsors-bg::before { background-image: url('/assets/images/fondo14.jpeg'); }
 .itinerary-bg::before { background-image: url('/assets/images/fondo4.jpeg'); }
