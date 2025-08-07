@@ -288,7 +288,7 @@
 
 /* Logo de la boda */
 .wedding-logo img {
-    animation: gentleRotate 20s linear infinite;
+    /* Animación de rotación removida */
 }
 
 /* Flechas de galería */
