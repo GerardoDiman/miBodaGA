@@ -5,6 +5,7 @@
 /* Base y utilidades */
 @import url('./sections/_base.css');
 @import url('./sections/_utilities.css');
+@import url('./sections/_color-consistency.css');
 
 /* Accesibilidad y audio */
 @import url('./sections/_accessibility.css');
@@ -76,7 +77,7 @@
     top: 0;
     height: 100%;
     width: 2px;
-    background: #d1b7a0;
+    background: var(--color-accent);
     animation: blink 0.75s infinite;
     opacity: 0;
 }

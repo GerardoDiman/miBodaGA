@@ -2,15 +2,15 @@
 .gifts-section { padding: 0; }
 .registry-links { display: flex; justify-content: space-around; align-items: stretch; gap: var(--spacing-medium); margin: 0 0 var(--spacing-section) 0; padding: 0 var(--spacing-small); position: relative; flex-wrap: wrap; }
 .registry-block { flex: 1 1 250px; max-width: 45%; text-align: center; padding: var(--spacing-medium) var(--spacing-small); position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; min-width: 200px; }
-.registry-store { font-family: var(--font-secondary); font-size: 1.7em; color: #e5e5e5; margin-bottom: var(--spacing-small); }
+.registry-store { font-family: var(--font-secondary); font-size: 1.7em; color: var(--color-text-light); margin-bottom: var(--spacing-small); }
 .registry-code { font-family: var(--font-primary); font-size: 0.8em; color: var(--color-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: var(--spacing-medium); }
 .registry-button { display: inline-flex; align-items: center; gap: var(--spacing-small); background-color: rgba(30, 30, 30, 0.9); color: var(--color-text); font-family: var(--font-primary); font-size: 0.8em; font-weight: 500; text-decoration: none; padding: var(--spacing-small) var(--spacing-medium); border-radius: 20px; text-transform: uppercase; transition: background-color 0.3s ease, color 0.3s ease; margin-top: auto; }
 .registry-button:hover { background-color: var(--color-accent); color: var(--color-background); }
 .registry-button i { font-size: 0.9em; margin-right: var(--spacing-small); }
 .bank-details { max-width: 500px; margin: var(--spacing-large) auto 0 auto; padding: 0 var(--spacing-small); position: relative; z-index: 1;}
 .bank-detail-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.bank-icon { font-size: 1.2em; color: #c5c5c5; width: 20px; text-align: center; flex-shrink: 0; }
-bank-label { font-family: var(--font-primary); font-size: 0.9em; color: #b5b5b5; flex-shrink: 0; }
+.bank-icon { font-size: 1.2em; color: var(--color-text-muted); width: 20px; text-align: center; flex-shrink: 0; }
+bank-label { font-family: var(--font-primary); font-size: 0.9em; color: var(--color-gray-medium); flex-shrink: 0; }
 .bank-value { font-family: var(--font-primary); font-size: 0.9em; font-weight: 500; color: var(--color-text); word-break: break-all; text-align: center; margin-top: 4px; }
 .registry-block .registry-icon img {
     max-width: 60px;

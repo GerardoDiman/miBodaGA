@@ -206,12 +206,12 @@
 
 /* Estados de error */
 .custom-dropdown.error .custom-dropdown-button {
-    border-color: #ff6b6b;
+    border-color: var(--color-error);
     box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
 }
 
 /* Estados de éxito */
 .custom-dropdown.success .custom-dropdown-button {
-    border-color: #51cf66;
+    border-color: var(--color-success);
     box-shadow: 0 4px 15px rgba(81, 207, 102, 0.2);
 }

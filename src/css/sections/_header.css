@@ -2,8 +2,8 @@
 .title-section, .main-content { max-width: 900px; width: 90%; margin: 0 auto; position: relative; z-index: 1; padding: 0 var(--spacing-small); box-sizing: border-box; }
 .title-section { margin-bottom: var(--spacing-medium); text-align: center; }
 .main-content { margin-bottom: var(--spacing-large); height: 800px; display: flex; justify-content: center; align-items: center;}
-.intro-text { font-size: 0.9em; letter-spacing: 4px; color: #c5c5c5; margin-bottom: var(--spacing-small); position: relative; display: flex; align-items: center; justify-content: center; gap: var(--spacing-small); white-space: nowrap; max-width: 100%; font-weight: normal; font-family: var(--font-primary); }
-.intro-text::before, .intro-text::after { content: ''; height: 1px; background-color: #c5c5c5; opacity: 0.5; flex-grow: 1; min-width: 50px; }
+.intro-text { font-size: 0.9em; letter-spacing: 4px; color: var(--color-text-muted); margin-bottom: var(--spacing-small); position: relative; display: flex; align-items: center; justify-content: center; gap: var(--spacing-small); white-space: nowrap; max-width: 100%; font-weight: normal; font-family: var(--font-primary); }
+.intro-text::before, .intro-text::after { content: ''; height: 1px; background-color: var(--color-text-muted); opacity: 0.5; flex-grow: 1; min-width: 50px; }
 h1 { font-family: var(--font-secondary); font-size: 4em; font-weight: 400; line-height: 1.1; color: var(--color-text); }
 .ampersand { font-family: var(--font-secondary); font-style: italic; font-weight: 400; color: var(--color-accent); font-size: 0.9em; margin: 0 var(--spacing-small); }
 .photo-container { 

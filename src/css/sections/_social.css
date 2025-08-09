@@ -5,8 +5,8 @@
 .social-filter-buttons { display: flex; justify-content: center; gap: var(--spacing-medium); margin: var(--spacing-large) 0; flex-wrap: wrap; padding: 0 var(--spacing-medium); }
 .social-button { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 28px; border-radius: 30px; font-family: var(--font-primary); font-size: 1rem; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; transition: all 0.4s ease; min-width: 180px; backdrop-filter: blur(5px); }
 .social-button i { font-size: 1.3rem; }
-.social-button.facebook { background-color: rgba(209, 183, 160, 0.9); color: #1a1a1a; box-shadow: 0 4px 15px rgba(209, 183, 160, 0.2); border: 1px solid rgba(255, 255, 255, 0.2); }
-.social-button.instagram { background: rgba(209, 183, 160, 0.8); color: #1a1a1a; box-shadow: 0 4px 15px rgba(209, 183, 160, 0.2); border: 1px solid rgba(255, 255, 255, 0.2); }
+.social-button.facebook { background-color: rgba(209, 183, 160, 0.9); color: var(--color-background-light); box-shadow: 0 4px 15px rgba(209, 183, 160, 0.2); border: 1px solid rgba(255, 255, 255, 0.2); }
+.social-button.instagram { background: rgba(209, 183, 160, 0.8); color: var(--color-background-light); box-shadow: 0 4px 15px rgba(209, 183, 160, 0.2); border: 1px solid rgba(255, 255, 255, 0.2); }
 .social-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(209, 183, 160, 0.3); background-color: rgba(209, 183, 160, 1); }
 .wedding-hashtag { 
     font-family: var(--font-secondary); 
@@ -26,7 +26,7 @@
     padding: 0 var(--spacing-small);
     box-sizing: border-box;
 }
-.social-button.facebook:hover, .social-button.instagram:hover { background-color: rgba(209, 183, 160, 1); color: #1a1a1a; }
+.social-button.facebook:hover, .social-button.instagram:hover { background-color: rgba(209, 183, 160, 1); color: var(--color-background-light); }
 
 /* Media queries para hashtag responsive */
 @media (max-width: 768px) {
