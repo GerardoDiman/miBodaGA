@@ -793,19 +793,20 @@
             transform: translate(-50%, -50%);
             width: 200px;
             height: 200px;
-            border: 2px solid #00ff00;
-            border-radius: 12px;
-            animation: scanning-pulse 2s infinite;
+            border: 3px solid rgba(76, 175, 80, 0.5);
+            border-radius: 50%;
+            animation: scanningPulse 2s ease-in-out infinite;
+            pointer-events: none;
         }
         
-        @keyframes scanning-pulse {
+        @keyframes scanningPulse {
             0%, 100% { 
-                border-color: #00ff00;
-                box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
             }
             50% { 
-                border-color: #00ff88;
-                box-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
             }
         }
         
@@ -1088,6 +1089,43 @@
                 opacity: 1;
             }
         }
+
+        .camera-error {
+            text-align: center;
+            padding: 40px 20px;
+            color: #f44336;
+        }
+        
+        .camera-error i {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .camera-error p {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .retry-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .retry-btn:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
     </style>
     <script src="https://kit.fontawesome.com/171beeb065.js" crossorigin="anonymous"></script>
     <!-- Librería jsQR para detección de códigos QR -->
@@ -1176,7 +1214,7 @@
             </button>
         </div>
         
-        <p id="status-message" class="status-message loading-message">Verificando invitado...</p>
+        <p id="status-message" class="status-message">Ingresa el ID del invitado o escanea el código QR</p>
     </div>
 
     <!-- Configuración del sistema -->

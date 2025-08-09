@@ -18,18 +18,28 @@ window.VALIDAR_CONFIG = {
         ENABLED: true,
         AUTO_START: false,
         TIMEOUT: 30000, // 30 segundos
-        QUALITY: 'medium', // low, medium, high
+        QUALITY: 'high', // low, medium, high
         FACING_MODE: 'environment', // environment (trasera) o user (frontal)
         ZOOM_LEVEL: 1.0,
-        FLASH_SUPPORT: true
+        FLASH_SUPPORT: true,
+        // Configuración de resolución para mejor calidad
+        RESOLUTION: {
+            width: { ideal: 1920, min: 1280 },
+            height: { ideal: 1080, min: 720 }
+        },
+        // Configuración de frame rate para mejor detección
+        FRAME_RATE: { ideal: 30, min: 15 }
     },
     
     // Configuración de QR
     QR: {
-        SCAN_TIMEOUT: 10000, // 10 segundos por escaneo
-        RETRY_ATTEMPTS: 3,
-        MIN_SIZE: 100, // tamaño mínimo en píxeles
-        SUPPORTED_FORMATS: ['QR_CODE', 'CODE_128', 'CODE_39']
+        SCAN_TIMEOUT: 5000, // 5 segundos por escaneo (más rápido)
+        RETRY_ATTEMPTS: 5, // Más intentos
+        MIN_SIZE: 80, // Tamaño mínimo más pequeño para mejor detección
+        SUPPORTED_FORMATS: ['QR_CODE', 'CODE_128', 'CODE_39'],
+        // Configuración de escaneo en tiempo real
+        SCAN_INTERVAL: 100, // Escanear cada 100ms
+        CONFIDENCE_THRESHOLD: 0.7 // Umbral de confianza para detección
     },
     
     // Configuración de validación
@@ -133,6 +143,46 @@ window.VALIDAR_CONFIG = {
             canvas.id = 'qr-canvas';
             canvas.style.display = 'none';
             return canvas;
+        },
+        
+        // Iniciar cámara con configuración optimizada
+        startCamera: async function(videoElement, onSuccess, onError) {
+            try {
+                const constraints = {
+                    video: {
+                        facingMode: VALIDAR_CONFIG.CAMERA.FACING_MODE,
+                        width: VALIDAR_CONFIG.CAMERA.RESOLUTION.width,
+                        height: VALIDAR_CONFIG.CAMERA.RESOLUTION.height,
+                        frameRate: VALIDAR_CONFIG.CAMERA.FRAME_RATE,
+                        // Configuraciones adicionales para mejor calidad
+                        aspectRatio: { ideal: 16/9 },
+                        resizeMode: 'none'
+                    }
+                };
+                
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                videoElement.srcObject = stream;
+                
+                // Esperar a que el video esté listo
+                await new Promise((resolve) => {
+                    videoElement.onloadedmetadata = resolve;
+                });
+                
+                // Configurar el video para mejor rendimiento
+                videoElement.play();
+                videoElement.style.transform = 'scaleX(-1)'; // Espejo para cámara frontal
+                
+                console.log('📹 Cámara iniciada con resolución:', 
+                    videoElement.videoWidth + 'x' + videoElement.videoHeight);
+                
+                if (onSuccess) onSuccess(stream);
+                return stream;
+                
+            } catch (error) {
+                console.error('❌ Error al iniciar cámara:', error);
+                if (onError) onError(error);
+                throw error;
+            }
         }
     },
     
