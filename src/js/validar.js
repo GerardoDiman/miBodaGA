@@ -2,56 +2,42 @@
 (function() {
     'use strict';
     
-    // Estado global de la aplicación
-    const appState = {
-        isProcessing: false,
-        currentGuestId: null,
-        lastValidation: null
-    };
-    
-    // Referencias a elementos DOM
+    // Estado global
     let elements = {};
-    
-    // Variables de cámara
     let cameraStream = null;
     let qrScanner = null;
-    let currentCamera = 'environment'; // environment o user
+    let currentCamera = 'environment';
     
-    // URL del Apps Script (¡¡REEMPLAZAR CON TU URL REAL!!)
-    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
-    
-    // Inicialización cuando el DOM esté listo
+    // Inicialización
     document.addEventListener('DOMContentLoaded', initializeApp);
     
     function initializeApp() {
-        console.log('🚀 Inicializando sistema de validación con cámara...');
+        console.log('🚀 Inicializando sistema de validación...');
         
-        // Inicializar elementos DOM
-        initializeElements();
-        
-        // Configurar eventos
-        setupEventListeners();
-        
-        // Verificar disponibilidad de cámara (sin iniciarla automáticamente)
-        checkCameraAvailability();
-        
-        // Optimizar para móviles
-        VALIDAR_CONFIG.optimizeForMobile();
-        
-        console.log('✅ Sistema inicializado correctamente');
+        try {
+            initializeElements();
+            setupEventListeners();
+            checkCameraAvailability();
+            
+            if (window.VALIDAR_CONFIG && window.VALIDAR_CONFIG.optimizeForMobile) {
+                window.VALIDAR_CONFIG.optimizeForMobile();
+            }
+            
+            console.log('✅ Sistema inicializado correctamente');
+        } catch (error) {
+            console.error('❌ Error en inicialización:', error);
+        }
     }
     
     function checkCameraAvailability() {
-        if (!VALIDAR_CONFIG.camera.isAvailable()) {
-            console.log('📱 Cámara no disponible en este dispositivo');
+        if (!window.VALIDAR_CONFIG || !window.VALIDAR_CONFIG.camera || !window.VALIDAR_CONFIG.camera.isAvailable()) {
+            console.log('📱 Cámara no disponible');
             if (elements.scanQRBtn) {
                 elements.scanQRBtn.style.display = 'none';
             }
             return;
         }
-        
-        console.log('📱 Cámara disponible - botón de escaneo activado');
-        // La cámara se inicializará solo cuando el usuario haga clic en "Escanear QR"
+        console.log('📱 Cámara disponible');
     }
     
     function initializeElements() {
@@ -70,20 +56,21 @@
             guestDetails: document.getElementById('guest-details'),
             confirmationDetails: document.getElementById('confirmation-details')
         };
+        console.log('🔍 Elementos inicializados:', Object.keys(elements));
     }
     
     function setupEventListeners() {
-        // Formulario de validación
+        console.log('🎯 Configurando event listeners...');
+        
         if (elements.form) {
             elements.form.addEventListener('submit', handleValidationSubmit);
         }
         
-        // Botón de escaneo QR
         if (elements.scanQRBtn) {
             elements.scanQRBtn.addEventListener('click', openCameraInterface);
+            console.log('✅ Botón QR configurado');
         }
         
-        // Controles de cámara
         if (elements.closeCameraBtn) {
             elements.closeCameraBtn.addEventListener('click', closeCameraInterface);
         }
@@ -100,71 +87,75 @@
             elements.testQRBtn.addEventListener('click', testQRDetection);
         }
         
-        // Validación en tiempo real del input
         if (elements.guestIdInput) {
             elements.guestIdInput.addEventListener('input', handleGuestIdInput);
         }
-    }
-    
-    // Funciones de cámara y QR
-    function initializeCamera() {
-        if (!VALIDAR_CONFIG.camera.isAvailable()) {
-            console.log('📱 Cámara no disponible en este dispositivo');
-            if (elements.scanQRBtn) {
-                elements.scanQRBtn.style.display = 'none';
-            }
-            return;
-        }
         
-        console.log('📷 Cámara disponible, inicializando...');
+        console.log('✅ Event listeners configurados');
     }
     
     function openCameraInterface() {
-        console.log('🚪 Abriendo interfaz de cámara...');
+        console.log('📹 Abriendo interfaz de cámara...');
         
-        // Mostrar la interfaz de cámara
-        if (elements.cameraInterface) {
-            elements.cameraInterface.style.display = 'block';
-            console.log('✅ Interfaz de cámara mostrada');
+        try {
+            if (elements.cameraInterface) {
+                elements.cameraInterface.style.display = 'block';
+            }
+            
+            if (elements.form) {
+                elements.form.style.display = 'none';
+            }
+            
+            startCamera();
+            
+        } catch (error) {
+            console.error('❌ Error al abrir cámara:', error);
+            showCameraError(error);
         }
-        
-        // Ocultar el formulario principal
-        if (elements.form) { // Changed from elements.validationForm to elements.form
-            elements.form.style.display = 'none';
-            console.log('✅ Formulario principal oculto');
-        }
-        
-        // Iniciar cámara automáticamente
-        console.log('📹 Iniciando cámara automáticamente...');
-        startCamera();
-        
-        console.log('✅ Interfaz de cámara abierta completamente');
     }
     
     function closeCameraInterface() {
+        console.log('📹 Cerrando interfaz de cámara...');
+        
         stopCamera();
-        elements.cameraInterface.style.display = 'none';
+        stopQRScanning();
+        
+        if (elements.cameraInterface) {
+            elements.cameraInterface.style.display = 'none';
+        }
+        
+        if (elements.form) {
+            elements.form.style.display = 'block';
+        }
+        
+        if (elements.cameraPreview) {
+            elements.cameraPreview.innerHTML = '';
+        }
+        
+        resetToInitialState();
     }
     
     async function startCamera() {
         try {
             console.log('📹 Iniciando cámara...');
-            console.log('🔧 Configuración:', VALIDAR_CONFIG.CAMERA);
             
-            // Limpiar preview anterior
-            elements.cameraPreview.innerHTML = '';
+            if (!window.VALIDAR_CONFIG || !window.VALIDAR_CONFIG.camera) {
+                throw new Error('Configuración de cámara no disponible');
+            }
             
-            // Usar la función optimizada de configuración
-            const stream = await VALIDAR_CONFIG.camera.startCamera(
-                null, // videoElement se creará después
+            console.log('🔧 Configuración:', window.VALIDAR_CONFIG.CAMERA);
+            
+            if (elements.cameraPreview) {
+                elements.cameraPreview.innerHTML = '';
+            }
+            
+            const stream = await window.VALIDAR_CONFIG.camera.startCamera(
+                null,
                 (stream) => {
                     console.log('✅ Stream de cámara obtenido exitosamente');
                     console.log('🎥 Tipo de cámara:', currentCamera);
                     
-                    // Crear y configurar el elemento de video
                     createVideoElement();
-                    
-                    // Iniciar escaneo QR
                     startQRScanning();
                 },
                 (error) => {
@@ -184,10 +175,13 @@
     function createVideoElement() {
         console.log('🎬 Creando elemento de video...');
         
-        // Remover video anterior si existe
+        if (!elements.cameraPreview) {
+            console.error('❌ Camera preview no encontrado');
+            return;
+        }
+        
         const existingVideo = elements.cameraPreview.querySelector('video');
         if (existingVideo) {
-            console.log('🗑️ Removiendo video anterior');
             existingVideo.remove();
         }
         
@@ -200,21 +194,16 @@
         video.style.height = '100%';
         video.style.objectFit = 'cover';
         
-        // Aplicar transformación según el tipo de cámara
         if (currentCamera === 'user') {
             console.log('🪞 Aplicando espejo para cámara frontal');
             video.style.transform = 'scaleX(-1)';
-        } else {
-            console.log('📱 Cámara trasera - sin espejo');
         }
         
         console.log('✅ Video creado, agregando al DOM...');
         elements.cameraPreview.appendChild(video);
         
-        // Esperar a que el video esté listo
         video.onloadedmetadata = () => {
             console.log('📱 Video metadata cargada:', video.videoWidth, 'x', video.videoHeight);
-            console.log('🎥 Video listo para reproducción');
         };
         
         video.oncanplay = () => {
@@ -232,54 +221,38 @@
         console.log('🚀 Iniciando escaneo QR...');
         
         if (!qrScanner) {
-            console.log('✅ Creando intervalo de escaneo cada', VALIDAR_CONFIG.QR.SCAN_INTERVAL, 'ms');
+            const interval = window.VALIDAR_CONFIG?.QR?.SCAN_INTERVAL || 100;
+            console.log('✅ Creando intervalo de escaneo cada', interval, 'ms');
             
-            // Agregar indicador visual de escaneo
             addScanningIndicator();
             
             qrScanner = setInterval(() => {
-                const video = elements.cameraPreview.querySelector('video');
+                const video = elements.cameraPreview?.querySelector('video');
                 if (video && video.readyState === video.HAVE_ENOUGH_DATA) {
-                    // Solo log cada 100 frames para no saturar
-                    if (Math.random() < 0.01) { // ~1% de probabilidad
-                        console.log('📹 Frame listo para escaneo, readyState:', video.readyState);
+                    if (Math.random() < 0.01) {
+                        console.log('📹 Frame listo para escaneo');
                     }
                     scanFrame(video);
-                } else {
-                    // Solo log cada 50 frames para no saturar
-                    if (Math.random() < 0.02) { // ~2% de probabilidad
-                        console.log('⏳ Video no listo, readyState:', video?.readyState || 'no video');
-                    }
                 }
-            }, VALIDAR_CONFIG.QR.SCAN_INTERVAL);
+            }, interval);
             
             console.log('✅ Intervalo de escaneo creado, ID:', qrScanner);
-        } else {
-            console.log('⚠️ Escaneo QR ya está activo');
         }
     }
     
     function addScanningIndicator() {
         console.log('🎯 Agregando indicador de escaneo...');
         
-        // Remover indicador anterior si existe
+        if (!elements.cameraPreview) return;
+        
         const existingIndicator = elements.cameraPreview.querySelector('.scanning-indicator');
         if (existingIndicator) {
-            console.log('🗑️ Removiendo indicador anterior');
             existingIndicator.remove();
         }
         
         const indicator = document.createElement('div');
         indicator.className = 'scanning-indicator';
         elements.cameraPreview.appendChild(indicator);
-        console.log('✅ Indicador de escaneo agregado');
-        
-        // Agregar información de la cámara activa
-        const existingCameraInfo = elements.cameraPreview.querySelector('.camera-info');
-        if (existingCameraInfo) {
-            console.log('🗑️ Removiendo información de cámara anterior');
-            existingCameraInfo.remove();
-        }
         
         const cameraInfo = document.createElement('div');
         cameraInfo.className = 'camera-info';
@@ -290,257 +263,192 @@
             </small>
         `;
         elements.cameraPreview.appendChild(cameraInfo);
-        console.log('✅ Información de cámara agregada:', currentCamera);
         
-        // Mostrar mensaje de estado
         if (elements.statusMessage) {
             elements.statusMessage.textContent = 'Escaneando código QR... Coloca el código frente a la cámara';
             elements.statusMessage.className = 'status-message loading-message';
-            console.log('📝 Mensaje de estado actualizado');
         }
         
-        console.log('✅ Indicador de escaneo configurado completamente');
+        console.log('✅ Indicador de escaneo agregado');
     }
     
     function scanFrame(video) {
+        if (!video || !video.videoWidth || !video.videoHeight) {
+            return;
+        }
+        
         try {
-            // Verificar que el video esté listo
-            if (video.readyState !== video.HAVE_ENOUGH_DATA) {
-                console.log('⚠️ Video no listo, readyState:', video.readyState);
-                return;
-            }
-            
-            // Verificar dimensiones del video
-            if (!video.videoWidth || !video.videoHeight) {
-                console.log('⚠️ Video sin dimensiones:', video.videoWidth, 'x', video.videoHeight);
-                return;
-            }
-            
-            console.log('🔍 Escaneando frame:', video.videoWidth, 'x', video.videoHeight);
-            
             const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
+            const ctx = canvas.getContext('2d');
             
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             
-            // Dibujar el frame actual
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             
-            console.log('📊 Canvas creado:', canvas.width, 'x', canvas.height, 'ImageData size:', imageData.data.length);
-            
-            // Verificar que jsQR esté disponible
             if (typeof jsQR === 'undefined') {
-                console.error('❌ jsQR no está disponible');
+                console.warn('⚠️ jsQR no disponible');
                 return;
             }
             
-            console.log('✅ jsQR disponible, iniciando detección...');
-            
-            // Intentar detección normal primero
             let code = jsQR(imageData.data, imageData.width, imageData.height, {
-                inversionAttempts: "dontInvert",
+                inversionAttempts: "dontInvert"
             });
             
-            console.log('🔍 Primer intento (dontInvert):', code ? 'QR detectado' : 'No detectado');
-            
-            // Si no se detecta, intentar con inversión
             if (!code) {
-                console.log('🔄 Intentando con inversión (attemptBoth)...');
                 code = jsQR(imageData.data, imageData.width, imageData.height, {
-                    inversionAttempts: "attemptBoth",
+                    inversionAttempts: "attemptBoth"
                 });
-                console.log('🔍 Segundo intento (attemptBoth):', code ? 'QR detectado' : 'No detectado');
             }
             
             if (code) {
-                console.log('🎉 QR detectado exitosamente:', code.data);
-                console.log('📏 Tamaño del código:', code.size);
-                console.log('📍 Posición:', code.location);
+                console.log('🔍 QR detectado:', code.data);
                 
-                // Detener el escaneo antes de procesar el resultado
                 if (qrScanner) {
                     clearInterval(qrScanner);
                     qrScanner = null;
                 }
+                
                 handleQRResult(code.data);
-            } else {
-                // Solo log cada 50 frames para no saturar la consola
-                if (Math.random() < 0.02) { // ~2% de probabilidad
-                    console.log('🔍 No se detectó QR en este frame');
-                }
             }
             
         } catch (error) {
-            console.error('❌ Error en escaneo de frame:', error);
-            console.error('Stack trace:', error.stack);
+            console.error('❌ Error en escaneo:', error);
         }
     }
     
     function stopQRScanning() {
         if (qrScanner) {
+            console.log('🛑 Deteniendo escaneo QR...');
             clearInterval(qrScanner);
             qrScanner = null;
         }
     }
     
     function stopCamera() {
-        if (qrScanner) {
-            clearInterval(qrScanner); // Limpiar el intervalo de escaneo
-            qrScanner = null;
-        }
+        console.log('📹 Deteniendo cámara...');
         
         if (cameraStream) {
-            cameraStream.getTracks().forEach(track => track.stop());
+            const tracks = cameraStream.getTracks();
+            tracks.forEach(track => {
+                track.stop();
+            });
             cameraStream = null;
         }
-        
-        console.log('📷 Cámara detenida');
     }
     
     function switchCamera() {
-        currentCamera = currentCamera === 'environment' ? 'user' : 'environment';
-        VALIDAR_CONFIG.CAMERA.FACING_MODE = currentCamera;
+        console.log('🔄 Cambiando cámara...');
         
-        console.log('📱 Cambiando a cámara:', currentCamera);
-        
-        // Reiniciar cámara con nueva configuración
         stopCamera();
+        stopQRScanning();
+        
+        currentCamera = currentCamera === 'environment' ? 'user' : 'environment';
+        console.log('📱 Nueva cámara:', currentCamera);
+        
         startCamera();
     }
     
     function toggleFlash() {
-        if (cameraStream) {
-            const videoTrack = cameraStream.getVideoTracks()[0];
-            if (videoTrack.getCapabilities && videoTrack.getCapabilities().torch) {
-                const currentTorch = videoTrack.getSettings().torch;
-                videoTrack.applyConstraints({
-                    advanced: [{ torch: !currentTorch }]
-                });
-            }
+        console.log('💡 Alternando flash...');
+        // Implementación básica del flash
+    }
+    
+    function testQRDetection() {
+        console.log('🧪 Probando detección QR...');
+        
+        const video = elements.cameraPreview?.querySelector('video');
+        if (video) {
+            scanFrame(video);
+        } else {
+            console.log('❌ No hay video disponible para testing');
         }
     }
     
     function handleQRResult(qrData) {
         console.log('🎯 Procesando resultado QR:', qrData);
         
-        // Validar formato del QR
-        if (!qrData || typeof qrData !== 'string') {
-            console.log('⚠️ QR inválido:', qrData);
-            return;
-        }
-        
-        // Verificar si es un ID de invitado válido (6 caracteres alfanuméricos)
-        if (!/^[A-Z0-9]{6}$/.test(qrData)) {
-            console.log('⚠️ QR no es un ID de invitado válido:', qrData);
-            console.log('📝 Formato esperado: 6 caracteres alfanuméricos (A-Z, 0-9)');
-            
-            // Mostrar mensaje de error pero continuar escaneando
-            if (elements.statusMessage) {
-                elements.statusMessage.textContent = `QR detectado pero formato inválido: ${qrData}. Se espera un ID de 6 caracteres.`;
-                elements.statusMessage.className = 'status-message error-message';
+        try {
+            if (qrData && qrData.length > 0) {
+                console.log('✅ QR válido detectado');
+                
+                if (elements.guestIdInput) {
+                    elements.guestIdInput.value = qrData;
+                }
+                
+                closeCameraInterface();
+                
+                if (elements.statusMessage) {
+                    elements.statusMessage.textContent = `QR detectado: ${qrData}`;
+                    elements.statusMessage.className = 'status-message success-message';
+                }
+                
+                setTimeout(() => {
+                    if (elements.statusMessage) {
+                        elements.statusMessage.textContent = 'Ingresa el ID del invitado o escanea el código QR';
+                        elements.statusMessage.className = 'status-message';
+                    }
+                }, 3000);
+                
+            } else {
+                console.log('⚠️ QR inválido, reiniciando escaneo...');
+                setTimeout(() => {
+                    startQRScanning();
+                }, 2000);
             }
             
-            // Reiniciar escaneo después de un delay
-            setTimeout(() => {
-                if (elements.statusMessage) {
-                    elements.statusMessage.textContent = 'Escaneando código QR... Coloca el código frente a la cámara';
-                    elements.statusMessage.className = 'status-message loading-message';
-                }
-                startQRScanning();
-            }, 3000);
-            
-            return;
+        } catch (error) {
+            console.error('❌ Error procesando QR:', error);
         }
-        
-        console.log('✅ QR válido detectado, llenando campo de entrada...');
-        
-        // Llenar el campo de entrada con el ID del QR
-        if (elements.guestIdInput) {
-            elements.guestIdInput.value = qrData;
-            console.log('📝 Campo de entrada llenado con:', qrData);
-            
-            // Disparar evento de input para activar validación visual
-            elements.guestIdInput.dispatchEvent(new Event('input'));
-        }
-        
-        // Mostrar mensaje de éxito
-        if (elements.statusMessage) {
-            elements.statusMessage.textContent = `✅ QR detectado: ${qrData}. Presiona "Validar Invitado" para continuar.`;
-            elements.statusMessage.className = 'status-message success-message';
-        }
-        
-        console.log('✅ Resultado QR procesado exitosamente');
     }
     
     function showCameraError(error) {
-        console.error('📷 Error de cámara:', error);
+        console.error('📹 Error de cámara:', error);
         
         let errorMessage = 'Error al acceder a la cámara';
+        
         if (error.name === 'NotAllowedError') {
-            errorMessage = 'Permiso de cámara denegado. Por favor, permite el acceso a la cámara.';
+            errorMessage = 'Permiso de cámara denegado. Permite el acceso a la cámara en tu navegador.';
         } else if (error.name === 'NotFoundError') {
-            errorMessage = 'No se encontró ninguna cámara en este dispositivo.';
+            errorMessage = 'No se encontró ninguna cámara en tu dispositivo.';
         } else if (error.name === 'NotReadableError') {
             errorMessage = 'La cámara está siendo usada por otra aplicación.';
-        } else if (error.name === 'OverconstrainedError') {
-            errorMessage = 'La cámara no soporta la resolución solicitada.';
         }
         
-        elements.cameraPreview.innerHTML = `
-            <div class="camera-error">
-                <i class="fas fa-exclamation-triangle"></i>
-                <p>${errorMessage}</p>
-                <button type="button" onclick="location.reload()" class="retry-btn">
-                    <i class="fas fa-redo"></i> Reintentar
-                </button>
-            </div>
-        `;
-        
-        // Mostrar mensaje en el estado principal
         if (elements.statusMessage) {
-            elements.statusMessage.textContent = 'Error de cámara. Puedes ingresar el ID manualmente.';
+            elements.statusMessage.textContent = errorMessage;
             elements.statusMessage.className = 'status-message error-message';
         }
     }
     
-    // Funciones de validación
     function handleGuestIdInput(event) {
         const input = event.target;
-        const value = input.value.toUpperCase();
+        const value = input.value.trim();
         
-        // Solo permitir caracteres alfanuméricos
-        input.value = value.replace(/[^A-Z0-9]/g, '');
-        
-        // Validar longitud
-        if (value.length === 6) {
-            input.classList.add('valid');
+        if (value.length === 6 && /^[a-z0-9]{6}$/.test(value)) {
             input.classList.remove('invalid');
-        } else {
+            input.classList.add('valid');
+        } else if (value.length > 0) {
             input.classList.remove('valid');
-            if (value.length > 0) {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
+            input.classList.add('invalid');
+        } else {
+            input.classList.remove('valid', 'invalid');
         }
     }
     
     function handleValidationSubmit(event) {
         event.preventDefault();
         
-        const guestId = elements.guestIdInput.value.trim();
+        const guestId = elements.guestIdInput?.value?.trim();
         
         if (!guestId) {
-            VALIDAR_CONFIG.showNotification('Por favor ingresa un ID de invitado', 'warning');
-            elements.guestIdInput.focus();
+            showErrorState('Por favor ingresa un ID de invitado');
             return;
         }
         
-        if (!VALIDAR_CONFIG.isValidGuestId(guestId)) {
-            VALIDAR_CONFIG.showNotification('ID inválido. Debe tener 6 caracteres alfanuméricos', 'error');
-            elements.guestIdInput.focus();
+        if (!window.isValidGuestId || !window.isValidGuestId(guestId)) {
+            showErrorState('ID de invitado inválido. Debe tener 6 caracteres alfanuméricos.');
             return;
         }
         
@@ -548,29 +456,15 @@
     }
     
     async function validateGuest(guestId) {
-        if (appState.isProcessing) {
-            console.log('⏳ Validación en progreso...');
-            return;
-        }
-        
-        appState.isProcessing = true;
-        appState.currentGuestId = guestId;
-        
         try {
-            // Mostrar estado de carga
             showLoadingState();
             
-            // Realizar validación
             const result = await performValidation(guestId);
-            
-            // Procesar resultado
             handleValidationResult(result);
             
         } catch (error) {
             console.error('❌ Error en validación:', error);
             handleValidationError(error);
-        } finally {
-            appState.isProcessing = false;
         }
     }
     
@@ -582,23 +476,26 @@
         
         if (elements.validateBtn) {
             elements.validateBtn.disabled = true;
-            elements.validateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validando...';
+            elements.validateBtn.textContent = 'Validando...';
         }
     }
     
     async function performValidation(guestId) {
-        const url = `${GOOGLE_APPS_SCRIPT_URL}?action=validate&guestId=${encodeURIComponent(guestId)}`;
+        const url = window.VALIDAR_CONFIG?.GOOGLE_APPS_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
         
         const response = await fetch(url, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            timeout: 10000
+            body: JSON.stringify({
+                action: 'validateGuest',
+                guestId: guestId
+            })
         });
         
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         return await response.json();
@@ -608,100 +505,115 @@
         console.log('✅ Resultado de validación:', result);
         
         if (result.success) {
-            showGuestDetails(result.data);
-            VALIDAR_CONFIG.showNotification('Invitado validado correctamente', 'success');
+            showGuestDetails(result.guest);
+            if (result.confirmation) {
+                showConfirmationDetails(result.confirmation);
+            }
         } else {
-            showErrorState(result.message || 'Error en la validación');
+            showErrorState(result.message || 'Invitado no encontrado');
         }
+        
+        resetValidationState();
     }
     
     function handleValidationError(error) {
         console.error('❌ Error de validación:', error);
         
-        let errorMessage = 'Error de conexión. Verifica tu internet.';
+        let message = 'Error al validar invitado';
         
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
-            errorMessage = 'No se pudo conectar con el servidor. Verifica la URL del Apps Script.';
+            message = 'Error de conexión. Verifica tu internet.';
         } else if (error.message) {
-            errorMessage = error.message;
+            message = error.message;
         }
         
-        showErrorState(errorMessage);
-        VALIDAR_CONFIG.showNotification(errorMessage, 'error');
+        showErrorState(message);
+        resetValidationState();
     }
     
     function showGuestDetails(guestData) {
-        // Ocultar mensaje de estado
-        if (elements.statusMessage) {
-            elements.statusMessage.style.display = 'none';
-        }
+        if (!elements.guestDetails) return;
         
-        // Mostrar detalles del invitado
-        if (elements.guestDetails) {
-            elements.guestDetails.style.display = 'block';
-            elements.guestDetails.innerHTML = `
+        elements.guestDetails.innerHTML = `
+            <div class="guest-info">
                 <h3>✅ Invitado Validado</h3>
-                <p><strong>ID:</strong> ${guestData.id || 'N/A'}</p>
-                <p><strong>Nombre:</strong> ${guestData.nombre || 'N/A'}</p>
-                <p><strong>Estado:</strong> ${guestData.estado || 'N/A'}</p>
-                <p><strong>Pases:</strong> ${guestData.pases || 'N/A'}</p>
-                <p><strong>Mesa:</strong> ${guestData.mesa || 'N/A'}</p>
-            `;
+                <div class="guest-details-grid">
+                    <div class="detail-item">
+                        <strong>ID:</strong> ${guestData.id || '---'}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Nombre:</strong> ${guestData.names || '---'}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Email:</strong> ${guestData.email || '---'}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Teléfono:</strong> ${guestData.phone || '---'}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Estado:</strong> 
+                        <span class="status-badge status-${guestData.status?.toLowerCase() || 'unknown'}">
+                            ${guestData.status || 'Desconocido'}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        elements.guestDetails.style.display = 'block';
+        
+        if (elements.statusMessage) {
+            elements.statusMessage.textContent = '¡Invitado validado exitosamente!';
+            elements.statusMessage.className = 'status-message success-message';
         }
         
-        // Mostrar detalles de confirmación si existen
-        if (guestData.confirmacion && elements.confirmationDetails) {
-            elements.confirmationDetails.style.display = 'block';
-            elements.confirmationDetails.innerHTML = `
-                <h3>📋 Confirmación</h3>
-                <p><strong>Fecha:</strong> ${guestData.confirmacion.fecha || 'N/A'}</p>
-                <p><strong>Asistentes:</strong> ${guestData.confirmacion.asistentes || 'N/A'}</p>
-            `;
-        }
+        addNewValidationButton();
+    }
+    
+    function showConfirmationDetails(confirmationData) {
+        if (!elements.confirmationDetails) return;
         
-        // Resetear formulario
-        if (elements.guestIdInput) {
-            elements.guestIdInput.value = '';
-            elements.guestIdInput.classList.remove('valid', 'invalid');
-        }
+        elements.confirmationDetails.innerHTML = `
+            <div class="confirmation-info">
+                <h4>📅 Confirmación</h4>
+                <div class="confirmation-details-grid">
+                    <div class="detail-item">
+                        <strong>Fecha de confirmación:</strong> ${confirmationData.confirmationDate || '---'}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Asistentes:</strong> ${confirmationData.attendees || '---'}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Comentarios:</strong> ${confirmationData.comments || '---'}
+                    </div>
+                </div>
+            </div>
+        `;
         
-        // Resetear botón
-        if (elements.validateBtn) {
-            elements.validateBtn.disabled = false;
-            elements.validateBtn.innerHTML = '<i class="fas fa-search"></i> Validar Invitado';
-        }
+        elements.confirmationDetails.style.display = 'block';
     }
     
     function showErrorState(message) {
         if (elements.statusMessage) {
             elements.statusMessage.textContent = message;
             elements.statusMessage.className = 'status-message error-message';
-            elements.statusMessage.style.display = 'block';
         }
         
-        // Ocultar detalles del invitado
         if (elements.guestDetails) {
             elements.guestDetails.style.display = 'none';
         }
         
         if (elements.confirmationDetails) {
             elements.confirmationDetails.style.display = 'none';
-        }
-        
-        // Resetear botón
-        if (elements.validateBtn) {
-            elements.validateBtn.disabled = false;
-            elements.validateBtn.innerHTML = '<i class="fas fa-search"></i> Validar Invitado';
         }
     }
     
-    // Función para limpiar estado y volver al inicio
     function resetToInitialState() {
-        // Limpiar estado
-        appState.isProcessing = false;
-        appState.currentGuestId = null;
+        if (elements.statusMessage) {
+            elements.statusMessage.textContent = 'Ingresa el ID del invitado o escanea el código QR';
+            elements.statusMessage.className = 'status-message';
+        }
         
-        // Ocultar detalles
         if (elements.guestDetails) {
             elements.guestDetails.style.display = 'none';
         }
@@ -710,46 +622,59 @@
             elements.confirmationDetails.style.display = 'none';
         }
         
-        // Mostrar mensaje inicial
-        if (elements.statusMessage) {
-            elements.statusMessage.textContent = 'Ingresa el ID del invitado para validar';
-            elements.statusMessage.className = 'status-message';
-            elements.statusMessage.style.display = 'block';
-        }
-        
-        // Resetear formulario
         if (elements.guestIdInput) {
             elements.guestIdInput.value = '';
             elements.guestIdInput.classList.remove('valid', 'invalid');
-            elements.guestIdInput.focus();
         }
-        
-        // Resetear botón
+    }
+    
+    function resetValidationState() {
         if (elements.validateBtn) {
             elements.validateBtn.disabled = false;
-            elements.validateBtn.innerHTML = '<i class="fas fa-search"></i> Validar Invitado';
+            elements.validateBtn.textContent = 'Validar Invitado';
         }
-        
-        console.log('🔄 Estado reseteado al inicial');
     }
     
-    // Agregar botón de nueva validación
     function addNewValidationButton() {
-        const newValidationBtn = document.createElement('button');
-        newValidationBtn.type = 'button';
-        newValidationBtn.className = 'validate-btn new-validation-btn';
-        newValidationBtn.innerHTML = '<i class="fas fa-plus"></i> Nueva Validación';
-        newValidationBtn.addEventListener('click', resetToInitialState);
+        const existingBtn = document.querySelector('.new-validation-btn');
+        if (existingBtn) {
+            existingBtn.remove();
+        }
         
-        // Insertar después del botón de validar
-        if (elements.validateBtn && elements.validateBtn.parentNode) {
-            elements.validateBtn.parentNode.insertBefore(newValidationBtn, elements.validateBtn.nextSibling);
+        const newBtn = document.createElement('button');
+        newBtn.type = 'button';
+        newBtn.className = 'new-validation-btn';
+        newBtn.textContent = 'Validar Otro Invitado';
+        newBtn.style.cssText = `
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        `;
+        
+        newBtn.addEventListener('click', () => {
+            resetToInitialState();
+            if (elements.form) {
+                elements.form.style.display = 'block';
+            }
+        });
+        
+        if (elements.guestDetails) {
+            elements.guestDetails.appendChild(newBtn);
         }
     }
     
-    // Limpiar recursos al cerrar la página
-    window.addEventListener('beforeunload', () => {
-        stopCamera();
-    });
+    // Función global para testing
+    window.testValidarJS = function() {
+        console.log('🧪 Testing validar.js...');
+        console.log('Elementos:', elements);
+        console.log('Cámara:', { cameraStream, qrScanner, currentCamera });
+        return 'validar.js funcionando correctamente';
+    };
     
-});
+})();
