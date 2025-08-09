@@ -220,8 +220,12 @@
                 
                 if (code) {
                     console.log('🔍 QR detectado:', code.data);
+                    // Detener el escaneo antes de procesar el resultado
+                    if (qrScanner) {
+                        clearInterval(qrScanner);
+                        qrScanner = null;
+                    }
                     handleQRResult(code.data);
-                    stopQRScanning();
                 }
             }
             
@@ -292,8 +296,7 @@
             // Cerrar interfaz de cámara
             closeCameraInterface();
             
-            // Limpiar estado de escaneo
-            stopQRScanning();
+            // El escaneo ya se detuvo en scanFrame
             
         } else {
             // Código QR inválido
