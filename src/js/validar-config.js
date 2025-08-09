@@ -170,7 +170,11 @@ window.VALIDAR_CONFIG = {
                 
                 // Configurar el video para mejor rendimiento
                 videoElement.play();
-                videoElement.style.transform = 'scaleX(-1)'; // Espejo para cámara frontal
+                
+                // Solo aplicar espejo para cámara frontal (user)
+                if (VALIDAR_CONFIG.CAMERA.FACING_MODE === 'user') {
+                    videoElement.style.transform = 'scaleX(-1)';
+                }
                 
                 console.log('📹 Cámara iniciada con resolución:', 
                     videoElement.videoWidth + 'x' + videoElement.videoHeight);

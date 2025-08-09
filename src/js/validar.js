@@ -65,6 +65,7 @@
             closeCameraBtn: document.getElementById('closeCameraBtn'),
             switchCameraBtn: document.getElementById('switchCameraBtn'),
             toggleFlashBtn: document.getElementById('toggleFlashBtn'),
+            testQRBtn: document.getElementById('testQRBtn'),
             statusMessage: document.getElementById('status-message'),
             guestDetails: document.getElementById('guest-details'),
             confirmationDetails: document.getElementById('confirmation-details')
@@ -93,6 +94,10 @@
         
         if (elements.toggleFlashBtn) {
             elements.toggleFlashBtn.addEventListener('click', toggleFlash);
+        }
+        
+        if (elements.testQRBtn) {
+            elements.testQRBtn.addEventListener('click', testQRDetection);
         }
         
         // Validación en tiempo real del input
@@ -165,6 +170,11 @@
         video.style.height = '100%';
         video.style.objectFit = 'cover';
         
+        // Aplicar transformación según el tipo de cámara
+        if (currentCamera === 'user') {
+            video.style.transform = 'scaleX(-1)';
+        }
+        
         elements.cameraPreview.appendChild(video);
         return video;
     }
@@ -194,6 +204,17 @@
         indicator.className = 'scanning-indicator';
         elements.cameraPreview.appendChild(indicator);
         
+        // Agregar información de la cámara activa
+        const cameraInfo = document.createElement('div');
+        cameraInfo.className = 'camera-info';
+        cameraInfo.innerHTML = `
+            <small style="color: #666; font-size: 0.8em;">
+                📱 ${currentCamera === 'environment' ? 'Cámara trasera' : 'Cámara frontal'}
+                ${currentCamera === 'user' ? '(Espejo activado)' : ''}
+            </small>
+        `;
+        elements.cameraPreview.appendChild(cameraInfo);
+        
         // Mostrar mensaje de estado
         if (elements.statusMessage) {
             elements.statusMessage.textContent = 'Escaneando código QR... Coloca el código frente a la cámara';
@@ -209,14 +230,23 @@
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             
+            // Dibujar el frame actual
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
             
-            // Usar jsQR para detectar códigos
+            // Usar jsQR para detectar códigos con múltiples intentos de inversión
             if (typeof jsQR !== 'undefined') {
-                const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                // Intentar detección normal primero
+                let code = jsQR(imageData.data, imageData.width, imageData.height, {
                     inversionAttempts: "dontInvert",
                 });
+                
+                // Si no se detecta, intentar con inversión
+                if (!code) {
+                    code = jsQR(imageData.data, imageData.width, imageData.height, {
+                        inversionAttempts: "attemptBoth",
+                    });
+                }
                 
                 if (code) {
                     console.log('🔍 QR detectado:', code.data);
@@ -258,6 +288,8 @@
     function switchCamera() {
         currentCamera = currentCamera === 'environment' ? 'user' : 'environment';
         VALIDAR_CONFIG.CAMERA.FACING_MODE = currentCamera;
+        
+        console.log('📱 Cambiando a cámara:', currentCamera);
         
         // Reiniciar cámara con nueva configuración
         stopCamera();
@@ -580,6 +612,26 @@
         // Insertar después del botón de validar
         if (elements.validateBtn && elements.validateBtn.parentNode) {
             elements.validateBtn.parentNode.insertBefore(newValidationBtn, elements.validateBtn.nextSibling);
+        }
+    }
+    
+    // Función para probar la detección de QR manualmente
+    function testQRDetection() {
+        const video = elements.cameraPreview.querySelector('video');
+        if (!video || video.readyState !== video.HAVE_ENOUGH_DATA) {
+            console.log('⚠️ Video no disponible para prueba');
+            return;
+        }
+        
+        console.log('🧪 Probando detección de QR manualmente...');
+        
+        // Forzar un escaneo inmediato
+        scanFrame(video);
+        
+        // Mostrar mensaje de prueba
+        if (elements.statusMessage) {
+            elements.statusMessage.textContent = '🧪 Prueba de detección QR ejecutada. Revisa la consola para detalles.';
+            elements.statusMessage.className = 'status-message info-message';
         }
     }
     

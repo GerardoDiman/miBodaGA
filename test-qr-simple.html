@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Simple de QR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .camera-preview {
+            width: 100%;
+            height: 300px;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            margin: 20px 0;
+        }
+        .camera-preview video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            background: #007bff;
+            color: white;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn.danger {
+            background: #dc3545;
+        }
+        .btn.danger:hover {
+            background: #c82333;
+        }
+        .btn.success {
+            background: #28a745;
+        }
+        .btn.success:hover {
+            background: #218838;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .qr-result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+            margin: 20px 0;
+        }
+        .camera-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Prueba Simple de Detección QR</h1>
+        
+        <div class="status info">
+            <strong>Instrucciones:</strong> 
+            Presiona "Iniciar Cámara" y apunta a un código QR. 
+            La detección se ejecuta automáticamente cada 100ms.
+        </div>
+        
+        <div class="controls">
+            <button id="startBtn" class="btn">📹 Iniciar Cámara</button>
+            <button id="stopBtn" class="btn danger" disabled>🛑 Detener Cámara</button>
+            <button id="switchBtn" class="btn" disabled>🔄 Cambiar Cámara</button>
+            <button id="testBtn" class="btn success" disabled>🧪 Probar QR</button>
+        </div>
+        
+        <div class="camera-preview" id="cameraPreview">
+            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white;">
+                <div style="text-align: center;">
+                    <div style="font-size: 3em; margin-bottom: 10px;">📷</div>
+                    <div>Presiona "Iniciar Cámara" para comenzar</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="status info" id="status">
+            Cámara no iniciada
+        </div>
+        
+        <div class="qr-result" id="qrResult">
+            <strong>Resultado QR:</strong> Ningún código detectado
+        </div>
+        
+        <div class="status info">
+            <strong>Debug:</strong> Abre la consola del navegador (F12) para ver logs detallados
+        </div>
+    </div>
+
+    <!-- Librería jsQR -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    
+    <script>
+        let cameraStream = null;
+        let qrScanner = null;
+        let currentCamera = 'environment';
+        
+        const elements = {
+            startBtn: document.getElementById('startBtn'),
+            stopBtn: document.getElementById('stopBtn'),
+            switchBtn: document.getElementById('switchBtn'),
+            testBtn: document.getElementById('testBtn'),
+            cameraPreview: document.getElementById('cameraPreview'),
+            status: document.getElementById('status'),
+            qrResult: document.getElementById('qrResult')
+        };
+        
+        // Iniciar cámara
+        async function startCamera() {
+            try {
+                elements.status.textContent = '🔄 Iniciando cámara...';
+                elements.status.className = 'status info';
+                
+                const constraints = {
+                    video: {
+                        facingMode: currentCamera,
+                        width: { ideal: 1280, min: 640 },
+                        height: { ideal: 720, min: 480 },
+                        frameRate: { ideal: 30, min: 15 }
+                    }
+                };
+                
+                cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+                
+                // Crear video
+                const video = document.createElement('video');
+                video.srcObject = cameraStream;
+                video.autoplay = true;
+                video.muted = true;
+                video.playsInline = true;
+                video.style.width = '100%';
+                video.style.height = '100%';
+                video.style.objectFit = 'cover';
+                
+                // Solo aplicar espejo para cámara frontal
+                if (currentCamera === 'user') {
+                    video.style.transform = 'scaleX(-1)';
+                }
+                
+                // Limpiar preview y agregar video
+                elements.cameraPreview.innerHTML = '';
+                elements.cameraPreview.appendChild(video);
+                
+                // Agregar información de cámara
+                const cameraInfo = document.createElement('div');
+                cameraInfo.className = 'camera-info';
+                cameraInfo.innerHTML = `
+                    📱 ${currentCamera === 'environment' ? 'Trasera' : 'Frontal'}
+                    ${currentCamera === 'user' ? '(Espejo)' : ''}
+                `;
+                elements.cameraPreview.appendChild(cameraInfo);
+                
+                // Esperar a que el video esté listo
+                await new Promise((resolve) => {
+                    video.onloadedmetadata = resolve;
+                });
+                
+                elements.status.textContent = `✅ Cámara iniciada: ${video.videoWidth}x${video.videoHeight}`;
+                elements.status.className = 'status success';
+                
+                // Habilitar controles
+                elements.startBtn.disabled = true;
+                elements.stopBtn.disabled = false;
+                elements.switchBtn.disabled = false;
+                elements.testBtn.disabled = false;
+                
+                // Iniciar escaneo QR
+                startQRScanning(video);
+                
+            } catch (error) {
+                console.error('Error al iniciar cámara:', error);
+                elements.status.textContent = `❌ Error: ${error.message}`;
+                elements.status.className = 'status error';
+            }
+        }
+        
+        // Detener cámara
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            
+            if (qrScanner) {
+                clearInterval(qrScanner);
+                qrScanner = null;
+            }
+            
+            elements.cameraPreview.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3em; margin-bottom: 10px;">📷</div>
+                        <div>Presiona "Iniciar Cámara" para comenzar</div>
+                    </div>
+                </div>
+            `;
+            
+            elements.status.textContent = 'Cámara detenida';
+            elements.status.className = 'status info';
+            elements.qrResult.innerHTML = '<strong>Resultado QR:</strong> Ningún código detectado';
+            
+            // Deshabilitar controles
+            elements.startBtn.disabled = false;
+            elements.stopBtn.disabled = true;
+            elements.switchBtn.disabled = true;
+            elements.testBtn.disabled = true;
+        }
+        
+        // Cambiar cámara
+        function switchCamera() {
+            currentCamera = currentCamera === 'environment' ? 'user' : 'environment';
+            console.log('Cambiando a cámara:', currentCamera);
+            
+            stopCamera();
+            startCamera();
+        }
+        
+        // Probar detección QR manualmente
+        function testQRDetection() {
+            const video = elements.cameraPreview.querySelector('video');
+            if (!video || video.readyState !== video.HAVE_ENOUGH_DATA) {
+                console.log('Video no disponible para prueba');
+                return;
+            }
+            
+            console.log('Probando detección de QR manualmente...');
+            scanFrame(video);
+        }
+        
+        // Iniciar escaneo QR
+        function startQRScanning(video) {
+            if (!qrScanner) {
+                qrScanner = setInterval(() => {
+                    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                        scanFrame(video);
+                    }
+                }, 100); // Escanear cada 100ms
+            }
+        }
+        
+        // Escanear frame
+        function scanFrame(video) {
+            try {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
+                // Dibujar el frame actual
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                
+                // Usar jsQR para detectar códigos con múltiples intentos de inversión
+                if (typeof jsQR !== 'undefined') {
+                    // Intentar detección normal primero
+                    let code = jsQR(imageData.data, imageData.width, imageData.height, {
+                        inversionAttempts: "dontInvert",
+                    });
+                    
+                    // Si no se detecta, intentar con inversión
+                    if (!code) {
+                        code = jsQR(imageData.data, imageData.width, imageData.height, {
+                            inversionAttempts: "attemptBoth",
+                        });
+                    }
+                    
+                    if (code) {
+                        console.log('QR detectado:', code.data);
+                        elements.qrResult.innerHTML = `<strong>Resultado QR:</strong> ${code.data}`;
+                        
+                        // Detener el escaneo
+                        if (qrScanner) {
+                            clearInterval(qrScanner);
+                            qrScanner = null;
+                        }
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error en escaneo de frame:', error);
+            }
+        }
+        
+        // Event listeners
+        elements.startBtn.addEventListener('click', startCamera);
+        elements.stopBtn.addEventListener('click', stopCamera);
+        elements.switchBtn.addEventListener('click', switchCamera);
+        elements.testBtn.addEventListener('click', testQRDetection);
+        
+        // Limpiar al cerrar
+        window.addEventListener('beforeunload', () => {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>
