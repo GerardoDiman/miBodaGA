@@ -120,13 +120,25 @@
     }
     
     function openCameraInterface() {
-        if (!VALIDAR_CONFIG.camera.isAvailable()) {
-            VALIDAR_CONFIG.showNotification('Cámara no disponible en este dispositivo', 'error');
-            return;
+        console.log('🚪 Abriendo interfaz de cámara...');
+        
+        // Mostrar la interfaz de cámara
+        if (elements.cameraInterface) {
+            elements.cameraInterface.style.display = 'block';
+            console.log('✅ Interfaz de cámara mostrada');
         }
         
-        elements.cameraInterface.style.display = 'flex';
+        // Ocultar el formulario principal
+        if (elements.form) { // Changed from elements.validationForm to elements.form
+            elements.form.style.display = 'none';
+            console.log('✅ Formulario principal oculto');
+        }
+        
+        // Iniciar cámara automáticamente
+        console.log('📹 Iniciando cámara automáticamente...');
         startCamera();
+        
+        console.log('✅ Interfaz de cámara abierta completamente');
     }
     
     function closeCameraInterface() {
@@ -137,13 +149,23 @@
     async function startCamera() {
         try {
             console.log('📹 Iniciando cámara...');
+            console.log('🔧 Configuración:', VALIDAR_CONFIG.CAMERA);
             
-            // Usar la configuración optimizada
-            cameraStream = await VALIDAR_CONFIG.camera.startCamera(
-                elements.cameraPreview.querySelector('video') || createVideoElement(),
-                (stream) => {
-                    console.log('✅ Cámara iniciada correctamente');
-                    // Iniciar escaneo de QR en tiempo real
+            // Limpiar preview anterior
+            elements.cameraPreview.innerHTML = '';
+            
+            // Usar la función optimizada de configuración
+            const stream = await VALIDAR_CONFIG.camera.startCamera(
+                null, // videoElement se creará después
+                (videoElement) => {
+                    console.log('✅ Cámara iniciada exitosamente');
+                    console.log('📱 Resolución del video:', videoElement.videoWidth, 'x', videoElement.videoHeight);
+                    console.log('🎥 Tipo de cámara:', currentCamera);
+                    
+                    // Crear y configurar el elemento de video
+                    createVideoElement();
+                    
+                    // Iniciar escaneo QR
                     startQRScanning();
                 },
                 (error) => {
@@ -152,17 +174,26 @@
                 }
             );
             
+            cameraStream = stream;
+            
         } catch (error) {
-            console.error('❌ Error crítico al iniciar cámara:', error);
+            console.error('❌ Error en startCamera:', error);
             showCameraError(error);
         }
     }
     
     function createVideoElement() {
-        // Limpiar preview anterior
-        elements.cameraPreview.innerHTML = '';
+        console.log('🎬 Creando elemento de video...');
+        
+        // Remover video anterior si existe
+        const existingVideo = elements.cameraPreview.querySelector('video');
+        if (existingVideo) {
+            console.log('🗑️ Removiendo video anterior');
+            existingVideo.remove();
+        }
         
         const video = document.createElement('video');
+        video.srcObject = cameraStream;
         video.autoplay = true;
         video.muted = true;
         video.playsInline = true;
@@ -172,39 +203,85 @@
         
         // Aplicar transformación según el tipo de cámara
         if (currentCamera === 'user') {
+            console.log('🪞 Aplicando espejo para cámara frontal');
             video.style.transform = 'scaleX(-1)';
+        } else {
+            console.log('📱 Cámara trasera - sin espejo');
         }
         
+        console.log('✅ Video creado, agregando al DOM...');
         elements.cameraPreview.appendChild(video);
-        return video;
+        
+        // Esperar a que el video esté listo
+        video.onloadedmetadata = () => {
+            console.log('📱 Video metadata cargada:', video.videoWidth, 'x', video.videoHeight);
+            console.log('🎥 Video listo para reproducción');
+        };
+        
+        video.oncanplay = () => {
+            console.log('▶️ Video puede reproducirse');
+        };
+        
+        video.onplay = () => {
+            console.log('🎬 Video iniciado');
+        };
+        
+        console.log('✅ Elemento de video creado y configurado');
     }
     
     function startQRScanning() {
+        console.log('🚀 Iniciando escaneo QR...');
+        
         if (!qrScanner) {
+            console.log('✅ Creando intervalo de escaneo cada', VALIDAR_CONFIG.QR.SCAN_INTERVAL, 'ms');
+            
             // Agregar indicador visual de escaneo
             addScanningIndicator();
             
             qrScanner = setInterval(() => {
                 const video = elements.cameraPreview.querySelector('video');
                 if (video && video.readyState === video.HAVE_ENOUGH_DATA) {
+                    // Solo log cada 100 frames para no saturar
+                    if (Math.random() < 0.01) { // ~1% de probabilidad
+                        console.log('📹 Frame listo para escaneo, readyState:', video.readyState);
+                    }
                     scanFrame(video);
+                } else {
+                    // Solo log cada 50 frames para no saturar
+                    if (Math.random() < 0.02) { // ~2% de probabilidad
+                        console.log('⏳ Video no listo, readyState:', video?.readyState || 'no video');
+                    }
                 }
             }, VALIDAR_CONFIG.QR.SCAN_INTERVAL);
+            
+            console.log('✅ Intervalo de escaneo creado, ID:', qrScanner);
+        } else {
+            console.log('⚠️ Escaneo QR ya está activo');
         }
     }
     
     function addScanningIndicator() {
+        console.log('🎯 Agregando indicador de escaneo...');
+        
         // Remover indicador anterior si existe
         const existingIndicator = elements.cameraPreview.querySelector('.scanning-indicator');
         if (existingIndicator) {
+            console.log('🗑️ Removiendo indicador anterior');
             existingIndicator.remove();
         }
         
         const indicator = document.createElement('div');
         indicator.className = 'scanning-indicator';
         elements.cameraPreview.appendChild(indicator);
+        console.log('✅ Indicador de escaneo agregado');
         
         // Agregar información de la cámara activa
+        const existingCameraInfo = elements.cameraPreview.querySelector('.camera-info');
+        if (existingCameraInfo) {
+            console.log('🗑️ Removiendo información de cámara anterior');
+            existingCameraInfo.remove();
+        }
+        
         const cameraInfo = document.createElement('div');
         cameraInfo.className = 'camera-info';
         cameraInfo.innerHTML = `
@@ -214,16 +291,34 @@
             </small>
         `;
         elements.cameraPreview.appendChild(cameraInfo);
+        console.log('✅ Información de cámara agregada:', currentCamera);
         
         // Mostrar mensaje de estado
         if (elements.statusMessage) {
             elements.statusMessage.textContent = 'Escaneando código QR... Coloca el código frente a la cámara';
             elements.statusMessage.className = 'status-message loading-message';
+            console.log('📝 Mensaje de estado actualizado');
         }
+        
+        console.log('✅ Indicador de escaneo configurado completamente');
     }
     
     function scanFrame(video) {
         try {
+            // Verificar que el video esté listo
+            if (video.readyState !== video.HAVE_ENOUGH_DATA) {
+                console.log('⚠️ Video no listo, readyState:', video.readyState);
+                return;
+            }
+            
+            // Verificar dimensiones del video
+            if (!video.videoWidth || !video.videoHeight) {
+                console.log('⚠️ Video sin dimensiones:', video.videoWidth, 'x', video.videoHeight);
+                return;
+            }
+            
+            console.log('🔍 Escaneando frame:', video.videoWidth, 'x', video.videoHeight);
+            
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
             
@@ -234,33 +329,53 @@
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
             
-            // Usar jsQR para detectar códigos con múltiples intentos de inversión
-            if (typeof jsQR !== 'undefined') {
-                // Intentar detección normal primero
-                let code = jsQR(imageData.data, imageData.width, imageData.height, {
-                    inversionAttempts: "dontInvert",
+            console.log('📊 Canvas creado:', canvas.width, 'x', canvas.height, 'ImageData size:', imageData.data.length);
+            
+            // Verificar que jsQR esté disponible
+            if (typeof jsQR === 'undefined') {
+                console.error('❌ jsQR no está disponible');
+                return;
+            }
+            
+            console.log('✅ jsQR disponible, iniciando detección...');
+            
+            // Intentar detección normal primero
+            let code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: "dontInvert",
+            });
+            
+            console.log('🔍 Primer intento (dontInvert):', code ? 'QR detectado' : 'No detectado');
+            
+            // Si no se detecta, intentar con inversión
+            if (!code) {
+                console.log('🔄 Intentando con inversión (attemptBoth)...');
+                code = jsQR(imageData.data, imageData.width, imageData.height, {
+                    inversionAttempts: "attemptBoth",
                 });
+                console.log('🔍 Segundo intento (attemptBoth):', code ? 'QR detectado' : 'No detectado');
+            }
+            
+            if (code) {
+                console.log('🎉 QR detectado exitosamente:', code.data);
+                console.log('📏 Tamaño del código:', code.size);
+                console.log('📍 Posición:', code.location);
                 
-                // Si no se detecta, intentar con inversión
-                if (!code) {
-                    code = jsQR(imageData.data, imageData.width, imageData.height, {
-                        inversionAttempts: "attemptBoth",
-                    });
+                // Detener el escaneo antes de procesar el resultado
+                if (qrScanner) {
+                    clearInterval(qrScanner);
+                    qrScanner = null;
                 }
-                
-                if (code) {
-                    console.log('🔍 QR detectado:', code.data);
-                    // Detener el escaneo antes de procesar el resultado
-                    if (qrScanner) {
-                        clearInterval(qrScanner);
-                        qrScanner = null;
-                    }
-                    handleQRResult(code.data);
+                handleQRResult(code.data);
+            } else {
+                // Solo log cada 50 frames para no saturar la consola
+                if (Math.random() < 0.02) { // ~2% de probabilidad
+                    console.log('🔍 No se detectó QR en este frame');
                 }
             }
             
         } catch (error) {
             console.error('❌ Error en escaneo de frame:', error);
+            console.error('Stack trace:', error.stack);
         }
     }
     
@@ -309,37 +424,55 @@
     }
     
     function handleQRResult(qrData) {
-        console.log('🎯 Código QR detectado:', qrData);
+        console.log('🎯 Procesando resultado QR:', qrData);
         
-        // Validar formato del código QR
-        if (VALIDAR_CONFIG.validation.isValidGuestId(qrData)) {
-            // Llenar el input con el código detectado
-            if (elements.guestIdInput) {
-                elements.guestIdInput.value = qrData;
-                elements.guestIdInput.focus();
-            }
+        // Validar formato del QR
+        if (!qrData || typeof qrData !== 'string') {
+            console.log('⚠️ QR inválido:', qrData);
+            return;
+        }
+        
+        // Verificar si es un ID de invitado válido (6 caracteres alfanuméricos)
+        if (!/^[A-Z0-9]{6}$/.test(qrData)) {
+            console.log('⚠️ QR no es un ID de invitado válido:', qrData);
+            console.log('📝 Formato esperado: 6 caracteres alfanuméricos (A-Z, 0-9)');
             
-            // Mostrar mensaje de éxito
+            // Mostrar mensaje de error pero continuar escaneando
             if (elements.statusMessage) {
-                elements.statusMessage.textContent = `✅ QR detectado: ${qrData}. Presiona "Validar Invitado" para continuar.`;
-                elements.statusMessage.className = 'status-message success-message';
-            }
-            
-            // Cerrar interfaz de cámara
-            closeCameraInterface();
-            
-            // El escaneo ya se detuvo en scanFrame
-            
-        } else {
-            // Código QR inválido
-            if (elements.statusMessage) {
-                elements.statusMessage.textContent = `❌ Código QR inválido: ${qrData}. Debe tener 6 caracteres alfanuméricos.`;
+                elements.statusMessage.textContent = `QR detectado pero formato inválido: ${qrData}. Se espera un ID de 6 caracteres.`;
                 elements.statusMessage.className = 'status-message error-message';
             }
             
-            // Continuar escaneando para otro código
-            console.log('🔄 Continuando escaneo...');
+            // Reiniciar escaneo después de un delay
+            setTimeout(() => {
+                if (elements.statusMessage) {
+                    elements.statusMessage.textContent = 'Escaneando código QR... Coloca el código frente a la cámara';
+                    elements.statusMessage.className = 'status-message loading-message';
+                }
+                startQRScanning();
+            }, 3000);
+            
+            return;
         }
+        
+        console.log('✅ QR válido detectado, llenando campo de entrada...');
+        
+        // Llenar el campo de entrada con el ID del QR
+        if (elements.guestIdInput) {
+            elements.guestIdInput.value = qrData;
+            console.log('📝 Campo de entrada llenado con:', qrData);
+            
+            // Disparar evento de input para activar validación visual
+            elements.guestIdInput.dispatchEvent(new Event('input'));
+        }
+        
+        // Mostrar mensaje de éxito
+        if (elements.statusMessage) {
+            elements.statusMessage.textContent = `✅ QR detectado: ${qrData}. Presiona "Validar Invitado" para continuar.`;
+            elements.statusMessage.className = 'status-message success-message';
+        }
+        
+        console.log('✅ Resultado QR procesado exitosamente');
     }
     
     function showCameraError(error) {
@@ -615,29 +748,9 @@
         }
     }
     
-    // Función para probar la detección de QR manualmente
-    function testQRDetection() {
-        const video = elements.cameraPreview.querySelector('video');
-        if (!video || video.readyState !== video.HAVE_ENOUGH_DATA) {
-            console.log('⚠️ Video no disponible para prueba');
-            return;
-        }
-        
-        console.log('🧪 Probando detección de QR manualmente...');
-        
-        // Forzar un escaneo inmediato
-        scanFrame(video);
-        
-        // Mostrar mensaje de prueba
-        if (elements.statusMessage) {
-            elements.statusMessage.textContent = '🧪 Prueba de detección QR ejecutada. Revisa la consola para detalles.';
-            elements.statusMessage.className = 'status-message info-message';
-        }
-    }
-    
     // Limpiar recursos al cerrar la página
     window.addEventListener('beforeunload', () => {
         stopCamera();
     });
     
-})();
+});
