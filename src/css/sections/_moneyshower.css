@@ -1,11 +1,9 @@
 /* Lluvia de Sobres */
 .money-shower-section {
-    background: rgba(30, 30, 30, 0.85);
     border-radius: 18px;
     padding: 32px 24px 28px 24px;
     margin: 0 auto var(--spacing-large) auto;
     max-width: 600px;
-    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.25);
     text-align: center;
     position: relative;
     z-index: 2;
@@ -29,8 +27,9 @@
     font-size: 0.95em;
     color: #f5e7d6;
     letter-spacing: 1px;
-    margin-bottom: 0;
+    margin: 20px 0;
     text-shadow: 0 1px 6px rgba(0,0,0,0.18);
+    text-align: center;
 }
 
 /* Media queries para responsive */
@@ -39,7 +38,7 @@
         font-size: 1.4em !important;
     }
     .money-shower-description {
-        font-size: 0.9em !important;
+        font-size: 0.75em !important;
     }
     .money-shower-icon {
         font-size: 1.8em !important;
@@ -51,7 +50,7 @@
         font-size: 1.2em !important;
     }
     .money-shower-description {
-        font-size: 0.85em !important;
+        font-size: 0.7em !important;
     }
     .money-shower-icon {
         font-size: 1.6em !important;

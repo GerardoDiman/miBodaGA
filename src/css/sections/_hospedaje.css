@@ -1,9 +1,5 @@
 /* Sección Lluvia de Sobres y Hospedaje */
-.money-shower-section { background: rgba(30, 30, 30, 0.85); border-radius: 18px; padding: 32px 24px 28px 24px; margin: 0 auto var(--spacing-large) auto; max-width: 600px; box-shadow: 0 4px 24px 0 rgba(0,0,0,0.25); text-align: center; position: relative; z-index: 2; }
-.money-shower-icon { font-size: 2.5em; color: var(--color-accent); margin-bottom: 10px; }
-.money-shower-title { font-family: var(--font-secondary); font-size: 2em; color: #fff; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.25); }
-.money-shower-description { font-family: var(--font-primary); font-size: 1.1em; color: #f5e7d6; letter-spacing: 1px; margin-bottom: 0; text-shadow: 0 1px 6px rgba(0,0,0,0.18); }
-.lodging-section { padding: var(--spacing-large) 0; max-width: 900px; margin: 0 auto; text-align: center; margin-top: calc(var(--spacing-large) * 2); }
+.lodging-section { max-width: 900px; text-align: center; }
 .lodging-container { display: flex; flex-wrap: wrap; gap: var(--spacing-large); justify-content: center; align-items: stretch; margin-top: var(--spacing-medium); }
 .lodging-block { 
     background: rgba(171, 149, 131, 0.27); 
