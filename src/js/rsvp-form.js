@@ -27,6 +27,124 @@
         // --- Variables de Estado ---
         let invitadoActual = null;
         let pasesDisponibles = 0;
+
+        // --- DETECCIÓN MEJORADA DE NAVEGADOR Y DISPOSITIVO ---
+        function detectBrowserAndDevice() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isChrome = /chrome/.test(userAgent) && !/edge/.test(userAgent);
+            const isChromeMobile = isChrome && /mobile|android|iphone|ipad/.test(userAgent);
+            const isIncognito = !window.localStorage || !window.sessionStorage;
+            const isPrivateMode = isIncognito || (() => {
+                try {
+                    localStorage.setItem('test', 'test');
+                    localStorage.removeItem('test');
+                    return false;
+                } catch (e) {
+                    return true;
+                }
+            })();
+            
+            console.log('🔍 RSVP - Detección de navegador:', {
+                isChrome,
+                isChromeMobile,
+                isIncognito,
+                isPrivateMode,
+                userAgent: navigator.userAgent
+            });
+            
+            return { isChrome, isChromeMobile, isIncognito, isPrivateMode };
+        }
+
+        // --- ALMACENAMIENTO ROBUSTO CON FALLBACKS ---
+        const storageManager = {
+            // Intentar usar localStorage primero
+            setItem: function(key, value) {
+                try {
+                    if (window.localStorage) {
+                        localStorage.setItem(key, value);
+                        return true;
+                    }
+                } catch (e) {
+                    console.warn('localStorage falló, intentando sessionStorage:', e);
+                }
+                
+                try {
+                    if (window.sessionStorage) {
+                        sessionStorage.setItem(key, value);
+                        return true;
+                    }
+                } catch (e) {
+                    console.warn('sessionStorage también falló:', e);
+                }
+                
+                // Fallback: usar cookies
+                try {
+                    document.cookie = `${key}=${value};path=/;max-age=31536000`; // 1 año
+                    return true;
+                } catch (e) {
+                    console.error('Todos los métodos de almacenamiento fallaron:', e);
+                    return false;
+                }
+            },
+            
+            getItem: function(key) {
+                try {
+                    if (window.localStorage) {
+                        return localStorage.getItem(key);
+                    }
+                } catch (e) {
+                    console.warn('localStorage falló al leer:', e);
+                }
+                
+                try {
+                    if (window.sessionStorage) {
+                        return sessionStorage.getItem(key);
+                    }
+                } catch (e) {
+                    console.warn('sessionStorage falló al leer:', e);
+                }
+                
+                // Fallback: leer de cookies
+                try {
+                    const cookies = document.cookie.split(';');
+                    for (let cookie of cookies) {
+                        const [cookieKey, cookieValue] = cookie.trim().split('=');
+                        if (cookieKey === key) {
+                            return cookieValue;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error leyendo cookies:', e);
+                }
+                
+                return null;
+            },
+            
+            removeItem: function(key) {
+                try {
+                    if (window.localStorage) {
+                        localStorage.removeItem(key);
+                    }
+                } catch (e) {
+                    console.warn('localStorage falló al remover:', e);
+                }
+                
+                try {
+                    if (window.sessionStorage) {
+                        sessionStorage.removeItem(key);
+                    }
+                } catch (e) {
+                    console.warn('sessionStorage falló al remover:', e);
+                }
+                
+                // Fallback: expirar cookie
+                try {
+                    document.cookie = `${key}=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+                } catch (e) {
+                    console.error('Error expirando cookie:', e);
+                }
+            }
+        };
         
         // --- Funciones Helper ---
         
@@ -612,16 +730,32 @@
                     // Enviar datos a Google Sheets
                     await submitFormData(formData);
                     
-                    // Guardar confirmación en localStorage inmediatamente
+                    // Guardar confirmación usando el sistema robusto de almacenamiento
                     if (invitadoActual && invitadoActual.id) {
                         const confirmationKey = `boda_confirmado_${invitadoActual.id}`;
                         const timestampKey = `${confirmationKey}_timestamp`;
-                        try {
-                            localStorage.setItem(confirmationKey, 'true');
-                            localStorage.setItem(timestampKey, Date.now().toString());
-                            console.log('✅ Confirmación guardada en localStorage:', confirmationKey);
-                        } catch (e) {
-                            console.warn('⚠️ No se pudo guardar en localStorage:', e);
+                        
+                        console.log('💾 Guardando confirmación usando sistema robusto...');
+                        
+                        const confirmationSaved = storageManager.setItem(confirmationKey, 'true');
+                        const timestampSaved = storageManager.setItem(timestampKey, Date.now().toString());
+                        
+                        console.log('✅ Confirmación guardada:', {
+                            confirmación: confirmationSaved,
+                            timestamp: timestampSaved,
+                            clave: confirmationKey
+                        });
+                        
+                        // Para Chrome móvil, asegurar que también se guarde en cookies
+                        const browserInfo = detectBrowserAndDevice();
+                        if (browserInfo.isChromeMobile) {
+                            try {
+                                document.cookie = `${confirmationKey}=true;path=/;max-age=31536000`;
+                                document.cookie = `${timestampKey}=${Date.now()};path=/;max-age=31536000`;
+                                console.log('🍪 Confirmación también guardada en cookies para Chrome móvil');
+                            } catch (e) {
+                                console.warn('⚠️ No se pudo guardar en cookies para Chrome móvil:', e);
+                            }
                         }
                     }
                     

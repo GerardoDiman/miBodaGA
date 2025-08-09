@@ -28,6 +28,124 @@ console.log('🎯 invitation.js cargado');
         let confirmacionVerificada = false;
         let yaConfirmoSheet = false;
 
+        // --- DETECCIÓN MEJORADA DE NAVEGADOR Y DISPOSITIVO ---
+        function detectBrowserAndDevice() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isChrome = /chrome/.test(userAgent) && !/edge/.test(userAgent);
+            const isChromeMobile = isChrome && /mobile|android|iphone|ipad/.test(userAgent);
+            const isIncognito = !window.localStorage || !window.sessionStorage;
+            const isPrivateMode = isIncognito || (() => {
+                try {
+                    localStorage.setItem('test', 'test');
+                    localStorage.removeItem('test');
+                    return false;
+                } catch (e) {
+                    return true;
+                }
+            })();
+            
+            console.log('🔍 Detección de navegador:', {
+                isChrome,
+                isChromeMobile,
+                isIncognito,
+                isPrivateMode,
+                userAgent: navigator.userAgent
+            });
+            
+            return { isChrome, isChromeMobile, isIncognito, isPrivateMode };
+        }
+
+        // --- ALMACENAMIENTO ROBUSTO CON FALLBACKS ---
+        const storageManager = {
+            // Intentar usar localStorage primero
+            setItem: function(key, value) {
+                try {
+                    if (window.localStorage) {
+                        localStorage.setItem(key, value);
+                        return true;
+                    }
+                } catch (e) {
+                    console.warn('localStorage falló, intentando sessionStorage:', e);
+                }
+                
+                try {
+                    if (window.sessionStorage) {
+                        sessionStorage.setItem(key, value);
+                        return true;
+                    }
+                } catch (e) {
+                    console.warn('sessionStorage también falló:', e);
+                }
+                
+                // Fallback: usar cookies
+                try {
+                    document.cookie = `${key}=${value};path=/;max-age=31536000`; // 1 año
+                    return true;
+                } catch (e) {
+                    console.error('Todos los métodos de almacenamiento fallaron:', e);
+                    return false;
+                }
+            },
+            
+            getItem: function(key) {
+                try {
+                    if (window.localStorage) {
+                        return localStorage.getItem(key);
+                    }
+                } catch (e) {
+                    console.warn('localStorage falló al leer:', e);
+                }
+                
+                try {
+                    if (window.sessionStorage) {
+                        return sessionStorage.getItem(key);
+                    }
+                } catch (e) {
+                    console.warn('sessionStorage falló al leer:', e);
+                }
+                
+                // Fallback: leer de cookies
+                try {
+                    const cookies = document.cookie.split(';');
+                    for (let cookie of cookies) {
+                        const [cookieKey, cookieValue] = cookie.trim().split('=');
+                        if (cookieKey === key) {
+                            return cookieValue;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error leyendo cookies:', e);
+                }
+                
+                return null;
+            },
+            
+            removeItem: function(key) {
+                try {
+                    if (window.localStorage) {
+                        localStorage.removeItem(key);
+                    }
+                } catch (e) {
+                    console.warn('localStorage falló al remover:', e);
+                }
+                
+                try {
+                    if (window.sessionStorage) {
+                        sessionStorage.removeItem(key);
+                    }
+                } catch (e) {
+                    console.warn('sessionStorage falló al remover:', e);
+                }
+                
+                // Fallback: expirar cookie
+                try {
+                    document.cookie = `${key}=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+                } catch (e) {
+                    console.error('Error expirando cookie:', e);
+                }
+            }
+        };
+
         // --- Función para generar mensaje de WhatsApp dinámico ---
         function generateWhatsAppMessage(invitado) {
             if (!invitado || !invitado.nombre || !invitado.id) {
@@ -146,12 +264,14 @@ console.log('🎯 invitation.js cargado');
 
         /** Actualiza la UI (botón/QR) basado en el estado de confirmación */
         function updateUIBasedOnConfirmation(confirmado) {
-            console.log(`Actualizando UI - Estado Confirmado desde Sheet: ${confirmado}`);
+            console.log(`🔄 Actualizando UI - Estado Confirmado: ${confirmado}`);
             yaConfirmoSheet = confirmado;
 
             if (confirmado && invitadoActual) {
+                console.log('✅ Mostrando QR para invitado confirmado');
                 displayQrCode(invitadoActual);
             } else if (!confirmado && invitadoActual) {
+                console.log('❌ Mostrando botón de confirmación para invitado no confirmado');
                 rsvpSectionElements.forEach(el => {
                     if(el) {
                         const classes = el.classList;
@@ -170,18 +290,33 @@ console.log('🎯 invitation.js cargado');
                     confirmButton.style.display = 'inline-block';
                 }
             }
-            const confirmationKey = `boda_confirmado_${invitadoActual?.id}`;
-            if (confirmado) {
-                try { 
-                    localStorage.setItem(confirmationKey, 'true'); 
-                    // Guardar también timestamp para sincronización futura
-                    localStorage.setItem(`${confirmationKey}_timestamp`, Date.now().toString());
-                } catch(e){ console.warn("No se pudo escribir en localStorage", e); }
-            } else {
-                try { 
-                    localStorage.removeItem(confirmationKey); 
-                    localStorage.removeItem(`${confirmationKey}_timestamp`);
-                } catch(e){ console.warn("No se pudo borrar de localStorage", e); }
+            
+            // Guardar estado usando el sistema robusto de almacenamiento
+            if (invitadoActual?.id) {
+                const confirmationKey = `boda_confirmado_${invitadoActual.id}`;
+                const timestampKey = `${confirmationKey}_timestamp`;
+                
+                if (confirmado) {
+                    const success = storageManager.setItem(confirmationKey, 'true');
+                    const timestampSuccess = storageManager.setItem(timestampKey, Date.now().toString());
+                    console.log(`💾 Estado guardado: confirmación=${success}, timestamp=${timestampSuccess}`);
+                    
+                    // Para Chrome móvil, asegurar que también se guarde en cookies
+                    const browserInfo = detectBrowserAndDevice();
+                    if (browserInfo.isChromeMobile) {
+                        try {
+                            document.cookie = `${confirmationKey}=true;path=/;max-age=31536000`;
+                            document.cookie = `${timestampKey}=${Date.now()};path=/;max-age=31536000`;
+                            console.log('🍪 Estado también guardado en cookies para Chrome móvil');
+                        } catch (e) {
+                            console.warn('⚠️ No se pudo guardar en cookies para Chrome móvil:', e);
+                        }
+                    }
+                } else {
+                    storageManager.removeItem(confirmationKey);
+                    storageManager.removeItem(timestampKey);
+                    console.log('🗑️ Estado de confirmación removido del almacenamiento');
+                }
             }
         }
 
@@ -190,19 +325,58 @@ console.log('🎯 invitation.js cargado');
             if (!invitadoActual) return false;
             
             const confirmationKey = `boda_confirmado_${invitadoActual.id}`;
+            const timestampKey = `${confirmationKey}_timestamp`;
+            
+            // Detectar navegador y dispositivo
+            const browserInfo = detectBrowserAndDevice();
+            console.log('🔍 Verificando confirmación local para:', invitadoActual.id, 'en navegador:', browserInfo);
+            
             try {
-                const isConfirmed = localStorage.getItem(confirmationKey) === 'true';
-                const timestamp = localStorage.getItem(`${confirmationKey}_timestamp`);
-                console.log(`Verificación local: ${invitadoActual.id} confirmado = ${isConfirmed}, timestamp = ${timestamp}`);
+                const isConfirmed = storageManager.getItem(confirmationKey) === 'true';
+                const timestamp = storageManager.getItem(timestampKey);
+                console.log(`✅ Verificación local: ${invitadoActual.id} confirmado = ${isConfirmed}, timestamp = ${timestamp}`);
                 
-                // Debug: mostrar todas las claves relacionadas con este invitado
-                const allKeys = Object.keys(localStorage);
-                const relatedKeys = allKeys.filter(key => key.includes(invitadoActual.id));
-                console.log('Claves relacionadas en localStorage:', relatedKeys);
+                // Para Chrome móvil, verificar también en cookies como respaldo
+                if (browserInfo.isChromeMobile && !isConfirmed) {
+                    console.log('🔍 Chrome móvil detectado, verificando cookies como respaldo...');
+                    const cookieValue = document.cookie.split(';').find(cookie => 
+                        cookie.trim().startsWith(`${confirmationKey}=`)
+                    );
+                    if (cookieValue) {
+                        const cookieConfirmed = cookieValue.split('=')[1] === 'true';
+                        console.log(`🍪 Confirmación encontrada en cookies: ${cookieConfirmed}`);
+                        if (cookieConfirmed) {
+                            // Migrar de cookies al almacenamiento principal si es posible
+                            try {
+                                storageManager.setItem(confirmationKey, 'true');
+                                storageManager.setItem(timestampKey, Date.now().toString());
+                                console.log('✅ Confirmación migrada de cookies al almacenamiento principal');
+                            } catch (e) {
+                                console.warn('⚠️ No se pudo migrar la confirmación:', e);
+                            }
+                            return true;
+                        }
+                    }
+                }
                 
                 return isConfirmed;
             } catch(e) {
-                console.warn("Error verificando confirmación local:", e);
+                console.warn("⚠️ Error verificando confirmación local:", e);
+                
+                // Fallback: verificar solo cookies
+                try {
+                    const cookieValue = document.cookie.split(';').find(cookie => 
+                        cookie.trim().startsWith(`${confirmationKey}=`)
+                    );
+                    if (cookieValue) {
+                        const cookieConfirmed = cookieValue.split('=')[1] === 'true';
+                        console.log(`🍪 Fallback a cookies: confirmado = ${cookieConfirmed}`);
+                        return cookieConfirmed;
+                    }
+                } catch (cookieError) {
+                    console.error("❌ Error en fallback de cookies:", cookieError);
+                }
+                
                 return false;
             }
         }
@@ -251,17 +425,19 @@ console.log('🎯 invitation.js cargado');
                 const syncKey = `${confirmationKey}_synced`;
                 
                 try {
-                    const isConfirmed = localStorage.getItem(confirmationKey) === 'true';
-                    const timestamp = localStorage.getItem(timestampKey);
-                    const isSynced = localStorage.getItem(syncKey) === 'true';
+                    const isConfirmed = storageManager.getItem(confirmationKey) === 'true';
+                    const timestamp = storageManager.getItem(timestampKey);
+                    const isSynced = storageManager.getItem(syncKey) === 'true';
+                    
+                    console.log(`🔍 Verificando sincronización: confirmado=${isConfirmed}, sincronizado=${isSynced}`);
                     
                     // Si está confirmado localmente pero no sincronizado
                     if (isConfirmed && !isSynced && timestamp) {
-                        console.log("Encontrada confirmación pendiente de sincronizar");
+                        console.log("✅ Encontrada confirmación pendiente de sincronizar");
                         syncPendingConfirmation();
                     }
                 } catch (e) {
-                    console.warn("Error verificando sincronización pendiente:", e);
+                    console.warn("⚠️ Error verificando sincronización pendiente:", e);
                 }
             }
 
@@ -288,7 +464,7 @@ console.log('🎯 invitation.js cargado');
                     console.log("✅ Confirmación sincronizada exitosamente");
                     // Marcar como sincronizada
                     const syncKey = `boda_confirmado_${invitadoActual.id}_synced`;
-                    localStorage.setItem(syncKey, 'true');
+                    storageManager.setItem(syncKey, 'true');
                     
                     // Mostrar notificación de sincronización
                     showSyncNotification();
@@ -467,41 +643,83 @@ console.log('🎯 invitation.js cargado');
                 }
 
                 // Verificar confirmación local inmediatamente después de cargar datos del invitado
+                console.log("🔍 Verificando confirmación local al cargar datos...");
                 const localConfirmation = checkLocalConfirmation();
+                
                 if (localConfirmation) {
-                    console.log("Confirmación local encontrada al cargar datos, mostrando QR inmediatamente");
+                    console.log("✅ Confirmación local encontrada al cargar datos, mostrando QR inmediatamente");
                     updateUIBasedOnConfirmation(true);
-                    return; // No necesitamos verificar con Google Sheets si ya confirmó localmente
+                    
+                    // Para Chrome móvil, verificar también en el servidor como respaldo
+                    const browserInfo = detectBrowserAndDevice();
+                    if (browserInfo.isChromeMobile) {
+                        console.log("📱 Chrome móvil detectado, verificando también en servidor como respaldo...");
+                        // Continuar con la verificación del servidor pero no bloquear la UI
+                    } else {
+                        return; // No necesitamos verificar con Google Sheets si ya confirmó localmente
+                    }
+                } else {
+                    console.log("❌ No se encontró confirmación local, verificando en servidor...");
                 }
 
-                console.log("Verificando estado de confirmación (JSONP)...");
+                console.log("🌐 Verificando estado de confirmación en servidor...");
+                
+                // Detectar navegador para ajustar la estrategia
+                const browserInfo = detectBrowserAndDevice();
+                
+                // Para Chrome móvil, usar timeout más corto y fallback más agresivo
+                const timeoutDuration = browserInfo.isChromeMobile ? 5000 : 10000;
+                const fallbackStrategy = browserInfo.isChromeMobile ? 'aggressive' : 'standard';
+                
+                console.log(`📱 Estrategia de verificación: ${fallbackStrategy}, timeout: ${timeoutDuration}ms`);
                 
                 const callbackCheckStatus = 'handleCheckStatusResponse' + Date.now();
                 const checkUrl = `${GOOGLE_APPS_SCRIPT_URL}?action=checkStatus&id=${guestId}&callback=${callbackCheckStatus}&t=${Date.now()}`;
                 const scriptCheckTag = document.createElement('script');
                 scriptCheckTag.src = checkUrl;
+                
                 let checkTimeoutId = setTimeout(() => {
-                    console.warn("Timeout esperando respuesta checkStatus. Asumiendo no confirmado.");
-                    updateUIBasedOnConfirmation(false);
+                    console.warn(`⏰ Timeout (${timeoutDuration}ms) esperando respuesta checkStatus.`);
+                    
+                    if (fallbackStrategy === 'aggressive') {
+                        console.log("📱 Chrome móvil: usando fallback agresivo - asumiendo estado local");
+                        // En Chrome móvil, confiar más en el estado local
+                        const localState = checkLocalConfirmation();
+                        updateUIBasedOnConfirmation(localState);
+                    } else {
+                        console.log("🖥️ Desktop: asumiendo no confirmado");
+                        updateUIBasedOnConfirmation(false);
+                    }
+                    
                     try { delete window[callbackCheckStatus]; } catch(e){}
-                }, 10000);
+                }, timeoutDuration);
 
                 scriptCheckTag.onerror = () => {
                     clearTimeout(checkTimeoutId);
-                    console.error("Error al cargar script JSONP checkStatus.");
-                    updateUIBasedOnConfirmation(false);
+                    console.error("❌ Error al cargar script JSONP checkStatus.");
+                    
+                    if (fallbackStrategy === 'aggressive') {
+                        console.log("📱 Chrome móvil: fallback agresivo en error - usando estado local");
+                        const localState = checkLocalConfirmation();
+                        updateUIBasedOnConfirmation(localState);
+                    } else {
+                        updateUIBasedOnConfirmation(false);
+                    }
+                    
                     try { document.body.removeChild(scriptCheckTag); } catch (e) {}
                     try { delete window[callbackCheckStatus]; } catch (e) {}
                 };
 
                 window[callbackCheckStatus] = (data) => {
                     clearTimeout(checkTimeoutId);
-                    console.log("Respuesta del checkStatus (JSONP):", data);
+                    console.log("✅ Respuesta del checkStatus (JSONP):", data);
                     confirmacionVerificada = true;
                     updateUIBasedOnConfirmation(data.status === 'confirmed');
                     try { document.body.removeChild(scriptCheckTag); } catch (e) {}
                     try { delete window[callbackCheckStatus]; } catch (e) {}
                 };
+                
+                // Añadir el script al DOM
                 document.body.appendChild(scriptCheckTag);
             })
             .catch(error => {

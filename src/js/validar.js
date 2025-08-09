@@ -28,6 +28,87 @@
         // --- URL del Apps Script (¡¡REEMPLAZAR!!) ---
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
 
+        // --- INTEGRACIÓN CON CHROME MOBILE FIX ---
+        let robustStorage = null;
+        
+        // Inicializar almacenamiento robusto si está disponible
+        function initializeRobustStorage() {
+            if (window.RobustStorage) {
+                robustStorage = new window.RobustStorage();
+                console.log('✅ Almacenamiento robusto inicializado');
+                return true;
+            } else {
+                console.warn('⚠️ RobustStorage no disponible, usando localStorage estándar');
+                return false;
+            }
+        }
+        
+        // Función para persistir confirmación de invitado
+        function persistGuestConfirmation(guestId, guestData) {
+            if (!guestId) return false;
+            
+            const confirmationData = {
+                guestId: guestId,
+                guestData: guestData,
+                confirmedAt: new Date().toISOString(),
+                timestamp: Date.now()
+            };
+            
+            // Usar almacenamiento robusto si está disponible
+            if (robustStorage && window.persistConfirmation) {
+                return window.persistConfirmation(guestId, confirmationData);
+            }
+            
+            // Fallback a localStorage estándar
+            try {
+                localStorage.setItem(`boda_confirmado_${guestId}`, JSON.stringify(confirmationData));
+                localStorage.setItem('boda_confirmado', JSON.stringify(confirmationData));
+                console.log('✅ Confirmación persistida en localStorage');
+                return true;
+            } catch (e) {
+                console.warn('❌ Error persistiendo en localStorage:', e);
+                return false;
+            }
+        }
+        
+        // Función para recuperar confirmación de invitado
+        function recoverGuestConfirmation(guestId) {
+            if (!guestId) return null;
+            
+            // Usar almacenamiento robusto si está disponible
+            if (robustStorage) {
+                const data = robustStorage.get(`boda_confirmado_${guestId}`);
+                if (data) return data;
+            }
+            
+            // Fallback a localStorage estándar
+            try {
+                const data = localStorage.getItem(`boda_confirmado_${guestId}`);
+                return data ? JSON.parse(data) : null;
+            } catch (e) {
+                console.warn('❌ Error recuperando de localStorage:', e);
+                return null;
+            }
+        }
+        
+        // Función para limpiar confirmación de invitado
+        function clearGuestConfirmation(guestId) {
+            if (!guestId) return;
+            
+            // Usar almacenamiento robusto si está disponible
+            if (robustStorage) {
+                robustStorage.remove(`boda_confirmado_${guestId}`);
+            }
+            
+            // Limpiar localStorage estándar
+            try {
+                localStorage.removeItem(`boda_confirmado_${guestId}`);
+                localStorage.removeItem('boda_confirmado');
+            } catch (e) {
+                console.warn('❌ Error limpiando localStorage:', e);
+            }
+        }
+
         // --- Función para convertir nombres separados por comas en lista HTML ---
         function formatNamesAsList(namesString) {
             if (!namesString || namesString.trim() === '') {
@@ -98,105 +179,73 @@
                     guestDetailsDiv.style.transform = 'translateY(0)';
                 }, 100);
                 
-                // Si está confirmado, mostrar detalles de confirmación
-                if (invitado.confirmado && confirmationDetailsDiv) {
-                    // Actualizar detalles de confirmación
-                    if (passesUsedEl) passesUsedEl.textContent = invitado.pasesUtilizados != null ? invitado.pasesUtilizados : '0';
-                    if (kidsUsedEl) kidsUsedEl.textContent = invitado.ninosUtilizados != null ? invitado.ninosUtilizados : '0';
-                    if (adultNamesEl) {
-                        adultNamesEl.innerHTML = formatNamesAsList(invitado.nombresInvitados);
-                        adultNamesEl.classList.add('names-list');
-                    }
-                    
-                    // Mostrar nombres de niños solo si hay niños
-                    if (invitado.nombresNinos && invitado.nombresNinos.trim() !== '') {
-                        if (kidsNamesEl) {
-                            kidsNamesEl.innerHTML = formatNamesAsList(invitado.nombresNinos);
-                            kidsNamesEl.classList.add('names-list');
-                        }
-                        if (kidsNamesRow) kidsNamesRow.style.display = 'block';
-                    } else {
-                        if (kidsNamesRow) kidsNamesRow.style.display = 'none';
-                    }
-                    
-                    if (phoneEl) phoneEl.textContent = invitado.telefono || 'No proporcionado';
-                    
-                    // Mostrar email solo si existe
-                    if (invitado.email && invitado.email.trim() !== '') {
-                        if (emailEl) emailEl.textContent = invitado.email;
-                        if (emailRow) emailRow.style.display = 'block';
-                    } else {
-                        if (emailRow) emailRow.style.display = 'none';
-                    }
-                    
-                    // Formatear fecha de confirmación
-                    if (confirmationDateEl && invitado.fechaConfirmacion) {
-                        const fecha = new Date(invitado.fechaConfirmacion);
-                        const fechaFormateada = fecha.toLocaleDateString('es-ES', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        });
-                        confirmationDateEl.textContent = fechaFormateada;
-                    }
-                    
-                    // Mostrar detalles de confirmación con animación retardada
-                    setTimeout(() => {
-                        confirmationDetailsDiv.style.display = 'block';
-                        confirmationDetailsDiv.style.opacity = '0';
-                        confirmationDetailsDiv.style.transform = 'translateY(20px)';
-                        
-                        setTimeout(() => {
-                            confirmationDetailsDiv.style.transition = 'all 0.5s ease';
-                            confirmationDetailsDiv.style.opacity = '1';
-                            confirmationDetailsDiv.style.transform = 'translateY(0)';
-                        }, 100);
-                    }, 300);
-                } else {
-                    // Si no está confirmado, ocultar detalles de confirmación
-                    if (confirmationDetailsDiv) {
-                        confirmationDetailsDiv.style.display = 'none';
-                    }
+                // Si el invitado está confirmado, mostrar detalles de confirmación
+                if (invitado.confirmado || invitado.estado === 'Confirmado') {
+                    showConfirmationDetails(invitado);
                 }
                 
-                // Ocultar formulario con animación
-                if (validationForm) {
-                    validationForm.style.transition = 'all 0.3s ease';
-                    validationForm.style.opacity = '0';
-                    validationForm.style.transform = 'translateY(-20px)';
-                    setTimeout(() => {
-                        validationForm.style.display = 'none';
-                    }, 300);
+                // Persistir confirmación para recuperación en Chrome móvil
+                if (invitado.id) {
+                    persistGuestConfirmation(invitado.id, invitado);
                 }
                 
-            } else { // Error o no encontrado
+            } else if (status === 'error') {
+                // Animación de error
                 statusIcon.classList.add('fas', 'fa-times-circle', 'error');
-                statusMessageEl.textContent = message || "Invitado no encontrado o error.";
+                statusMessageEl.textContent = message || "Error en la validación";
                 statusMessageEl.classList.add('error');
                 
-                // Ocultar todos los detalles
+                // Ocultar detalles del invitado
                 guestDetailsDiv.style.display = 'none';
                 if (confirmationDetailsDiv) {
                     confirmationDetailsDiv.style.display = 'none';
                 }
-                
-                // Mostrar formulario con animación
-                if (validationForm) {
-                    validationForm.style.display = 'block';
-                    validationForm.style.opacity = '0';
-                    validationForm.style.transform = 'translateY(20px)';
-                    setTimeout(() => {
-                        validationForm.style.transition = 'all 0.3s ease';
-                        validationForm.style.opacity = '1';
-                        validationForm.style.transform = 'translateY(0)';
-                    }, 100);
-                }
             }
         }
+        
+        // --- Función para mostrar detalles de confirmación ---
+        function showConfirmationDetails(invitado) {
+            if (!confirmationDetailsDiv) return;
+            
+            // Actualizar detalles de confirmación
+            if (passesUsedEl) passesUsedEl.textContent = invitado.pases_utilizados || invitado.pases || '---';
+            if (kidsUsedEl) kidsUsedEl.textContent = invitado.ninos_utilizados || invitado.ninos || '---';
+            if (adultNamesEl) adultNamesEl.innerHTML = formatNamesAsList(invitado.nombres_adultos || invitado.nombre);
+            if (phoneEl) phoneEl.textContent = invitado.telefono || 'No especificado';
+            if (emailEl) emailEl.textContent = invitado.email || 'No especificado';
+            if (confirmationDateEl) {
+                const fecha = invitado.fecha_confirmacion || invitado.confirmed_at || '---';
+                confirmationDateEl.textContent = fecha;
+            }
+            
+            // Mostrar nombres de niños si hay
+            if (invitado.nombres_ninos && invitado.nombres_ninos.trim() !== '') {
+                if (kidsNamesEl) kidsNamesEl.innerHTML = formatNamesAsList(invitado.nombres_ninos);
+                if (kidsNamesRow) kidsNamesRow.style.display = 'block';
+            } else {
+                if (kidsNamesRow) kidsNamesRow.style.display = 'none';
+            }
+            
+            // Mostrar email si está disponible
+            if (invitado.email && invitado.email.trim() !== '') {
+                if (emailRow) emailRow.style.display = 'block';
+            } else {
+                if (emailRow) emailRow.style.display = 'none';
+            }
+            
+            // Mostrar detalles de confirmación con animación
+            confirmationDetailsDiv.style.display = 'block';
+            confirmationDetailsDiv.style.opacity = '0';
+            confirmationDetailsDiv.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                confirmationDetailsDiv.style.transition = 'all 0.5s ease';
+                confirmationDetailsDiv.style.opacity = '1';
+                confirmationDetailsDiv.style.transform = 'translateY(0)';
+            }, 300);
+        }
 
-        // --- Función para realizar la validación con mejor UX ---
+        // --- Función para validar invitado ---
         function performValidation(guestId) {
             if (!guestId) {
                 updateValidationUI('error', "Por favor, ingresa un ID de invitado válido.");
@@ -284,7 +333,7 @@
             // Limpiar clases del icono
             statusIcon.classList.remove('fas', 'fa-spinner', 'fa-spin', 'loading', 'fa-check-circle', 'success', 'fa-times-circle', 'error');
             statusIcon.classList.add('fas', 'fa-id-card');
-            statusIcon.style.color = '#d1b7a0';
+            statusIcon.style.color = '#d1b0a0';
             
             // Limpiar clases del mensaje
             statusMessageEl.classList.remove('loading-message', 'success', 'error');
@@ -323,10 +372,39 @@
                 guestIdInput.focus();
             }
         }
+        
+        // --- Función para recuperar estado del invitado ---
+        function recoverGuestState(guestId) {
+            if (!guestId) return;
+            
+            console.log(`🔧 Recuperando estado del invitado ${guestId}...`);
+            
+            // Verificar si hay confirmación persistida
+            const confirmation = recoverGuestConfirmation(guestId);
+            if (confirmation && confirmation.guestData) {
+                console.log('✅ Estado del invitado recuperado de almacenamiento local');
+                updateValidationUI('success', "¡Invitado Válido! Acceso confirmado.", confirmation.guestData);
+                return;
+            }
+            
+            // Si no hay confirmación persistida, validar desde el servidor
+            console.log('🔍 No hay confirmación persistida, validando desde servidor...');
+            performValidation(guestId);
+        }
 
         // --- Lógica Principal ---
         const urlParams = new URLSearchParams(window.location.search);
         const guestIdFromUrl = urlParams.get('id');
+
+        // Inicializar almacenamiento robusto
+        initializeRobustStorage();
+        
+        // Intentar recuperar estado si es Chrome móvil
+        if (window.recoverChromeMobileState) {
+            setTimeout(() => {
+                window.recoverChromeMobileState();
+            }, 1000);
+        }
 
         if (guestIdFromUrl) {
             // Si el ID está en la URL, validar directamente
@@ -399,6 +477,15 @@
             if (status === 'success') {
                 // Agregar botón de nueva validación después de un delay
                 setTimeout(addNewValidationButton, 1000);
+            }
+        };
+        
+        // --- EXPONER FUNCIONES GLOBALMENTE PARA INTEGRACIÓN ---
+        window.performValidation = performValidation;
+        window.recoverGuestState = recoverGuestState;
+        window.updateUIBasedOnConfirmation = function(confirmed, guestId) {
+            if (confirmed && guestId) {
+                recoverGuestState(guestId);
             }
         };
 
