@@ -86,7 +86,7 @@ window.VALIDAR_CONFIG = {
     
     // Función para optimizar dispositivos móviles
     optimizeForMobile: function() {
-        if (this.isMobileDevice()) {
+        if (window.isMobileDevice()) {
             // Reducir animaciones en móviles
             document.body.style.setProperty('--animation-duration', '0.2s');
             
