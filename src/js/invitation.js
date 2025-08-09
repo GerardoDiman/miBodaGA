@@ -185,6 +185,28 @@ console.log('🎯 invitation.js cargado');
             }
         }
 
+        /** Verifica si el invitado ya confirmó localmente */
+        function checkLocalConfirmation() {
+            if (!invitadoActual) return false;
+            
+            const confirmationKey = `boda_confirmado_${invitadoActual.id}`;
+            try {
+                const isConfirmed = localStorage.getItem(confirmationKey) === 'true';
+                const timestamp = localStorage.getItem(`${confirmationKey}_timestamp`);
+                console.log(`Verificación local: ${invitadoActual.id} confirmado = ${isConfirmed}, timestamp = ${timestamp}`);
+                
+                // Debug: mostrar todas las claves relacionadas con este invitado
+                const allKeys = Object.keys(localStorage);
+                const relatedKeys = allKeys.filter(key => key.includes(invitadoActual.id));
+                console.log('Claves relacionadas en localStorage:', relatedKeys);
+                
+                return isConfirmed;
+            } catch(e) {
+                console.warn("Error verificando confirmación local:", e);
+                return false;
+            }
+        }
+
         /** Función de fallback cuando Google Sheets falla */
         function handleGoogleSheetsFailure() {
             console.warn("Google Sheets no disponible. Usando fallback local.");
@@ -444,7 +466,16 @@ console.log('🎯 invitation.js cargado');
                     if(passesSpanElement) passesSpanElement.innerHTML = `<span id="guest-passes-placeholder">${invitadoActual.pases}</span> - PASES`;
                 }
 
+                // Verificar confirmación local inmediatamente después de cargar datos del invitado
+                const localConfirmation = checkLocalConfirmation();
+                if (localConfirmation) {
+                    console.log("Confirmación local encontrada al cargar datos, mostrando QR inmediatamente");
+                    updateUIBasedOnConfirmation(true);
+                    return; // No necesitamos verificar con Google Sheets si ya confirmó localmente
+                }
+
                 console.log("Verificando estado de confirmación (JSONP)...");
+                
                 const callbackCheckStatus = 'handleCheckStatusResponse' + Date.now();
                 const checkUrl = `${GOOGLE_APPS_SCRIPT_URL}?action=checkStatus&id=${guestId}&callback=${callbackCheckStatus}&t=${Date.now()}`;
                 const scriptCheckTag = document.createElement('script');
@@ -499,6 +530,11 @@ console.log('🎯 invitation.js cargado');
 
         // Inicializar el sistema de sincronización
         setupAutoSync();
+
+        // Exponer funciones globalmente para que otros scripts puedan usarlas
+        window.updateUIBasedOnConfirmation = updateUIBasedOnConfirmation;
+        window.checkLocalConfirmation = checkLocalConfirmation;
+        window.displayQrCode = displayQrCode;
 
     });
 })();

@@ -612,15 +612,65 @@
                     // Enviar datos a Google Sheets
                     await submitFormData(formData);
                     
+                    // Guardar confirmación en localStorage inmediatamente
+                    if (invitadoActual && invitadoActual.id) {
+                        const confirmationKey = `boda_confirmado_${invitadoActual.id}`;
+                        const timestampKey = `${confirmationKey}_timestamp`;
+                        try {
+                            localStorage.setItem(confirmationKey, 'true');
+                            localStorage.setItem(timestampKey, Date.now().toString());
+                            console.log('✅ Confirmación guardada en localStorage:', confirmationKey);
+                        } catch (e) {
+                            console.warn('⚠️ No se pudo guardar en localStorage:', e);
+                        }
+                    }
+                    
                     // Mostrar mensaje de éxito
                     showSuccessMessage();
                     
                     // Ocultar formulario
                     hideRsvpForm();
                     
-                    // Actualizar UI para mostrar QR (si es necesario)
+                    // Actualizar UI para mostrar QR inmediatamente
+                    console.log('✅ Formulario enviado exitosamente, mostrando QR...');
+                    
+                    // Intentar usar la función global si está disponible
                     if (window.updateUIBasedOnConfirmation) {
                         window.updateUIBasedOnConfirmation(true);
+                    } else {
+                        // Fallback: mostrar QR directamente si la función no está disponible
+                        console.log('⚠️ Función global no disponible, usando fallback local');
+                        if (window.displayQrCode && invitadoActual) {
+                            window.displayQrCode(invitadoActual);
+                        } else {
+                            // Fallback final: mostrar mensaje de éxito y ocultar botón
+                            if (confirmButton) {
+                                confirmButton.style.display = 'none';
+                                confirmButton.disabled = true;
+                            }
+                            // Mostrar mensaje de que el QR se mostrará al recargar
+                            const qrMessage = document.createElement('div');
+                            qrMessage.style.cssText = `
+                                background: rgba(76, 175, 80, 0.1);
+                                border: 1px solid rgba(76, 175, 80, 0.3);
+                                color: #4CAF50;
+                                padding: 15px;
+                                border-radius: 8px;
+                                margin: 20px 0;
+                                text-align: center;
+                                font-size: 0.95em;
+                            `;
+                            qrMessage.innerHTML = `
+                                <strong>✅ ¡Confirmación Exitosa!</strong><br>
+                                Tu código QR se mostrará al recargar la página.
+                            `;
+                            
+                            // Insertar el mensaje después del formulario
+                            const rsvpSection = document.querySelector('.rsvp-section');
+                            if (rsvpSection) {
+                                rsvpSection.appendChild(qrMessage);
+                            }
+                        }
                     }
                     
                 } catch (error) {
