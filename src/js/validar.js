@@ -30,22 +30,45 @@
 
         // --- INTEGRACIÓN CON CHROME MOBILE FIX ---
         let robustStorage = null;
+        let isInitializingStorage = false;
         
         // Inicializar almacenamiento robusto si está disponible
         function initializeRobustStorage() {
+            if (isInitializingStorage) {
+                console.log('⚠️ Ya se está inicializando el almacenamiento, ignorando llamada adicional');
+                return false;
+            }
+            
+            isInitializingStorage = true;
+            
             if (window.RobustStorage) {
                 robustStorage = new window.RobustStorage();
                 console.log('✅ Almacenamiento robusto inicializado');
+                // Resetear el flag después de un delay
+                setTimeout(() => {
+                    isInitializingStorage = false;
+                }, 1000);
                 return true;
             } else {
                 console.warn('⚠️ RobustStorage no disponible, usando localStorage estándar');
+                // Resetear el flag después de un delay
+                setTimeout(() => {
+                    isInitializingStorage = false;
+                }, 1000);
                 return false;
             }
         }
         
         // Función para persistir confirmación de invitado
+        let isPersistingConfirmation = false;
+        
         function persistGuestConfirmation(guestId, guestData) {
-            if (!guestId) return false;
+            if (!guestId || isPersistingConfirmation) {
+                console.log('⚠️ Persistencia de confirmación ignorada:', { guestId, isPersistingConfirmation });
+                return false;
+            }
+            
+            isPersistingConfirmation = true;
             
             const confirmationData = {
                 guestId: guestId,
@@ -56,7 +79,12 @@
             
             // Usar almacenamiento robusto si está disponible
             if (robustStorage && window.persistConfirmation) {
-                return window.persistConfirmation(guestId, confirmationData);
+                const result = window.persistConfirmation(guestId, confirmationData);
+                // Resetear el flag después de un delay
+                setTimeout(() => {
+                    isPersistingConfirmation = false;
+                }, 1000);
+                return result;
             }
             
             // Fallback a localStorage estándar
@@ -64,71 +92,150 @@
                 localStorage.setItem(`boda_confirmado_${guestId}`, JSON.stringify(confirmationData));
                 localStorage.setItem('boda_confirmado', JSON.stringify(confirmationData));
                 console.log('✅ Confirmación persistida en localStorage');
+                // Resetear el flag después de un delay
+                setTimeout(() => {
+                    isPersistingConfirmation = false;
+                }, 1000);
                 return true;
             } catch (e) {
                 console.warn('❌ Error persistiendo en localStorage:', e);
+                // Resetear el flag después de un delay
+                setTimeout(() => {
+                    isPersistingConfirmation = false;
+                }, 1000);
                 return false;
             }
         }
         
         // Función para recuperar confirmación de invitado
+        let isRecoveringConfirmation = false;
+        
         function recoverGuestConfirmation(guestId) {
-            if (!guestId) return null;
+            if (!guestId || isRecoveringConfirmation) {
+                console.log('⚠️ Recuperación de confirmación ignorada:', { guestId, isRecoveringConfirmation });
+                return null;
+            }
+            
+            isRecoveringConfirmation = true;
             
             // Usar almacenamiento robusto si está disponible
             if (robustStorage) {
                 const data = robustStorage.get(`boda_confirmado_${guestId}`);
-                if (data) return data;
+                // Resetear el flag después de un delay
+                setTimeout(() => {
+                    isRecoveringConfirmation = false;
+                }, 500);
+                return data;
             }
             
             // Fallback a localStorage estándar
             try {
                 const data = localStorage.getItem(`boda_confirmado_${guestId}`);
+                // Resetear el flag después de un delay
+                setTimeout(() => {
+                    isRecoveringConfirmation = false;
+                }, 500);
                 return data ? JSON.parse(data) : null;
             } catch (e) {
                 console.warn('❌ Error recuperando de localStorage:', e);
+                // Resetear el flag después de un delay
+                setTimeout(() => {
+                    isRecoveringConfirmation = false;
+                }, 500);
                 return null;
             }
         }
         
         // Función para limpiar confirmación de invitado
+        let isClearingConfirmation = false;
+        
         function clearGuestConfirmation(guestId) {
-            if (!guestId) return;
+            if (!guestId || isClearingConfirmation) {
+                console.log('⚠️ Limpieza de confirmación ignorada:', { guestId, isClearingConfirmation });
+                return;
+            }
+            
+            isClearingConfirmation = true;
             
             // Usar almacenamiento robusto si está disponible
             if (robustStorage) {
                 robustStorage.remove(`boda_confirmado_${guestId}`);
+                robustStorage.remove('boda_confirmado');
             }
             
-            // Limpiar localStorage estándar
+            // Fallback a localStorage estándar
             try {
                 localStorage.removeItem(`boda_confirmado_${guestId}`);
                 localStorage.removeItem('boda_confirmado');
+                console.log('✅ Confirmación limpiada de localStorage');
             } catch (e) {
-                console.warn('❌ Error limpiando localStorage:', e);
+                console.warn('❌ Error limpiando de localStorage:', e);
             }
+            
+            // Resetear el flag después de un delay
+            setTimeout(() => {
+                isClearingConfirmation = false;
+            }, 500);
         }
 
-        // --- Función para convertir nombres separados por comas en lista HTML ---
+        // --- Función para formatear nombres como lista ---
+        let isFormattingNames = false;
+        
         function formatNamesAsList(namesString) {
-            if (!namesString || namesString.trim() === '') {
-                return '<span style="color: rgba(255, 255, 255, 0.6); font-style: italic;">No especificado</span>';
+            if (!namesString || isFormattingNames) {
+                console.log('⚠️ Formateo de nombres ignorado:', { namesString, isFormattingNames });
+                return 'No disponible';
             }
             
-            // Dividir por comas y limpiar espacios
-            const names = namesString.split(',').map(name => name.trim()).filter(name => name.length > 0);
+            isFormattingNames = true;
             
-            if (names.length === 0) {
-                return '<span style="color: rgba(255, 255, 255, 0.6); font-style: italic;">No especificado</span>';
+            try {
+                // Si es un string, dividir por comas y formatear
+                if (typeof namesString === 'string') {
+                    const names = namesString.split(',').map(name => name.trim()).filter(name => name);
+                    if (names.length === 0) {
+                        // Resetear el flag después de un delay
+                        setTimeout(() => {
+                            isFormattingNames = false;
+                        }, 500);
+                        return 'No disponible';
+                    }
+                    
+                    const formattedNames = names.map(name => `<li>${name}</li>`).join('');
+                    // Resetear el flag después de un delay
+                    setTimeout(() => {
+                        isFormattingNames = false;
+                    }, 500);
+                    return `<ul style="margin: 0; padding-left: 20px;">${formattedNames}</ul>`;
+                }
+                
+                // Resetear el flag después de un delay
+                setTimeout(() => {
+                    isFormattingNames = false;
+                }, 500);
+                return 'Formato no válido';
+            } catch (e) {
+                console.error('Error formateando nombres:', e);
+                // Resetear el flag después de un delay
+                setTimeout(() => {
+                    isFormattingNames = false;
+                }, 500);
+                return 'Error en formato';
             }
-            
-            // Crear lista HTML
-            const listItems = names.map(name => `<li>${name}</li>`).join('');
-            return `<ul>${listItems}</ul>`;
         }
 
-        // --- Función para actualizar la UI con animaciones mejoradas ---
+        // --- Función para actualizar la UI de validación ---
+        let isUpdatingUI = false;
+        
         function updateValidationUI(status, message, invitado = null) {
+            // Evitar actualizaciones duplicadas
+            if (isUpdatingUI) {
+                console.log('⚠️ Ya se está actualizando la UI, ignorando llamada adicional');
+                return;
+            }
+            
+            isUpdatingUI = true;
+            
             // Limpiar clases anteriores
             statusIcon.classList.remove('fa-spinner', 'fa-spin', 'loading', 'fa-check-circle', 'success', 'fa-times-circle', 'error', 'fa-question-circle');
             statusMessageEl.classList.remove('loading-message', 'success', 'error');
@@ -201,11 +308,23 @@
                     confirmationDetailsDiv.style.display = 'none';
                 }
             }
+            
+            // Resetear el flag después de un delay
+            setTimeout(() => {
+                isUpdatingUI = false;
+            }, 1000);
         }
         
         // --- Función para mostrar detalles de confirmación ---
+        let isShowingConfirmation = false;
+        
         function showConfirmationDetails(invitado) {
-            if (!confirmationDetailsDiv) return;
+            if (!confirmationDetailsDiv || isShowingConfirmation) {
+                console.log('⚠️ Mostrar confirmación ignorada:', { confirmationDetailsDiv, isShowingConfirmation });
+                return;
+            }
+            
+            isShowingConfirmation = true;
             
             // Actualizar detalles de confirmación
             if (passesUsedEl) passesUsedEl.textContent = invitado.pases_utilizados || invitado.pases || '---';
@@ -242,19 +361,35 @@
                 confirmationDetailsDiv.style.transition = 'all 0.5s ease';
                 confirmationDetailsDiv.style.opacity = '1';
                 confirmationDetailsDiv.style.transform = 'translateY(0)';
-            }, 300);
+            }, 200);
+            
+            // Resetear el flag después de un delay
+            setTimeout(() => {
+                isShowingConfirmation = false;
+            }, 1000);
         }
 
         // --- Función para validar invitado ---
+        let isPerformingValidation = false;
+        
         function performValidation(guestId) {
             if (!guestId) {
                 updateValidationUI('error', "Por favor, ingresa un ID de invitado válido.");
                 return;
             }
             
+            // Evitar validaciones duplicadas
+            if (isPerformingValidation) {
+                console.log('⚠️ Ya se está realizando una validación, ignorando llamada adicional');
+                return;
+            }
+            
+            isPerformingValidation = true;
+            
             // Validar formato del ID
             if (!/^[a-z0-9]{6}$/.test(guestId)) {
                 updateValidationUI('error', "El ID debe tener exactamente 6 caracteres (letras y números).");
+                isPerformingValidation = false;
                 return;
             }
             
@@ -295,6 +430,7 @@
                 // Limpiar
                 try { delete window[callbackFunctionName]; } catch(e){}
                 try { document.body.removeChild(scriptTag); } catch (e) {}
+                isPerformingValidation = false;
             }, 15000); // Timeout de 15 segundos
 
             // Manejar errores de carga del script
@@ -305,6 +441,7 @@
                 // Limpiar
                 try { document.body.removeChild(scriptTag); } catch (e) {}
                 try { delete window[callbackFunctionName]; } catch (e) {}
+                isPerformingValidation = false;
             };
 
             // Definir la función de callback global
@@ -321,6 +458,7 @@
                 // Limpiar después de ejecutar
                 try { document.body.removeChild(scriptTag); } catch (e) {}
                 try { delete window[callbackFunctionName]; } catch (e) {}
+                isPerformingValidation = false;
             };
 
             // Añadir el script al body
@@ -329,7 +467,17 @@
         }
 
         // --- Función para mostrar estado inicial mejorado ---
+        let isShowingInitialState = false;
+        
         function showInitialState() {
+            // Evitar ejecuciones duplicadas
+            if (isShowingInitialState) {
+                console.log('⚠️ Ya se está mostrando el estado inicial, ignorando llamada adicional');
+                return;
+            }
+            
+            isShowingInitialState = true;
+            
             // Limpiar clases del icono
             statusIcon.classList.remove('fas', 'fa-spinner', 'fa-spin', 'loading', 'fa-check-circle', 'success', 'fa-times-circle', 'error');
             statusIcon.classList.add('fas', 'fa-id-card');
@@ -363,20 +511,45 @@
             if (existingBtn) {
                 existingBtn.remove();
             }
+            
+            // Resetear el flag después de un delay
+            setTimeout(() => {
+                isShowingInitialState = false;
+            }, 1000);
         }
 
         // --- Función para limpiar formulario ---
+        let isClearingForm = false;
+        
         function clearForm() {
+            if (isClearingForm) {
+                console.log('⚠️ Ya se está limpiando el formulario, ignorando llamada adicional');
+                return;
+            }
+            
+            isClearingForm = true;
+            
             if (guestIdInput) {
                 guestIdInput.value = '';
                 guestIdInput.focus();
             }
+            
+            // Resetear el flag después de un delay
+            setTimeout(() => {
+                isClearingForm = false;
+            }, 500);
         }
         
         // --- Función para recuperar estado del invitado ---
+        let isRecoveringState = false;
+        
         function recoverGuestState(guestId) {
-            if (!guestId) return;
+            if (!guestId || isRecoveringState) {
+                console.log('⚠️ Recuperación de estado ignorada:', { guestId, isRecoveringState });
+                return;
+            }
             
+            isRecoveringState = true;
             console.log(`🔧 Recuperando estado del invitado ${guestId}...`);
             
             // Verificar si hay confirmación persistida
@@ -384,12 +557,18 @@
             if (confirmation && confirmation.guestData) {
                 console.log('✅ Estado del invitado recuperado de almacenamiento local');
                 updateValidationUI('success', "¡Invitado Válido! Acceso confirmado.", confirmation.guestData);
+                isRecoveringState = false;
                 return;
             }
             
             // Si no hay confirmación persistida, validar desde el servidor
             console.log('🔍 No hay confirmación persistida, validando desde servidor...');
             performValidation(guestId);
+            
+            // Resetear el flag después de un delay
+            setTimeout(() => {
+                isRecoveringState = false;
+            }, 3000);
         }
 
         // --- Lógica Principal ---
@@ -399,20 +578,54 @@
         // Inicializar almacenamiento robusto
         initializeRobustStorage();
         
-        // Intentar recuperar estado si es Chrome móvil
-        if (window.recoverChromeMobileState) {
+        // Variable para controlar si ya se está procesando una validación
+        let isProcessingValidation = false;
+        
+        // Función para manejar la lógica de validación de manera controlada ---
+        let isHandlingValidation = false;
+        
+        function handleValidationLogic() {
+            if (isHandlingValidation) {
+                console.log('⚠️ Ya se está manejando la lógica de validación, ignorando llamada adicional');
+                return;
+            }
+            
+            isHandlingValidation = true;
+            
+            if (guestIdFromUrl) {
+                // Si el ID está en la URL, validar directamente
+                console.log('🔍 ID encontrado en URL, validando directamente:', guestIdFromUrl);
+                performValidation(guestIdFromUrl);
+            } else {
+                // Si no hay ID en la URL, mostrar el formulario
+                console.log('📝 No hay ID en URL, mostrando formulario');
+                showInitialState();
+            }
+            
+            // Resetear el flag después de un delay
+            setTimeout(() => {
+                isHandlingValidation = false;
+            }, 2000);
+        }
+        
+        // Intentar recuperar estado si es Chrome móvil, pero solo si no hay ID en la URL
+        if (window.recoverChromeMobileState && !guestIdFromUrl) {
+            console.log('🔧 Chrome móvil detectado, intentando recuperar estado...');
             setTimeout(() => {
                 window.recoverChromeMobileState();
             }, 1000);
+        } else if (guestIdFromUrl) {
+            // Si hay ID en la URL, procesar inmediatamente
+            console.log('🔍 ID en URL detectado, procesando validación inmediatamente');
+            handleValidationLogic();
+        } else {
+            // Si no hay ID en URL, mostrar formulario
+            console.log('📝 Inicializando formulario de validación');
+            handleValidationLogic();
         }
 
-        if (guestIdFromUrl) {
-            // Si el ID está en la URL, validar directamente
-            performValidation(guestIdFromUrl);
-        } else {
-            // Si no hay ID en la URL, mostrar el formulario
-            showInitialState();
-
+        if (!guestIdFromUrl) {
+            // Solo configurar el formulario si no hay ID en la URL
             if (validationForm) {
                 validationForm.addEventListener('submit', (event) => {
                     event.preventDefault();
@@ -448,7 +661,17 @@
         }
 
         // --- Función para agregar botón de "Nueva Validación" ---
+        let isAddingNewButton = false;
+        
         function addNewValidationButton() {
+            // Evitar ejecuciones duplicadas
+            if (isAddingNewButton) {
+                console.log('⚠️ Ya se está agregando el botón de nueva validación, ignorando llamada adicional');
+                return;
+            }
+            
+            isAddingNewButton = true;
+            
             // Remover botón existente si hay uno
             const existingBtn = document.querySelector('.submit-btn[style*="margin-top: 20px"]');
             if (existingBtn) {
@@ -467,6 +690,11 @@
             
             // Insertar después del status message
             statusMessageEl.parentNode.insertBefore(newValidationBtn, statusMessageEl.nextSibling);
+            
+            // Resetear el flag después de un delay
+            setTimeout(() => {
+                isAddingNewButton = false;
+            }, 1000);
         }
 
         // --- Función para mostrar estado de éxito con botón de nueva validación ---
@@ -483,10 +711,26 @@
         // --- EXPONER FUNCIONES GLOBALMENTE PARA INTEGRACIÓN ---
         window.performValidation = performValidation;
         window.recoverGuestState = recoverGuestState;
+        
+        let isUpdatingUIBasedOnConfirmation = false;
+        
         window.updateUIBasedOnConfirmation = function(confirmed, guestId) {
+            if (isUpdatingUIBasedOnConfirmation) {
+                console.log('⚠️ Ya se está actualizando la UI basada en confirmación, ignorando llamada adicional');
+                return;
+            }
+            
+            isUpdatingUIBasedOnConfirmation = true;
+            
             if (confirmed && guestId) {
+                console.log('🔧 Actualizando UI basada en confirmación para:', guestId);
                 recoverGuestState(guestId);
             }
+            
+            // Resetear el flag después de un delay
+            setTimeout(() => {
+                isUpdatingUIBasedOnConfirmation = false;
+            }, 2000);
         };
 
     }); // Fin DOMContentLoaded
