@@ -1,737 +1,472 @@
-// validar.js
+// validar.js - Sistema de validación con escaneo QR y cámara
 (function() {
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- Referencias a Elementos de validar.html ---
-        const statusIcon = document.getElementById('validation-status-icon');
-        const guestDetailsDiv = document.getElementById('guest-details');
-        const confirmationDetailsDiv = document.getElementById('confirmation-details');
-        const guestNameEl = document.getElementById('val-guest-name');
-        const passesEl = document.getElementById('val-passes');
-        const kidsEl = document.getElementById('val-kids');
-        const guestIdEl = document.getElementById('val-guest-id');
-        const statusEl = document.getElementById('val-status');
-        const mesaEl = document.getElementById('val-mesa');
-        const mesaRow = document.getElementById('mesa-row');
-        const passesUsedEl = document.getElementById('val-passes-used');
-        const kidsUsedEl = document.getElementById('val-kids-used');
-        const adultNamesEl = document.getElementById('val-adult-names');
-        const kidsNamesEl = document.getElementById('val-kids-names');
-        const kidsNamesRow = document.getElementById('kids-names-row');
-        const phoneEl = document.getElementById('val-phone');
-        const emailEl = document.getElementById('val-email');
-        const emailRow = document.getElementById('email-row');
-        const confirmationDateEl = document.getElementById('val-confirmation-date');
-        const statusMessageEl = document.getElementById('status-message');
-        const validationForm = document.getElementById('validation-form');
-        const guestIdInput = document.getElementById('guest-id-input');
-
-        // --- URL del Apps Script (¡¡REEMPLAZAR!!) ---
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
-
-        // --- INTEGRACIÓN CON CHROME MOBILE FIX ---
-        let robustStorage = null;
-        let isInitializingStorage = false;
+    'use strict';
+    
+    // Estado global de la aplicación
+    const appState = {
+        isProcessing: false,
+        currentGuestId: null,
+        lastValidation: null
+    };
+    
+    // Referencias a elementos DOM
+    let elements = {};
+    
+    // Variables de cámara
+    let cameraStream = null;
+    let qrScanner = null;
+    let currentCamera = 'environment'; // environment o user
+    
+    // URL del Apps Script (¡¡REEMPLAZAR CON TU URL REAL!!)
+    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
+    
+    // Inicialización cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', initializeApp);
+    
+    function initializeApp() {
+        console.log('🚀 Inicializando sistema de validación con cámara...');
         
-        // Inicializar almacenamiento robusto si está disponible
-        function initializeRobustStorage() {
-            if (isInitializingStorage) {
-                console.log('⚠️ Ya se está inicializando el almacenamiento, ignorando llamada adicional');
-                return false;
-            }
-            
-            isInitializingStorage = true;
-            
-            if (window.RobustStorage) {
-                robustStorage = new window.RobustStorage();
-                console.log('✅ Almacenamiento robusto inicializado');
-                // Resetear el flag después de un delay
-                setTimeout(() => {
-                    isInitializingStorage = false;
-                }, 1000);
-                return true;
-            } else {
-                console.warn('⚠️ RobustStorage no disponible, usando localStorage estándar');
-                // Resetear el flag después de un delay
-                setTimeout(() => {
-                    isInitializingStorage = false;
-                }, 1000);
-                return false;
-            }
+        // Inicializar elementos DOM
+        initializeElements();
+        
+        // Configurar eventos
+        setupEventListeners();
+        
+        // Inicializar cámara si está disponible
+        initializeCamera();
+        
+        // Optimizar para móviles
+        VALIDAR_CONFIG.optimizeForMobile();
+        
+        console.log('✅ Sistema inicializado correctamente');
+    }
+    
+    function initializeElements() {
+        elements = {
+            form: document.querySelector('.validation-form'),
+            guestIdInput: document.getElementById('guestId'),
+            validateBtn: document.getElementById('validateBtn'),
+            scanQRBtn: document.getElementById('scanQRBtn'),
+            cameraInterface: document.getElementById('cameraInterface'),
+            cameraPreview: document.getElementById('cameraPreview'),
+            closeCameraBtn: document.getElementById('closeCameraBtn'),
+            switchCameraBtn: document.getElementById('switchCameraBtn'),
+            toggleFlashBtn: document.getElementById('toggleFlashBtn'),
+            statusMessage: document.getElementById('status-message'),
+            guestDetails: document.getElementById('guest-details'),
+            confirmationDetails: document.getElementById('confirmation-details')
+        };
+    }
+    
+    function setupEventListeners() {
+        // Formulario de validación
+        if (elements.form) {
+            elements.form.addEventListener('submit', handleValidationSubmit);
         }
         
-        // Función para persistir confirmación de invitado
-        let isPersistingConfirmation = false;
-        
-        function persistGuestConfirmation(guestId, guestData) {
-            if (!guestId || isPersistingConfirmation) {
-                console.log('⚠️ Persistencia de confirmación ignorada:', { guestId, isPersistingConfirmation });
-                return false;
-            }
-            
-            isPersistingConfirmation = true;
-            
-            const confirmationData = {
-                guestId: guestId,
-                guestData: guestData,
-                confirmedAt: new Date().toISOString(),
-                timestamp: Date.now()
-            };
-            
-            // Usar almacenamiento robusto si está disponible
-            if (robustStorage && window.persistConfirmation) {
-                const result = window.persistConfirmation(guestId, confirmationData);
-                // Resetear el flag después de un delay
-                setTimeout(() => {
-                    isPersistingConfirmation = false;
-                }, 1000);
-                return result;
-            }
-            
-            // Fallback a localStorage estándar
-            try {
-                localStorage.setItem(`boda_confirmado_${guestId}`, JSON.stringify(confirmationData));
-                localStorage.setItem('boda_confirmado', JSON.stringify(confirmationData));
-                console.log('✅ Confirmación persistida en localStorage');
-                // Resetear el flag después de un delay
-                setTimeout(() => {
-                    isPersistingConfirmation = false;
-                }, 1000);
-                return true;
-            } catch (e) {
-                console.warn('❌ Error persistiendo en localStorage:', e);
-                // Resetear el flag después de un delay
-                setTimeout(() => {
-                    isPersistingConfirmation = false;
-                }, 1000);
-                return false;
-            }
+        // Botón de escaneo QR
+        if (elements.scanQRBtn) {
+            elements.scanQRBtn.addEventListener('click', openCameraInterface);
         }
         
-        // Función para recuperar confirmación de invitado
-        let isRecoveringConfirmation = false;
-        
-        function recoverGuestConfirmation(guestId) {
-            if (!guestId || isRecoveringConfirmation) {
-                console.log('⚠️ Recuperación de confirmación ignorada:', { guestId, isRecoveringConfirmation });
-                return null;
-            }
-            
-            isRecoveringConfirmation = true;
-            
-            // Usar almacenamiento robusto si está disponible
-            if (robustStorage) {
-                const data = robustStorage.get(`boda_confirmado_${guestId}`);
-                // Resetear el flag después de un delay
-                setTimeout(() => {
-                    isRecoveringConfirmation = false;
-                }, 500);
-                return data;
-            }
-            
-            // Fallback a localStorage estándar
-            try {
-                const data = localStorage.getItem(`boda_confirmado_${guestId}`);
-                // Resetear el flag después de un delay
-                setTimeout(() => {
-                    isRecoveringConfirmation = false;
-                }, 500);
-                return data ? JSON.parse(data) : null;
-            } catch (e) {
-                console.warn('❌ Error recuperando de localStorage:', e);
-                // Resetear el flag después de un delay
-                setTimeout(() => {
-                    isRecoveringConfirmation = false;
-                }, 500);
-                return null;
-            }
+        // Controles de cámara
+        if (elements.closeCameraBtn) {
+            elements.closeCameraBtn.addEventListener('click', closeCameraInterface);
         }
         
-        // Función para limpiar confirmación de invitado
-        let isClearingConfirmation = false;
-        
-        function clearGuestConfirmation(guestId) {
-            if (!guestId || isClearingConfirmation) {
-                console.log('⚠️ Limpieza de confirmación ignorada:', { guestId, isClearingConfirmation });
-                return;
-            }
-            
-            isClearingConfirmation = true;
-            
-            // Usar almacenamiento robusto si está disponible
-            if (robustStorage) {
-                robustStorage.remove(`boda_confirmado_${guestId}`);
-                robustStorage.remove('boda_confirmado');
-            }
-            
-            // Fallback a localStorage estándar
-            try {
-                localStorage.removeItem(`boda_confirmado_${guestId}`);
-                localStorage.removeItem('boda_confirmado');
-                console.log('✅ Confirmación limpiada de localStorage');
-            } catch (e) {
-                console.warn('❌ Error limpiando de localStorage:', e);
-            }
-            
-            // Resetear el flag después de un delay
-            setTimeout(() => {
-                isClearingConfirmation = false;
-            }, 500);
-        }
-
-        // --- Función para formatear nombres como lista ---
-        let isFormattingNames = false;
-        
-        function formatNamesAsList(namesString) {
-            if (!namesString || isFormattingNames) {
-                console.log('⚠️ Formateo de nombres ignorado:', { namesString, isFormattingNames });
-                return 'No disponible';
-            }
-            
-            isFormattingNames = true;
-            
-            try {
-                // Si es un string, dividir por comas y formatear
-                if (typeof namesString === 'string') {
-                    const names = namesString.split(',').map(name => name.trim()).filter(name => name);
-                    if (names.length === 0) {
-                        // Resetear el flag después de un delay
-                        setTimeout(() => {
-                            isFormattingNames = false;
-                        }, 500);
-                        return 'No disponible';
-                    }
-                    
-                    const formattedNames = names.map(name => `<li>${name}</li>`).join('');
-                    // Resetear el flag después de un delay
-                    setTimeout(() => {
-                        isFormattingNames = false;
-                    }, 500);
-                    return `<ul style="margin: 0; padding-left: 20px;">${formattedNames}</ul>`;
-                }
-                
-                // Resetear el flag después de un delay
-                setTimeout(() => {
-                    isFormattingNames = false;
-                }, 500);
-                return 'Formato no válido';
-            } catch (e) {
-                console.error('Error formateando nombres:', e);
-                // Resetear el flag después de un delay
-                setTimeout(() => {
-                    isFormattingNames = false;
-                }, 500);
-                return 'Error en formato';
-            }
-        }
-
-        // --- Función para actualizar la UI de validación ---
-        let isUpdatingUI = false;
-        
-        function updateValidationUI(status, message, invitado = null) {
-            // Evitar actualizaciones duplicadas
-            if (isUpdatingUI) {
-                console.log('⚠️ Ya se está actualizando la UI, ignorando llamada adicional');
-                return;
-            }
-            
-            isUpdatingUI = true;
-            
-            // Limpiar clases anteriores
-            statusIcon.classList.remove('fa-spinner', 'fa-spin', 'loading', 'fa-check-circle', 'success', 'fa-times-circle', 'error', 'fa-question-circle');
-            statusMessageEl.classList.remove('loading-message', 'success', 'error');
-
-            if (status === 'success' && invitado) {
-                // Animación de éxito
-                statusIcon.classList.add('fas', 'fa-check-circle', 'success');
-                statusMessageEl.textContent = message || "¡Invitado Válido!";
-                statusMessageEl.classList.add('success');
-                
-                // Actualizar detalles básicos del invitado
-                guestNameEl.textContent = invitado.nombre || 'No disponible';
-                passesEl.textContent = invitado.pases != null ? invitado.pases : '-';
-                kidsEl.textContent = invitado.ninos != null ? invitado.ninos : '-';
-                guestIdEl.textContent = invitado.id || '---';
-                
-                // Mostrar información de mesa si está disponible
-                if (invitado.mesa && invitado.mesa.trim() !== '') {
-                    if (mesaEl) mesaEl.textContent = invitado.mesa;
-                    if (mesaRow) mesaRow.style.display = 'block';
-                } else {
-                    if (mesaRow) mesaRow.style.display = 'none';
-                }
-                
-                // Actualizar estado
-                if (statusEl) {
-                    const estado = invitado.estado || 'Pendiente';
-                    statusEl.textContent = estado;
-                    
-                    // Cambiar el color según el estado
-                    if (estado === 'Confirmado') {
-                        statusEl.style.color = '#4CAF50';
-                        statusEl.style.fontWeight = 'bold';
-                    } else {
-                        statusEl.style.color = '#ffc107';
-                        statusEl.style.fontWeight = 'bold';
-                    }
-                }
-                
-                // Mostrar detalles básicos con animación
-                guestDetailsDiv.style.display = 'block';
-                guestDetailsDiv.style.opacity = '0';
-                guestDetailsDiv.style.transform = 'translateY(20px)';
-                
-                setTimeout(() => {
-                    guestDetailsDiv.style.transition = 'all 0.5s ease';
-                    guestDetailsDiv.style.opacity = '1';
-                    guestDetailsDiv.style.transform = 'translateY(0)';
-                }, 100);
-                
-                // Si el invitado está confirmado, mostrar detalles de confirmación
-                if (invitado.confirmado || invitado.estado === 'Confirmado') {
-                    showConfirmationDetails(invitado);
-                }
-                
-                // Persistir confirmación para recuperación en Chrome móvil
-                if (invitado.id) {
-                    persistGuestConfirmation(invitado.id, invitado);
-                }
-                
-            } else if (status === 'error') {
-                // Animación de error
-                statusIcon.classList.add('fas', 'fa-times-circle', 'error');
-                statusMessageEl.textContent = message || "Error en la validación";
-                statusMessageEl.classList.add('error');
-                
-                // Ocultar detalles del invitado
-                guestDetailsDiv.style.display = 'none';
-                if (confirmationDetailsDiv) {
-                    confirmationDetailsDiv.style.display = 'none';
-                }
-            }
-            
-            // Resetear el flag después de un delay
-            setTimeout(() => {
-                isUpdatingUI = false;
-            }, 1000);
+        if (elements.switchCameraBtn) {
+            elements.switchCameraBtn.addEventListener('click', switchCamera);
         }
         
-        // --- Función para mostrar detalles de confirmación ---
-        let isShowingConfirmation = false;
-        
-        function showConfirmationDetails(invitado) {
-            if (!confirmationDetailsDiv || isShowingConfirmation) {
-                console.log('⚠️ Mostrar confirmación ignorada:', { confirmationDetailsDiv, isShowingConfirmation });
-                return;
-            }
-            
-            isShowingConfirmation = true;
-            
-            // Actualizar detalles de confirmación
-            if (passesUsedEl) passesUsedEl.textContent = invitado.pases_utilizados || invitado.pases || '---';
-            if (kidsUsedEl) kidsUsedEl.textContent = invitado.ninos_utilizados || invitado.ninos || '---';
-            if (adultNamesEl) adultNamesEl.innerHTML = formatNamesAsList(invitado.nombres_adultos || invitado.nombre);
-            if (phoneEl) phoneEl.textContent = invitado.telefono || 'No especificado';
-            if (emailEl) emailEl.textContent = invitado.email || 'No especificado';
-            if (confirmationDateEl) {
-                const fecha = invitado.fecha_confirmacion || invitado.confirmed_at || '---';
-                confirmationDateEl.textContent = fecha;
-            }
-            
-            // Mostrar nombres de niños si hay
-            if (invitado.nombres_ninos && invitado.nombres_ninos.trim() !== '') {
-                if (kidsNamesEl) kidsNamesEl.innerHTML = formatNamesAsList(invitado.nombres_ninos);
-                if (kidsNamesRow) kidsNamesRow.style.display = 'block';
-            } else {
-                if (kidsNamesRow) kidsNamesRow.style.display = 'none';
-            }
-            
-            // Mostrar email si está disponible
-            if (invitado.email && invitado.email.trim() !== '') {
-                if (emailRow) emailRow.style.display = 'block';
-            } else {
-                if (emailRow) emailRow.style.display = 'none';
-            }
-            
-            // Mostrar detalles de confirmación con animación
-            confirmationDetailsDiv.style.display = 'block';
-            confirmationDetailsDiv.style.opacity = '0';
-            confirmationDetailsDiv.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                confirmationDetailsDiv.style.transition = 'all 0.5s ease';
-                confirmationDetailsDiv.style.opacity = '1';
-                confirmationDetailsDiv.style.transform = 'translateY(0)';
-            }, 200);
-            
-            // Resetear el flag después de un delay
-            setTimeout(() => {
-                isShowingConfirmation = false;
-            }, 1000);
-        }
-
-        // --- Función para validar invitado ---
-        let isPerformingValidation = false;
-        
-        function performValidation(guestId) {
-            if (!guestId) {
-                updateValidationUI('error', "Por favor, ingresa un ID de invitado válido.");
-                return;
-            }
-            
-            // Evitar validaciones duplicadas
-            if (isPerformingValidation) {
-                console.log('⚠️ Ya se está realizando una validación, ignorando llamada adicional');
-                return;
-            }
-            
-            isPerformingValidation = true;
-            
-            // Validar formato del ID
-            if (!/^[a-z0-9]{6}$/.test(guestId)) {
-                updateValidationUI('error', "El ID debe tener exactamente 6 caracteres (letras y números).");
-                isPerformingValidation = false;
-                return;
-            }
-            
-            console.log(`Validando ID: ${guestId}`);
-
-            // Ocultar formulario y mostrar mensaje de carga
-            if (validationForm) {
-                validationForm.style.transition = 'all 0.3s ease';
-                validationForm.style.opacity = '0';
-                validationForm.style.transform = 'translateY(-20px)';
-                setTimeout(() => {
-                    validationForm.style.display = 'none';
-                }, 300);
-            }
-            
-            statusMessageEl.textContent = "Verificando invitado...";
-            statusMessageEl.classList.add('loading-message');
-            statusIcon.classList.add('fas', 'fa-spinner', 'fa-spin', 'loading');
-            guestDetailsDiv.style.display = 'none';
-            if (confirmationDetailsDiv) {
-                confirmationDetailsDiv.style.display = 'none';
-            }
-
-            // --- Llamar al Apps Script usando JSONP ---
-            const callbackFunctionName = 'handleValidationResponse' + Date.now();
-
-            // Crear la URL para JSONP
-            const validationUrl = `${GOOGLE_APPS_SCRIPT_URL}?action=getGuestDetails&id=${guestId}&callback=${callbackFunctionName}&t=${Date.now()}`;
-
-            // Crear la etiqueta script
-            const scriptTag = document.createElement('script');
-            scriptTag.src = validationUrl;
-
-            // Variable para controlar timeout
-            let timeoutId = setTimeout(() => {
-                console.error("Timeout esperando respuesta JSONP para:", callbackFunctionName);
-                updateValidationUI('error', "No se recibió respuesta del servidor. Verifica tu conexión a internet.");
-                // Limpiar
-                try { delete window[callbackFunctionName]; } catch(e){}
-                try { document.body.removeChild(scriptTag); } catch (e) {}
-                isPerformingValidation = false;
-            }, 15000); // Timeout de 15 segundos
-
-            // Manejar errores de carga del script
-            scriptTag.onerror = () => {
-                clearTimeout(timeoutId);
-                console.error("Error al cargar el script JSONP desde:", validationUrl);
-                updateValidationUI('error', "Error de comunicación con el servidor. Intenta de nuevo.");
-                // Limpiar
-                try { document.body.removeChild(scriptTag); } catch (e) {}
-                try { delete window[callbackFunctionName]; } catch (e) {}
-                isPerformingValidation = false;
-            };
-
-            // Definir la función de callback global
-            window[callbackFunctionName] = (data) => {
-                clearTimeout(timeoutId);
-                console.log("Respuesta JSONP recibida:", data);
-                
-                if (data.status === 'success' && data.invitado) {
-                    updateValidationUI('success', "¡Invitado Válido! Acceso confirmado.", data.invitado);
-                } else {
-                    updateValidationUI('error', data.message || "Invitado no encontrado. Verifica el ID ingresado.");
-                }
-
-                // Limpiar después de ejecutar
-                try { document.body.removeChild(scriptTag); } catch (e) {}
-                try { delete window[callbackFunctionName]; } catch (e) {}
-                isPerformingValidation = false;
-            };
-
-            // Añadir el script al body
-            console.log("Añadiendo script JSONP:", validationUrl);
-            document.body.appendChild(scriptTag);
-        }
-
-        // --- Función para mostrar estado inicial mejorado ---
-        let isShowingInitialState = false;
-        
-        function showInitialState() {
-            // Evitar ejecuciones duplicadas
-            if (isShowingInitialState) {
-                console.log('⚠️ Ya se está mostrando el estado inicial, ignorando llamada adicional');
-                return;
-            }
-            
-            isShowingInitialState = true;
-            
-            // Limpiar clases del icono
-            statusIcon.classList.remove('fas', 'fa-spinner', 'fa-spin', 'loading', 'fa-check-circle', 'success', 'fa-times-circle', 'error');
-            statusIcon.classList.add('fas', 'fa-id-card');
-            statusIcon.style.color = '#d1b0a0';
-            
-            // Limpiar clases del mensaje
-            statusMessageEl.classList.remove('loading-message', 'success', 'error');
-            statusMessageEl.textContent = "Ingresa tu ID de invitado para validar tu acceso.";
-            
-            // Ocultar todos los detalles del invitado
-            guestDetailsDiv.style.display = 'none';
-            if (confirmationDetailsDiv) {
-                confirmationDetailsDiv.style.display = 'none';
-            }
-            
-            // Mostrar formulario con animación
-            if (validationForm) {
-                validationForm.style.display = 'block';
-                validationForm.style.opacity = '0';
-                validationForm.style.transform = 'translateY(20px)';
-                validationForm.style.transition = 'all 0.3s ease';
-                
-                setTimeout(() => {
-                    validationForm.style.opacity = '1';
-                    validationForm.style.transform = 'translateY(0)';
-                }, 100);
-            }
-            
-            // Remover botón de nueva validación si existe
-            const existingBtn = document.querySelector('.submit-btn[style*="margin-top: 20px"]');
-            if (existingBtn) {
-                existingBtn.remove();
-            }
-            
-            // Resetear el flag después de un delay
-            setTimeout(() => {
-                isShowingInitialState = false;
-            }, 1000);
-        }
-
-        // --- Función para limpiar formulario ---
-        let isClearingForm = false;
-        
-        function clearForm() {
-            if (isClearingForm) {
-                console.log('⚠️ Ya se está limpiando el formulario, ignorando llamada adicional');
-                return;
-            }
-            
-            isClearingForm = true;
-            
-            if (guestIdInput) {
-                guestIdInput.value = '';
-                guestIdInput.focus();
-            }
-            
-            // Resetear el flag después de un delay
-            setTimeout(() => {
-                isClearingForm = false;
-            }, 500);
+        if (elements.toggleFlashBtn) {
+            elements.toggleFlashBtn.addEventListener('click', toggleFlash);
         }
         
-        // --- Función para recuperar estado del invitado ---
-        let isRecoveringState = false;
-        
-        function recoverGuestState(guestId) {
-            if (!guestId || isRecoveringState) {
-                console.log('⚠️ Recuperación de estado ignorada:', { guestId, isRecoveringState });
-                return;
-            }
-            
-            isRecoveringState = true;
-            console.log(`🔧 Recuperando estado del invitado ${guestId}...`);
-            
-            // Verificar si hay confirmación persistida
-            const confirmation = recoverGuestConfirmation(guestId);
-            if (confirmation && confirmation.guestData) {
-                console.log('✅ Estado del invitado recuperado de almacenamiento local');
-                updateValidationUI('success', "¡Invitado Válido! Acceso confirmado.", confirmation.guestData);
-                isRecoveringState = false;
-                return;
-            }
-            
-            // Si no hay confirmación persistida, validar desde el servidor
-            console.log('🔍 No hay confirmación persistida, validando desde servidor...');
-            performValidation(guestId);
-            
-            // Resetear el flag después de un delay
-            setTimeout(() => {
-                isRecoveringState = false;
-            }, 3000);
+        // Validación en tiempo real del input
+        if (elements.guestIdInput) {
+            elements.guestIdInput.addEventListener('input', handleGuestIdInput);
         }
-
-        // --- Lógica Principal ---
-        const urlParams = new URLSearchParams(window.location.search);
-        const guestIdFromUrl = urlParams.get('id');
-
-        // Inicializar almacenamiento robusto
-        initializeRobustStorage();
-        
-        // Variable para controlar si ya se está procesando una validación
-        let isProcessingValidation = false;
-        
-        // Función para manejar la lógica de validación de manera controlada ---
-        let isHandlingValidation = false;
-        
-        function handleValidationLogic() {
-            if (isHandlingValidation) {
-                console.log('⚠️ Ya se está manejando la lógica de validación, ignorando llamada adicional');
-                return;
+    }
+    
+    // Funciones de cámara y QR
+    function initializeCamera() {
+        if (!VALIDAR_CONFIG.camera.isAvailable()) {
+            console.log('📱 Cámara no disponible en este dispositivo');
+            if (elements.scanQRBtn) {
+                elements.scanQRBtn.style.display = 'none';
             }
-            
-            isHandlingValidation = true;
-            
-            if (guestIdFromUrl) {
-                // Si el ID está en la URL, validar directamente
-                console.log('🔍 ID encontrado en URL, validando directamente:', guestIdFromUrl);
-                performValidation(guestIdFromUrl);
-            } else {
-                // Si no hay ID en la URL, mostrar el formulario
-                console.log('📝 No hay ID en URL, mostrando formulario');
-                showInitialState();
-            }
-            
-            // Resetear el flag después de un delay
-            setTimeout(() => {
-                isHandlingValidation = false;
-            }, 2000);
+            return;
         }
         
-        // Intentar recuperar estado si es Chrome móvil, pero solo si no hay ID en la URL
-        if (window.recoverChromeMobileState && !guestIdFromUrl) {
-            console.log('🔧 Chrome móvil detectado, intentando recuperar estado...');
-            setTimeout(() => {
-                window.recoverChromeMobileState();
-            }, 1000);
-        } else if (guestIdFromUrl) {
-            // Si hay ID en la URL, procesar inmediatamente
-            console.log('🔍 ID en URL detectado, procesando validación inmediatamente');
-            handleValidationLogic();
-        } else {
-            // Si no hay ID en URL, mostrar formulario
-            console.log('📝 Inicializando formulario de validación');
-            handleValidationLogic();
+        console.log('📷 Cámara disponible, inicializando...');
+    }
+    
+    function openCameraInterface() {
+        if (!VALIDAR_CONFIG.camera.isAvailable()) {
+            VALIDAR_CONFIG.showNotification('Cámara no disponible en este dispositivo', 'error');
+            return;
         }
-
-        if (!guestIdFromUrl) {
-            // Solo configurar el formulario si no hay ID en la URL
-            if (validationForm) {
-                validationForm.addEventListener('submit', (event) => {
-                    event.preventDefault();
-                    const guestIdFromInput = guestIdInput.value.trim();
-                    performValidation(guestIdFromInput);
+        
+        elements.cameraInterface.style.display = 'flex';
+        startCamera();
+    }
+    
+    function closeCameraInterface() {
+        stopCamera();
+        elements.cameraInterface.style.display = 'none';
+    }
+    
+    async function startCamera() {
+        try {
+            // Limpiar preview anterior
+            elements.cameraPreview.innerHTML = `
+                <div class="camera-placeholder">
+                    <i class="fas fa-camera"></i>
+                    <p>Iniciando cámara...</p>
+                </div>
+            `;
+            
+            // Solicitar permisos de cámara
+            cameraStream = await VALIDAR_CONFIG.camera.requestPermission();
+            
+            // Crear elemento de video
+            const video = VALIDAR_CONFIG.camera.createVideoElement();
+            video.srcObject = cameraStream;
+            
+            // Crear canvas para procesamiento
+            const canvas = VALIDAR_CONFIG.camera.createCanvas();
+            
+            // Limpiar preview y agregar video
+            elements.cameraPreview.innerHTML = '';
+            elements.cameraPreview.appendChild(video);
+            elements.cameraPreview.appendChild(canvas);
+            
+            // Inicializar escáner QR
+            qrScanner = VALIDAR_CONFIG.qrScanner.init(video, canvas, handleQRResult);
+            
+            // Agregar indicador de escaneo
+            const indicator = document.createElement('div');
+            indicator.className = 'scanning-indicator';
+            elements.cameraPreview.appendChild(indicator);
+            
+            // Iniciar escaneo
+            qrScanner.start();
+            
+            console.log('📷 Cámara iniciada correctamente');
+            
+        } catch (error) {
+            console.error('❌ Error al iniciar cámara:', error);
+            elements.cameraPreview.innerHTML = `
+                <div class="camera-placeholder">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Error al acceder a la cámara</p>
+                    <small>${error.message}</small>
+                </div>
+            `;
+        }
+    }
+    
+    function stopCamera() {
+        if (qrScanner) {
+            qrScanner.stop();
+            qrScanner = null;
+        }
+        
+        if (cameraStream) {
+            cameraStream.getTracks().forEach(track => track.stop());
+            cameraStream = null;
+        }
+        
+        console.log('📷 Cámara detenida');
+    }
+    
+    function switchCamera() {
+        currentCamera = currentCamera === 'environment' ? 'user' : 'environment';
+        VALIDAR_CONFIG.CAMERA.FACING_MODE = currentCamera;
+        
+        // Reiniciar cámara con nueva configuración
+        stopCamera();
+        startCamera();
+    }
+    
+    function toggleFlash() {
+        if (cameraStream) {
+            const videoTrack = cameraStream.getVideoTracks()[0];
+            if (videoTrack.getCapabilities && videoTrack.getCapabilities().torch) {
+                const currentTorch = videoTrack.getSettings().torch;
+                videoTrack.applyConstraints({
+                    advanced: [{ torch: !currentTorch }]
                 });
-
-                // Agregar validación en tiempo real
-                if (guestIdInput) {
-                    guestIdInput.addEventListener('input', (e) => {
-                        const value = e.target.value;
-                        if (value.length > 6) {
-                            e.target.value = value.substring(0, 6);
-                        }
-                        // Convertir a minúsculas
-                        e.target.value = value.toLowerCase();
-                    });
-
-                    // Agregar placeholder dinámico
-                    guestIdInput.addEventListener('focus', () => {
-                        if (!guestIdInput.value) {
-                            guestIdInput.placeholder = 'Ej: xnfj1a';
-                        }
-                    });
-
-                    guestIdInput.addEventListener('blur', () => {
-                        if (!guestIdInput.value) {
-                            guestIdInput.placeholder = 'Ej: xnfj1a';
-                        }
-                    });
-                }
             }
         }
-
-        // --- Función para agregar botón de "Nueva Validación" ---
-        let isAddingNewButton = false;
+    }
+    
+    function handleQRResult(qrData) {
+        console.log('🔍 QR detectado:', qrData);
         
-        function addNewValidationButton() {
-            // Evitar ejecuciones duplicadas
-            if (isAddingNewButton) {
-                console.log('⚠️ Ya se está agregando el botón de nueva validación, ignorando llamada adicional');
-                return;
-            }
+        // Validar formato del QR
+        if (VALIDAR_CONFIG.isValidGuestId(qrData)) {
+            // Cerrar cámara
+            closeCameraInterface();
             
-            isAddingNewButton = true;
+            // Llenar input con datos del QR
+            elements.guestIdInput.value = qrData;
             
-            // Remover botón existente si hay uno
-            const existingBtn = document.querySelector('.submit-btn[style*="margin-top: 20px"]');
-            if (existingBtn) {
-                existingBtn.remove();
-            }
+            // Mostrar notificación de éxito
+            VALIDAR_CONFIG.showNotification(`QR escaneado: ${qrData}`, 'success');
             
-            const newValidationBtn = document.createElement('button');
-            newValidationBtn.className = 'submit-btn';
-            newValidationBtn.style.marginTop = '20px';
-            newValidationBtn.innerHTML = '<i class="fas fa-redo" style="margin-right: 8px;"></i>Nueva Validación';
-            newValidationBtn.addEventListener('click', () => {
-                console.log('Botón Nueva Validación clickeado');
-                showInitialState();
-                clearForm();
-            });
-            
-            // Insertar después del status message
-            statusMessageEl.parentNode.insertBefore(newValidationBtn, statusMessageEl.nextSibling);
-            
-            // Resetear el flag después de un delay
-            setTimeout(() => {
-                isAddingNewButton = false;
-            }, 1000);
+            // Validar automáticamente
+            validateGuest(qrData);
+        } else {
+            VALIDAR_CONFIG.showNotification('QR inválido. Formato esperado: 6 caracteres alfanuméricos', 'warning');
         }
-
-        // --- Función para mostrar estado de éxito con botón de nueva validación ---
-        const originalUpdateValidationUI = updateValidationUI;
-        updateValidationUI = function(status, message, invitado = null) {
-            originalUpdateValidationUI(status, message, invitado);
-            
-            if (status === 'success') {
-                // Agregar botón de nueva validación después de un delay
-                setTimeout(addNewValidationButton, 1000);
-            }
-        };
+    }
+    
+    // Funciones de validación
+    function handleGuestIdInput(event) {
+        const input = event.target;
+        const value = input.value.toUpperCase();
         
-        // --- EXPONER FUNCIONES GLOBALMENTE PARA INTEGRACIÓN ---
-        window.performValidation = performValidation;
-        window.recoverGuestState = recoverGuestState;
+        // Solo permitir caracteres alfanuméricos
+        input.value = value.replace(/[^A-Z0-9]/g, '');
         
-        let isUpdatingUIBasedOnConfirmation = false;
+        // Validar longitud
+        if (value.length === 6) {
+            input.classList.add('valid');
+            input.classList.remove('invalid');
+        } else {
+            input.classList.remove('valid');
+            if (value.length > 0) {
+                input.classList.add('invalid');
+            } else {
+                input.classList.remove('invalid');
+            }
+        }
+    }
+    
+    function handleValidationSubmit(event) {
+        event.preventDefault();
         
-        window.updateUIBasedOnConfirmation = function(confirmed, guestId) {
-            if (isUpdatingUIBasedOnConfirmation) {
-                console.log('⚠️ Ya se está actualizando la UI basada en confirmación, ignorando llamada adicional');
-                return;
-            }
+        const guestId = elements.guestIdInput.value.trim();
+        
+        if (!guestId) {
+            VALIDAR_CONFIG.showNotification('Por favor ingresa un ID de invitado', 'warning');
+            elements.guestIdInput.focus();
+            return;
+        }
+        
+        if (!VALIDAR_CONFIG.isValidGuestId(guestId)) {
+            VALIDAR_CONFIG.showNotification('ID inválido. Debe tener 6 caracteres alfanuméricos', 'error');
+            elements.guestIdInput.focus();
+            return;
+        }
+        
+        validateGuest(guestId);
+    }
+    
+    async function validateGuest(guestId) {
+        if (appState.isProcessing) {
+            console.log('⏳ Validación en progreso...');
+            return;
+        }
+        
+        appState.isProcessing = true;
+        appState.currentGuestId = guestId;
+        
+        try {
+            // Mostrar estado de carga
+            showLoadingState();
             
-            isUpdatingUIBasedOnConfirmation = true;
+            // Realizar validación
+            const result = await performValidation(guestId);
             
-            if (confirmed && guestId) {
-                console.log('🔧 Actualizando UI basada en confirmación para:', guestId);
-                recoverGuestState(guestId);
-            }
+            // Procesar resultado
+            handleValidationResult(result);
             
-            // Resetear el flag después de un delay
-            setTimeout(() => {
-                isUpdatingUIBasedOnConfirmation = false;
-            }, 2000);
-        };
-
-    }); // Fin DOMContentLoaded
+        } catch (error) {
+            console.error('❌ Error en validación:', error);
+            handleValidationError(error);
+        } finally {
+            appState.isProcessing = false;
+        }
+    }
+    
+    function showLoadingState() {
+        if (elements.statusMessage) {
+            elements.statusMessage.textContent = 'Verificando invitado...';
+            elements.statusMessage.className = 'status-message loading-message';
+        }
+        
+        if (elements.validateBtn) {
+            elements.validateBtn.disabled = true;
+            elements.validateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validando...';
+        }
+    }
+    
+    async function performValidation(guestId) {
+        const url = `${GOOGLE_APPS_SCRIPT_URL}?action=validate&guestId=${encodeURIComponent(guestId)}`;
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            timeout: 10000
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        return await response.json();
+    }
+    
+    function handleValidationResult(result) {
+        console.log('✅ Resultado de validación:', result);
+        
+        if (result.success) {
+            showGuestDetails(result.data);
+            VALIDAR_CONFIG.showNotification('Invitado validado correctamente', 'success');
+        } else {
+            showErrorState(result.message || 'Error en la validación');
+        }
+    }
+    
+    function handleValidationError(error) {
+        console.error('❌ Error de validación:', error);
+        
+        let errorMessage = 'Error de conexión. Verifica tu internet.';
+        
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            errorMessage = 'No se pudo conectar con el servidor. Verifica la URL del Apps Script.';
+        } else if (error.message) {
+            errorMessage = error.message;
+        }
+        
+        showErrorState(errorMessage);
+        VALIDAR_CONFIG.showNotification(errorMessage, 'error');
+    }
+    
+    function showGuestDetails(guestData) {
+        // Ocultar mensaje de estado
+        if (elements.statusMessage) {
+            elements.statusMessage.style.display = 'none';
+        }
+        
+        // Mostrar detalles del invitado
+        if (elements.guestDetails) {
+            elements.guestDetails.style.display = 'block';
+            elements.guestDetails.innerHTML = `
+                <h3>✅ Invitado Validado</h3>
+                <p><strong>ID:</strong> ${guestData.id || 'N/A'}</p>
+                <p><strong>Nombre:</strong> ${guestData.nombre || 'N/A'}</p>
+                <p><strong>Estado:</strong> ${guestData.estado || 'N/A'}</p>
+                <p><strong>Pases:</strong> ${guestData.pases || 'N/A'}</p>
+                <p><strong>Mesa:</strong> ${guestData.mesa || 'N/A'}</p>
+            `;
+        }
+        
+        // Mostrar detalles de confirmación si existen
+        if (guestData.confirmacion && elements.confirmationDetails) {
+            elements.confirmationDetails.style.display = 'block';
+            elements.confirmationDetails.innerHTML = `
+                <h3>📋 Confirmación</h3>
+                <p><strong>Fecha:</strong> ${guestData.confirmacion.fecha || 'N/A'}</p>
+                <p><strong>Asistentes:</strong> ${guestData.confirmacion.asistentes || 'N/A'}</p>
+            `;
+        }
+        
+        // Resetear formulario
+        if (elements.guestIdInput) {
+            elements.guestIdInput.value = '';
+            elements.guestIdInput.classList.remove('valid', 'invalid');
+        }
+        
+        // Resetear botón
+        if (elements.validateBtn) {
+            elements.validateBtn.disabled = false;
+            elements.validateBtn.innerHTML = '<i class="fas fa-search"></i> Validar Invitado';
+        }
+    }
+    
+    function showErrorState(message) {
+        if (elements.statusMessage) {
+            elements.statusMessage.textContent = message;
+            elements.statusMessage.className = 'status-message error-message';
+            elements.statusMessage.style.display = 'block';
+        }
+        
+        // Ocultar detalles del invitado
+        if (elements.guestDetails) {
+            elements.guestDetails.style.display = 'none';
+        }
+        
+        if (elements.confirmationDetails) {
+            elements.confirmationDetails.style.display = 'none';
+        }
+        
+        // Resetear botón
+        if (elements.validateBtn) {
+            elements.validateBtn.disabled = false;
+            elements.validateBtn.innerHTML = '<i class="fas fa-search"></i> Validar Invitado';
+        }
+    }
+    
+    // Función para limpiar estado y volver al inicio
+    function resetToInitialState() {
+        // Limpiar estado
+        appState.isProcessing = false;
+        appState.currentGuestId = null;
+        
+        // Ocultar detalles
+        if (elements.guestDetails) {
+            elements.guestDetails.style.display = 'none';
+        }
+        
+        if (elements.confirmationDetails) {
+            elements.confirmationDetails.style.display = 'none';
+        }
+        
+        // Mostrar mensaje inicial
+        if (elements.statusMessage) {
+            elements.statusMessage.textContent = 'Ingresa el ID del invitado para validar';
+            elements.statusMessage.className = 'status-message';
+            elements.statusMessage.style.display = 'block';
+        }
+        
+        // Resetear formulario
+        if (elements.guestIdInput) {
+            elements.guestIdInput.value = '';
+            elements.guestIdInput.classList.remove('valid', 'invalid');
+            elements.guestIdInput.focus();
+        }
+        
+        // Resetear botón
+        if (elements.validateBtn) {
+            elements.validateBtn.disabled = false;
+            elements.validateBtn.innerHTML = '<i class="fas fa-search"></i> Validar Invitado';
+        }
+        
+        console.log('🔄 Estado reseteado al inicial');
+    }
+    
+    // Agregar botón de nueva validación
+    function addNewValidationButton() {
+        const newValidationBtn = document.createElement('button');
+        newValidationBtn.type = 'button';
+        newValidationBtn.className = 'validate-btn new-validation-btn';
+        newValidationBtn.innerHTML = '<i class="fas fa-plus"></i> Nueva Validación';
+        newValidationBtn.addEventListener('click', resetToInitialState);
+        
+        // Insertar después del botón de validar
+        if (elements.validateBtn && elements.validateBtn.parentNode) {
+            elements.validateBtn.parentNode.insertBefore(newValidationBtn, elements.validateBtn.nextSibling);
+        }
+    }
+    
+    // Limpiar recursos al cerrar la página
+    window.addEventListener('beforeunload', () => {
+        stopCamera();
+    });
+    
 })();

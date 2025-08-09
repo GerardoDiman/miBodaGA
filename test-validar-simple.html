@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Validación Simple - Boda A&G</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007cba;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #005a87;
+        }
+        .test-result {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #007cba;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        .warning {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test del Sistema de Validación - Boda A&G</h1>
+    
+    <div class="test-section">
+        <h2>1. Verificación de Configuración</h2>
+        <button class="test-button" onclick="testConfig()">Probar Configuración</button>
+        <div id="config-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Verificación de Funciones de Utilidad</h2>
+        <button class="test-button" onclick="testUtilityFunctions()">Probar Funciones</button>
+        <div id="utility-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Verificación de Validación de ID</h2>
+        <button class="test-button" onclick="testIdValidation()">Probar Validación ID</button>
+        <div id="validation-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Verificación de Formateo</h2>
+        <button class="test-button" onclick="testFormatting()">Probar Formateo</button>
+        <div id="formatting-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>5. Verificación de Notificaciones</h2>
+        <button class="test-button" onclick="testNotifications()">Probar Notificaciones</button>
+        <div id="notification-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>6. Verificación de Detección de Dispositivo</h2>
+        <button class="test-button" onclick="testDeviceDetection()">Probar Detección</button>
+        <div id="device-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>7. Test Completo del Sistema</h2>
+        <button class="test-button" onclick="runFullTest()">Ejecutar Test Completo</button>
+        <div id="full-test-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>8. Información del Sistema</h2>
+        <div id="system-info" class="test-result"></div>
+    </div>
+
+    <!-- Cargar configuración primero -->
+    <script src="src/js/validar-config.js"></script>
+    
+    <script>
+        // Función para mostrar resultados de test
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = message;
+            element.className = `test-result ${type}`;
+        }
+        
+        // Test 1: Verificación de Configuración
+        function testConfig() {
+            try {
+                if (window.VALIDAR_CONFIG) {
+                    const config = window.VALIDAR_CONFIG;
+                    const result = `
+                        <h4>✅ Configuración Cargada Correctamente</h4>
+                        <p><strong>App:</strong> ${config.APP_NAME}</p>
+                        <p><strong>Versión:</strong> ${config.VERSION}</p>
+                        <p><strong>URL Apps Script:</strong> ${config.GOOGLE_APPS_SCRIPT_URL}</p>
+                        <p><strong>Máximo de reintentos:</strong> ${config.VALIDATION.MAX_RETRIES}</p>
+                        <p><strong>Timeout:</strong> ${config.VALIDATION.TIMEOUT}ms</p>
+                    `;
+                    showResult('config-result', result, 'success');
+                } else {
+                    showResult('config-result', '❌ Error: Configuración no encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('config-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test 2: Verificación de Funciones de Utilidad
+        function testUtilityFunctions() {
+            try {
+                const functions = [
+                    'getConfig',
+                    'getMessage', 
+                    'getStatusColor',
+                    'isValidGuestId',
+                    'formatDate',
+                    'formatNames',
+                    'formatPhone',
+                    'formatEmail',
+                    'showNotification',
+                    'log',
+                    'handleError',
+                    'debounce',
+                    'throttle',
+                    'checkInternetConnection',
+                    'isMobileDevice',
+                    'optimizeForMobile'
+                ];
+                
+                const missingFunctions = functions.filter(fn => typeof window[fn] !== 'function');
+                
+                if (missingFunctions.length === 0) {
+                    showResult('utility-result', `
+                        <h4>✅ Todas las funciones de utilidad están disponibles</h4>
+                        <p>Se encontraron ${functions.length} funciones correctamente.</p>
+                    `, 'success');
+                } else {
+                    showResult('utility-result', `
+                        <h4>⚠️ Algunas funciones faltan</h4>
+                        <p>Funciones faltantes: ${missingFunctions.join(', ')}</p>
+                    `, 'warning');
+                }
+            } catch (error) {
+                showResult('utility-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test 3: Verificación de Validación de ID
+        function testIdValidation() {
+            try {
+                const testCases = [
+                    { id: 'abc123', expected: true, description: 'ID válido de 6 caracteres' },
+                    { id: '123456', expected: true, description: 'ID válido solo números' },
+                    { id: 'abcdef', expected: true, description: 'ID válido solo letras' },
+                    { id: 'abc12', expected: false, description: 'ID muy corto' },
+                    { id: 'abc1234', expected: false, description: 'ID muy largo' },
+                    { id: 'ABC123', expected: false, description: 'ID con mayúsculas' },
+                    { id: 'abc-12', expected: false, description: 'ID con caracteres especiales' },
+                    { id: '', expected: false, description: 'ID vacío' },
+                    { id: null, expected: false, description: 'ID null' },
+                    { id: undefined, expected: false, description: 'ID undefined' }
+                ];
+                
+                let passed = 0;
+                let failed = 0;
+                let results = '<h4>🧪 Test de Validación de ID</h4>';
+                
+                testCases.forEach(testCase => {
+                    const result = window.isValidGuestId(testCase.id);
+                    const success = result === testCase.expected;
+                    
+                    if (success) {
+                        passed++;
+                        results += `<p>✅ ${testCase.description}: ${testCase.id} → ${result}</p>`;
+                    } else {
+                        failed++;
+                        results += `<p>❌ ${testCase.description}: ${testCase.id} → ${result} (esperado: ${testCase.expected})</p>`;
+                    }
+                });
+                
+                results += `<p><strong>Resultado:</strong> ${passed} pasaron, ${failed} fallaron</p>`;
+                
+                if (failed === 0) {
+                    showResult('validation-result', results, 'success');
+                } else {
+                    showResult('validation-result', results, 'warning');
+                }
+            } catch (error) {
+                showResult('validation-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test 4: Verificación de Formateo
+        function testFormatting() {
+            try {
+                let results = '<h4>🧪 Test de Funciones de Formateo</h4>';
+                
+                // Test de formateo de fecha
+                const testDate = '2025-10-11T15:30:00';
+                const formattedDate = window.formatDate(testDate);
+                results += `<p>📅 Fecha: ${testDate} → ${formattedDate}</p>`;
+                
+                // Test de formateo de nombres
+                const testNames = ['Juan Pérez', 'María García'];
+                const formattedNames = window.formatNames(testNames);
+                results += `<p>👥 Nombres: ${JSON.stringify(testNames)} → ${formattedNames}</p>`;
+                
+                // Test de formateo de teléfono
+                const testPhone = '5512345678';
+                const formattedPhone = window.formatPhone(testPhone);
+                results += `<p>📞 Teléfono: ${testPhone} → ${formattedPhone}</p>`;
+                
+                // Test de formateo de email
+                const testEmail = 'TEST@EXAMPLE.COM';
+                const formattedEmail = window.formatEmail(testEmail);
+                results += `<p>📧 Email: ${testEmail} → ${formattedEmail}</p>`;
+                
+                showResult('formatting-result', results, 'success');
+            } catch (error) {
+                showResult('formatting-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test 5: Verificación de Notificaciones
+        function testNotifications() {
+            try {
+                showResult('notification-result', '<h4>🧪 Test de Notificaciones</h4><p>Deberías ver notificaciones apareciendo en la esquina superior derecha...</p>', 'info');
+                
+                // Mostrar diferentes tipos de notificaciones
+                setTimeout(() => window.showNotification('✅ Notificación de éxito', 'success'), 500);
+                setTimeout(() => window.showNotification('⚠️ Notificación de advertencia', 'warning'), 2000);
+                setTimeout(() => window.showNotification('❌ Notificación de error', 'error'), 3500);
+                setTimeout(() => window.showNotification('ℹ️ Notificación informativa', 'info'), 5000);
+                
+            } catch (error) {
+                showResult('notification-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test 6: Verificación de Detección de Dispositivo
+        function testDeviceDetection() {
+            try {
+                const isMobile = window.isMobileDevice();
+                const isOnline = window.checkInternetConnection();
+                const userAgent = navigator.userAgent;
+                const screenWidth = window.innerWidth;
+                const screenHeight = window.innerHeight;
+                
+                const result = `
+                    <h4>📱 Información del Dispositivo</h4>
+                    <p><strong>¿Es móvil?</strong> ${isMobile ? '✅ Sí' : '❌ No'}</p>
+                    <p><strong>¿Está online?</strong> ${isOnline ? '✅ Sí' : '❌ No'}</p>
+                    <p><strong>User Agent:</strong> ${userAgent}</p>
+                    <p><strong>Resolución:</strong> ${screenWidth} x ${screenHeight}</p>
+                    <p><strong>Orientación:</strong> ${screenWidth > screenHeight ? 'Landscape' : 'Portrait'}</p>
+                `;
+                
+                showResult('device-result', result, 'success');
+            } catch (error) {
+                showResult('device-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test 7: Test Completo del Sistema
+        function runFullTest() {
+            try {
+                let results = '<h4>🚀 Test Completo del Sistema</h4>';
+                let testsPassed = 0;
+                let totalTests = 0;
+                
+                // Test de configuración
+                totalTests++;
+                if (window.VALIDAR_CONFIG) {
+                    testsPassed++;
+                    results += '<p>✅ Configuración cargada</p>';
+                } else {
+                    results += '<p>❌ Configuración no cargada</p>';
+                }
+                
+                // Test de funciones básicas
+                totalTests++;
+                if (typeof window.isValidGuestId === 'function') {
+                    testsPassed++;
+                    results += '<p>✅ Función de validación disponible</p>';
+                } else {
+                    results += '<p>❌ Función de validación no disponible</p>';
+                }
+                
+                // Test de formateo
+                totalTests++;
+                if (typeof window.formatDate === 'function') {
+                    testsPassed++;
+                    results += '<p>✅ Funciones de formateo disponibles</p>';
+                } else {
+                    results += '<p>❌ Funciones de formateo no disponibles</p>';
+                }
+                
+                // Test de notificaciones
+                totalTests++;
+                if (typeof window.showNotification === 'function') {
+                    testsPassed++;
+                    results += '<p>✅ Sistema de notificaciones disponible</p>';
+                } else {
+                    results += '<p>❌ Sistema de notificaciones no disponible</p>';
+                }
+                
+                // Test de detección de dispositivo
+                totalTests++;
+                if (typeof window.isMobileDevice === 'function') {
+                    testsPassed++;
+                    results += '<p>✅ Detección de dispositivo disponible</p>';
+                } else {
+                    results += '<p>❌ Detección de dispositivo no disponible</p>';
+                }
+                
+                // Resultado final
+                const percentage = Math.round((testsPassed / totalTests) * 100);
+                results += `<p><strong>Resultado Final:</strong> ${testsPassed}/${totalTests} tests pasaron (${percentage}%)</p>`;
+                
+                if (percentage === 100) {
+                    showResult('full-test-result', results, 'success');
+                } else if (percentage >= 80) {
+                    showResult('full-test-result', results, 'warning');
+                } else {
+                    showResult('full-test-result', results, 'error');
+                }
+                
+            } catch (error) {
+                showResult('full-test-result', `❌ Error en test completo: ${error.message}`, 'error');
+            }
+        }
+        
+        // Mostrar información del sistema
+        function showSystemInfo() {
+            const info = `
+                <h4>💻 Información del Sistema</h4>
+                <p><strong>Navegador:</strong> ${navigator.userAgent}</p>
+                <p><strong>Plataforma:</strong> ${navigator.platform}</p>
+                <p><strong>Idioma:</strong> ${navigator.language}</p>
+                <p><strong>Cookies habilitadas:</strong> ${navigator.cookieEnabled ? 'Sí' : 'No'}</p>
+                <p><strong>JavaScript habilitado:</strong> Sí</p>
+                <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
+                <p><strong>URL:</strong> ${window.location.href}</p>
+            `;
+            
+            document.getElementById('system-info').innerHTML = info;
+        }
+        
+        // Ejecutar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            showSystemInfo();
+            
+            // Ejecutar test automático después de 1 segundo
+            setTimeout(() => {
+                testConfig();
+                testUtilityFunctions();
+            }, 1000);
+        });
+        
+        // Función para limpiar todos los resultados
+        function clearAllResults() {
+            const resultElements = [
+                'config-result',
+                'utility-result', 
+                'validation-result',
+                'formatting-result',
+                'notification-result',
+                'device-result',
+                'full-test-result'
+            ];
+            
+            resultElements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.innerHTML = '';
+                    element.className = 'test-result';
+                }
+            });
+        }
+        
+        // Agregar botón de limpieza
+        document.addEventListener('DOMContentLoaded', function() {
+            const clearButton = document.createElement('button');
+            clearButton.textContent = '🧹 Limpiar Todos los Resultados';
+            clearButton.className = 'test-button';
+            clearButton.style.background = '#6c757d';
+            clearButton.onclick = clearAllResults;
+            
+            document.body.insertBefore(clearButton, document.querySelector('.test-section'));
+        });
+    </script>
+</body>
+</html>
