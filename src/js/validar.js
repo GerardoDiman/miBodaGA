@@ -157,9 +157,8 @@
             // Usar la función optimizada de configuración
             const stream = await VALIDAR_CONFIG.camera.startCamera(
                 null, // videoElement se creará después
-                (videoElement) => {
-                    console.log('✅ Cámara iniciada exitosamente');
-                    console.log('📱 Resolución del video:', videoElement.videoWidth, 'x', videoElement.videoHeight);
+                (stream) => {
+                    console.log('✅ Stream de cámara obtenido exitosamente');
                     console.log('🎥 Tipo de cámara:', currentCamera);
                     
                     // Crear y configurar el elemento de video

@@ -161,25 +161,34 @@ window.VALIDAR_CONFIG = {
                 };
                 
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
-                videoElement.srcObject = stream;
                 
-                // Esperar a que el video esté listo
-                await new Promise((resolve) => {
-                    videoElement.onloadedmetadata = resolve;
-                });
-                
-                // Configurar el video para mejor rendimiento
-                videoElement.play();
-                
-                // Solo aplicar espejo para cámara frontal (user)
-                if (VALIDAR_CONFIG.CAMERA.FACING_MODE === 'user') {
-                    videoElement.style.transform = 'scaleX(-1)';
+                // Si se proporciona un videoElement, configurarlo
+                if (videoElement) {
+                    videoElement.srcObject = stream;
+                    
+                    // Esperar a que el video esté listo
+                    await new Promise((resolve) => {
+                        videoElement.onloadedmetadata = resolve;
+                    });
+                    
+                    // Configurar el video para mejor rendimiento
+                    videoElement.play();
+                    
+                    // Solo aplicar espejo para cámara frontal (user)
+                    if (VALIDAR_CONFIG.CAMERA.FACING_MODE === 'user') {
+                        videoElement.style.transform = 'scaleX(-1)';
+                    }
+                    
+                    console.log('📹 Cámara iniciada con resolución:', 
+                        videoElement.videoWidth + 'x' + videoElement.videoHeight);
+                    
+                    if (onSuccess) onSuccess(videoElement);
+                } else {
+                    // Si no hay videoElement, solo devolver el stream
+                    console.log('📹 Stream de cámara obtenido (sin videoElement)');
+                    if (onSuccess) onSuccess(stream);
                 }
                 
-                console.log('📹 Cámara iniciada con resolución:', 
-                    videoElement.videoWidth + 'x' + videoElement.videoHeight);
-                
-                if (onSuccess) onSuccess(stream);
                 return stream;
                 
             } catch (error) {
