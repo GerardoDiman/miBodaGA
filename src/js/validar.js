@@ -623,10 +623,14 @@
 
         if (passesUsedEl) passesUsedEl.textContent = String(invitado.pasesUtilizados ?? 0);
         if (kidsUsedEl) kidsUsedEl.textContent = String(invitado.ninosUtilizados ?? 0);
-        if (adultNamesEl) adultNamesEl.textContent = invitado.nombresInvitados || invitado.nombre || '---';
+        if (adultNamesEl) {
+            renderNamesList(adultNamesEl, invitado.nombresInvitados || invitado.nombre || '');
+        }
         const kidsNames = invitado.nombresNinos || '';
         if (kidsNamesRow) kidsNamesRow.style.display = kidsNames ? 'block' : 'none';
-        if (kidsNamesEl) kidsNamesEl.textContent = kidsNames || '---';
+        if (kidsNamesEl) {
+            renderNamesList(kidsNamesEl, kidsNames);
+        }
         if (phoneEl) phoneEl.textContent = formatPhone(invitado.telefono || '');
         const email = invitado.email || '';
         if (emailRow) emailRow.style.display = email ? 'block' : 'none';
@@ -644,6 +648,31 @@
         } else {
             if (elements.confirmationDetails) elements.confirmationDetails.style.display = 'none';
         }
+    }
+
+    // Utilidad: renderizar nombres separados por coma o salto de línea en lista <ul><li>
+    function renderNamesList(container, namesString) {
+        const clean = (namesString || '').toString().trim();
+        container.innerHTML = '';
+        if (!clean) {
+            container.textContent = '---';
+            return;
+        }
+        // Separar por coma o salto de línea
+        const parts = clean.split(/[,\n]/).map(s => s.trim()).filter(Boolean);
+        if (parts.length <= 1) {
+            container.textContent = parts[0] || clean;
+            return;
+        }
+        const ul = document.createElement('ul');
+        ul.style.margin = '6px 0 0';
+        ul.style.paddingLeft = '18px';
+        parts.forEach(p => {
+            const li = document.createElement('li');
+            li.textContent = p;
+            ul.appendChild(li);
+        });
+        container.appendChild(ul);
     }
     
     function showErrorState(message) {
