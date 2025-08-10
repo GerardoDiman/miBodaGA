@@ -5,9 +5,9 @@
 .details-bg::before { background-image: url('/assets/images/imgi17.png'); }
 .gallery-bg::before { background-image: url( '/assets/images/imgi6.png'); }
 .parents-bg::before { background-image: url('/assets/images/planta.jpg'); }
-.sponsors-bg::before { background-image: url('/assets/images/fondo14.jpeg'); }
+.sponsors-bg::before { background-image: url('/assets/images/fondo15.png'); }
 .itinerary-bg::before { background-image: url('/assets/images/fondo4.jpeg'); }
-.locations-bg::before { background-image: url('/assets/images/hojas.jpeg'); }
+.locations-bg::before { background-image: url('/assets/images/fondo3.jpeg'); }
 .gifts-bg::before { background-image: url('/assets/images/fondo12.jpeg'); }
 .lodging-bg::before { background-image: url('/assets/images/hoja_floral2.jpg'); }
 .rsvp-bg::before { background-image: linear-gradient(to bottom, rgb(65, 89, 67) 0%, rgb(65, 89, 67) 100%); }

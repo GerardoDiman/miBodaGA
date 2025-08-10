@@ -2,7 +2,7 @@
 .lodging-section { max-width: 900px; text-align: center; }
 .lodging-container { display: flex; flex-wrap: wrap; gap: var(--spacing-large); justify-content: center; align-items: stretch; margin-top: var(--spacing-medium); }
 .lodging-block { 
-    background: rgba(171, 149, 131, 0.27); 
+    background: rgba(30, 30, 30, 0.9); 
     border-radius: 18px; 
     box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18); 
     padding: 24px 18px 20px 18px; 
@@ -83,7 +83,7 @@
 
 @media screen and (max-width: 480px) { 
     .lodging-block { 
-        background: rgba(60, 60, 60, 0.9) !important; 
+        background: rgba(30, 30, 30, 0.9) !important; 
         border-radius: 12px !important; 
         box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3) !important; 
         padding: 16px 14px 14px 14px !important; 
