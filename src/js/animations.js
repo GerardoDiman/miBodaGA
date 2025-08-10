@@ -124,6 +124,9 @@
                 case 'typewriter':
                     this.animateTypewriter(element);
                     break;
+                case 'giftsWAAPI':
+                    this.animateGiftsSection(element);
+                    break;
                 case 'countdownDrop':
                     // La animación se maneja automáticamente por CSS
                     break;
@@ -225,6 +228,10 @@
             }
             
             // Determinar variante de animación
+            if (element.classList.contains('gifts-section')) {
+                // Usar Web Animations API para esta sección
+                return 'giftsWAAPI';
+            }
             if (element.classList.contains('registry-block') || 
                 element.classList.contains('lodging-block')) {
                 element.classList.add('depth-3d');
@@ -256,6 +263,10 @@
                 element.classList.contains('social-filter-buttons')) {
                 element.classList.add('fade-in-right');
                 return 'fadeInRight';
+            }
+            if (element.classList.contains('social-filter-buttons')) {
+                // Además marcar contenedor como visible para activar stagger de botones
+                element.classList.add('visible');
             }
             if (element.classList.contains('dresscode-gender-title') ||
                 element.classList.contains('money-shower-title') ||
@@ -308,6 +319,82 @@
                     child.style.animation = 'fadeInUp 0.6s ease-out forwards';
                 }, index * animationConfig.staggerDelay);
             });
+        }
+
+        // Animaciones con Web Animations API para la sección de Sugerencias de Regalo
+        animateGiftsSection(section) {
+            // Registry blocks (cada tarjeta/tienda)
+            const blocks = section.querySelectorAll('.registry-block');
+            blocks.forEach((block, i) => {
+                try {
+                    const blockTiming = { duration: 650, delay: i * 120, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' };
+                    // Entrada desde lados alternos: par = derecha, impar = izquierda
+                    const fromX = (i % 2 === 0) ? '24px' : '-24px';
+                    block.animate(
+                        [
+                            { opacity: 0, transform: `translate(${fromX}, 16px) scale(0.98)` },
+                            { opacity: 1, transform: 'translate(0, 0) scale(1)' }
+                        ],
+                        blockTiming
+                    );
+                } catch (_) {}
+            });
+
+            // Botones dentro de cada registro (ligero pop)
+            const buttons = section.querySelectorAll('.registry-button');
+            buttons.forEach((btn, i) => {
+                try {
+                    // Entrada sutil sin pop excesivo
+                    btn.animate(
+                        [
+                            { opacity: 0, transform: 'translateY(8px)' },
+                            { opacity: 1, transform: 'translateY(0)' }
+                        ],
+                        { duration: 400, delay: 240 + i * 120, easing: 'ease-out', fill: 'both' }
+                    );
+                } catch (_) {}
+            });
+
+            // Título y descripción de lluvia de sobres (si están presentes en la misma sección visual)
+            const moneyTitle = document.querySelector('.money-shower-title');
+            const moneyDesc = document.querySelector('.money-shower-description');
+            const moneyIcon = document.querySelector('.money-shower-icon img, .money-shower-icon');
+
+            if (moneyIcon) {
+                try {
+                    moneyIcon.animate(
+                        [
+                            { opacity: 0, transform: 'translateY(16px) scale(0.9) rotate(-2deg)' },
+                            { opacity: 1, transform: 'translateY(0) scale(1) rotate(0deg)' }
+                        ],
+                        { duration: 650, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both', delay: 200 }
+                    );
+                } catch (_) {}
+            }
+
+            if (moneyTitle) {
+                try {
+                    moneyTitle.animate(
+                        [
+                            { letterSpacing: '2px', opacity: 0, transform: 'translateY(10px)' },
+                            { letterSpacing: '2.5px', opacity: 1, transform: 'translateY(0)' }
+                        ],
+                        { duration: 500, easing: 'ease-out', fill: 'both', delay: 260 }
+                    );
+                } catch (_) {}
+            }
+
+            if (moneyDesc) {
+                try {
+                    moneyDesc.animate(
+                        [
+                            { opacity: 0, transform: 'translateY(12px)' },
+                            { opacity: 1, transform: 'translateY(0)' }
+                        ],
+                        { duration: 600, easing: 'ease-out', fill: 'both', delay: 320 }
+                    );
+                } catch (_) {}
+            }
         }
 
         // Efecto typewriter para el nombre del invitado
@@ -382,6 +469,9 @@
                     this.removeHoverEffect(e.target);
                 });
             });
+
+            // Efecto hover avanzado magnético para .registry-button
+            // Remover efecto magnético: mantener hover más sobrio
         }
 
         addHoverEffect(element) {
@@ -471,6 +561,47 @@
                     img.style.animation = '';
                 });
             });
+
+            // Efectos dinámicos para la sección del filtro/hashtag
+            const filterSection = document.querySelector('.filter-section');
+            if (filterSection) {
+                // Efecto de partículas de brillo en hover sobre botones
+                const filterButtons = filterSection.querySelectorAll('.social-button');
+                filterButtons.forEach(button => {
+                    button.addEventListener('mouseenter', (e) => {
+                        for (let i = 0; i < 4; i++) {
+                            const sparkle = document.createElement('span');
+                            sparkle.className = 'sparkle';
+                            const rect = button.getBoundingClientRect();
+                            const x = Math.random() * rect.width;
+                            sparkle.style.left = `${e.offsetX + (Math.random() * 20 - 10)}px`;
+                            sparkle.style.top = `${e.offsetY + (Math.random() * 10 - 5)}px`;
+                            button.appendChild(sparkle);
+                            setTimeout(() => sparkle.remove(), 1800);
+                        }
+                    });
+                });
+
+                // Efecto sutil parallax 3D al mover el mouse sobre los botones
+                const handleTilt = (e) => {
+                    const target = e.currentTarget;
+                    const rect = target.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -6; // inclinación vertical
+                    const rotateY = ((x - centerX) / centerX) * 6;  // inclinación horizontal
+                    target.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                };
+                const resetTilt = (e) => {
+                    e.currentTarget.style.transform = '';
+                };
+                filterButtons.forEach(btn => {
+                    btn.addEventListener('mousemove', handleTilt);
+                    btn.addEventListener('mouseleave', resetTilt);
+                });
+            }
         }
 
         // Efectos del contador regresivo

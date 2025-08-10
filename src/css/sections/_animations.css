@@ -283,7 +283,7 @@
 .registry-block:hover,
 .lodging-block:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: none;
 }
 
 /* Logo de la boda */
@@ -605,7 +605,7 @@ h1 {
     .registry-block:hover,
     .lodging-block:hover {
         transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        box-shadow: none;
     }
     
     /* Ajustes para información de fecha */
