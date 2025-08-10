@@ -7,6 +7,7 @@
     let cameraStream = null;
     let qrScanner = null;
     let currentCamera = 'environment';
+    let torchOn = false;
     
     // Inicialización
     document.addEventListener('DOMContentLoaded', initializeApp);
@@ -359,6 +360,14 @@
         console.log('📹 Deteniendo cámara...');
         
         if (cameraStream) {
+            // Intentar apagar flash si está activo
+            try {
+                const vTrack = cameraStream.getVideoTracks && cameraStream.getVideoTracks()[0];
+                if (vTrack && vTrack.getCapabilities && vTrack.getCapabilities().torch) {
+                    vTrack.applyConstraints({ advanced: [{ torch: false }] }).catch(()=>{});
+                }
+            } catch (_) {}
+            torchOn = false;
             const tracks = cameraStream.getTracks();
             tracks.forEach(track => {
                 track.stop();
@@ -374,6 +383,10 @@
         stopQRScanning();
         
         currentCamera = currentCamera === 'environment' ? 'user' : 'environment';
+        if (window.VALIDAR_CONFIG && window.VALIDAR_CONFIG.CAMERA) {
+            window.VALIDAR_CONFIG.CAMERA.FACING_MODE = currentCamera;
+        }
+        torchOn = false;
         console.log('📱 Nueva cámara:', currentCamera);
         
         startCamera();
@@ -381,7 +394,29 @@
     
     function toggleFlash() {
         console.log('💡 Alternando flash...');
-        // Implementación básica del flash
+        if (!cameraStream) {
+            console.warn('⚠️ No hay cámara activa');
+            return;
+        }
+        const track = cameraStream.getVideoTracks && cameraStream.getVideoTracks()[0];
+        if (!track) {
+            console.warn('⚠️ No se encontró pista de video');
+            return;
+        }
+        const caps = track.getCapabilities ? track.getCapabilities() : {};
+        if (!('torch' in caps)) {
+            console.warn('⚠️ Este dispositivo/navegador no soporta flash (torch)');
+            return;
+        }
+        const desired = !torchOn;
+        track.applyConstraints({ advanced: [{ torch: desired }] })
+            .then(() => {
+                torchOn = desired;
+                console.log(`💡 Flash ${torchOn ? 'ON' : 'OFF'}`);
+            })
+            .catch((e) => {
+                console.warn('⚠️ No se pudo cambiar el estado del flash:', e);
+            });
     }
     
     function testQRDetection() {
