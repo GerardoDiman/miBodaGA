@@ -762,24 +762,9 @@
         newBtn.style.cssText = `
             margin-top: 24px;
             padding: 12px 24px;
-            color: white;
-            border: none;
-            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
         `;
-        // Color verde oscuro (forzar sobre CSS con !important)
-        const darkGreen = '#1B5E20';
-        const darkGreenHover = '#2E7D32';
-        newBtn.style.setProperty('background', darkGreen, 'important');
-
-        newBtn.addEventListener('mouseenter', () => {
-            newBtn.style.setProperty('background', darkGreenHover, 'important');
-        });
-        newBtn.addEventListener('mouseleave', () => {
-            newBtn.style.setProperty('background', darkGreen, 'important');
-        });
+        // Estilos visuales los define CSS (.new-validation-btn). Evitar inline para permitir overrides.
 
         newBtn.addEventListener('click', () => {
             resetToInitialState();
