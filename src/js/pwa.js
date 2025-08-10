@@ -43,22 +43,28 @@ class PWAManager {
         if ('serviceWorker' in navigator) {
             try {
                 const registration = await navigator.serviceWorker.register('/sw.js');
-                console.log('Service Worker registrado:', registration);
-                
-                // Manejar actualizaciones
+                // Manejar actualizaciones en silencio
                 registration.addEventListener('updatefound', () => {
                     const newWorker = registration.installing;
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            this.showUpdateNotification();
+                            // Intentar activar inmediatamente sin UI
+                            if (registration.waiting) {
+                                registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                            }
                         }
                     });
                 });
                 
-                // Manejar mensajes del Service Worker
+                // Manejar mensajes del Service Worker en silencio
                 navigator.serviceWorker.addEventListener('message', (event) => {
                     if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
-                        this.showUpdateNotification();
+                        if (registration.waiting) {
+                            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                        } else {
+                            // Recarga como respaldo sin mostrar avisos
+                            window.location.reload();
+                        }
                     }
                 });
                 
@@ -169,12 +175,12 @@ class PWAManager {
     setupOnlineOfflineHandling() {
         window.addEventListener('online', () => {
             this.isOnline = true;
-            this.showOnlineStatus();
+            // Sin mensajes visibles
         });
         
         window.addEventListener('offline', () => {
             this.isOnline = false;
-            this.showOfflineStatus();
+            // Sin mensajes visibles
         });
     }
     
@@ -192,56 +198,28 @@ class PWAManager {
     setupUpdateNotification() {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.addEventListener('controllerchange', () => {
-                this.showStatusMessage('Aplicación actualizada. Recarga para ver los cambios.', 'info');
+                // Actualización silenciosa: recargar sin mostrar mensaje
+                window.location.reload();
             });
         }
     }
     
     // Mostrar notificación de actualización
     showUpdateNotification() {
-        const updateButton = document.createElement('button');
-        updateButton.id = 'pwa-update-button';
-        updateButton.className = 'pwa-update-button';
-        updateButton.innerHTML = `
-            <i class="fas fa-sync-alt"></i>
-            <span>Actualizar App</span>
-        `;
-        updateButton.setAttribute('aria-label', 'Actualizar aplicación');
-        
-        updateButton.addEventListener('click', () => {
-            window.location.reload();
-        });
-        
-        // Insertar en la parte superior
-        const container = document.querySelector('.container');
-        if (container) {
-            container.insertBefore(updateButton, container.firstChild);
-        }
-        
-        this.addUpdateButtonStyles();
+        // Sin notificaciones visibles de actualización
+        // La actualización se aplica en silencio en registerServiceWorker/setupUpdateNotification
+        return;
     }
     
     // Mostrar mensaje de estado
     showStatusMessage(message, type = 'info') {
-        const statusDiv = document.createElement('div');
-        statusDiv.className = `status-message ${type}`;
-        statusDiv.textContent = message;
-        statusDiv.setAttribute('role', 'alert');
-        
-        // Insertar al inicio del body
-        document.body.insertBefore(statusDiv, document.body.firstChild);
-        
-        // Auto-remover después de 5 segundos
-        setTimeout(() => {
-            if (statusDiv.parentNode) {
-                statusDiv.parentNode.removeChild(statusDiv);
-            }
-        }, 5000);
+        // Deshabilitado: no mostrar mensajes de estado
+        return;
     }
     
     // Mostrar mensaje de instalación exitosa
     showInstallationSuccess() {
-        this.showStatusMessage('¡Aplicación instalada exitosamente!', 'success');
+        // Sin mensajes visibles de instalación
     }
     
     // Solicitar permisos de notificación

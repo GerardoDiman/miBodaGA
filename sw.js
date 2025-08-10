@@ -230,17 +230,10 @@ self.addEventListener('message', event => {
     }
 });
 
-// Función para verificar actualizaciones
+// Función para verificar actualizaciones (silenciosa)
 function checkForUpdates() {
-    // Notificar a todos los clientes sobre actualizaciones disponibles
-    self.clients.matchAll().then(clients => {
-        clients.forEach(client => {
-            client.postMessage({
-                type: 'UPDATE_AVAILABLE',
-                message: 'Nueva versión disponible'
-            });
-        });
-    });
+    // No enviar mensajes visibles; los clientes consultan y activan SKIP_WAITING
+    // Mantener función por compatibilidad
 }
 
 // Manejo de sincronización en segundo plano

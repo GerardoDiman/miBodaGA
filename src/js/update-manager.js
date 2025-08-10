@@ -3,7 +3,7 @@ class UpdateManager {
     constructor() {
         this.swRegistration = null;
         this.isUpdateAvailable = false;
-        this.showUpdateNotifications = true;
+        this.showUpdateNotifications = false; // Desactivar notificaciones visibles
         this.init();
     }
 
@@ -13,12 +13,12 @@ class UpdateManager {
                 // Registrar service worker silenciosamente
                 this.swRegistration = await navigator.serviceWorker.register('/sw.js');
                 
-                // Escuchar mensajes del service worker
+                // Escuchar mensajes del service worker (silencioso)
                 navigator.serviceWorker.addEventListener('message', (event) => {
                     this.handleServiceWorkerMessage(event);
                 });
 
-                // Verificar actualizaciones cada 30 segundos (silenciosamente)
+                // Verificar actualizaciones cada 30 segundos (silencioso)
                 setInterval(() => {
                     this.checkForUpdates();
                 }, 30000);
@@ -61,8 +61,7 @@ class UpdateManager {
     }
 
     showUpdateNotification() {
-        // Actualización completamente silenciosa - sin notificaciones visibles
-        // Aplicar actualización automáticamente sin mostrar notificación
+        // Mantener actualización silenciosa: no mostrar notificaciones
         this.applyUpdateSilently();
     }
 
