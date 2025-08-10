@@ -83,9 +83,7 @@
             elements.toggleFlashBtn.addEventListener('click', toggleFlash);
         }
         
-        if (elements.testQRBtn) {
-            elements.testQRBtn.addEventListener('click', testQRDetection);
-        }
+        // testQRBtn eliminado del HTML
         
         if (elements.guestIdInput) {
             elements.guestIdInput.addEventListener('input', handleGuestIdInput);
@@ -98,8 +96,13 @@
         console.log('📹 Abriendo interfaz de cámara...');
         
         try {
+            // Elevar la interfaz de cámara al body para evitar stacking/overflow del contenedor
+            if (elements.cameraInterface && elements.cameraInterface.parentElement !== document.body) {
+                document.body.appendChild(elements.cameraInterface);
+            }
             if (elements.cameraInterface) {
                 elements.cameraInterface.style.display = 'block';
+                elements.cameraInterface.style.zIndex = '9999';
             }
             
             if (elements.form) {
@@ -154,8 +157,10 @@
                 (stream) => {
                     console.log('✅ Stream de cámara obtenido exitosamente');
                     console.log('🎥 Tipo de cámara:', currentCamera);
-                    
-                    createVideoElement();
+
+                    // Asegurar que el stream esté disponible antes de crear el video
+                    cameraStream = stream;
+                    createVideoElement(stream);
                     startQRScanning();
                 },
                 (error) => {
@@ -172,7 +177,7 @@
         }
     }
     
-    function createVideoElement() {
+    function createVideoElement(providedStream) {
         console.log('🎬 Creando elemento de video...');
         
         if (!elements.cameraPreview) {
@@ -186,7 +191,11 @@
         }
         
         const video = document.createElement('video');
-        video.srcObject = cameraStream;
+        const streamToUse = providedStream || cameraStream;
+        if (!streamToUse) {
+            console.warn('⚠️ Stream de cámara no disponible al crear el video');
+        }
+        video.srcObject = streamToUse || null;
         video.autoplay = true;
         video.muted = true;
         video.playsInline = true;
@@ -204,6 +213,11 @@
         
         video.onloadedmetadata = () => {
             console.log('📱 Video metadata cargada:', video.videoWidth, 'x', video.videoHeight);
+            // Forzar play por si el autoplay no se dispara inmediatamente
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise.catch((e) => console.warn('⚠️ Autoplay bloqueado, se intentará nuevamente al interactuar:', e));
+            }
         };
         
         video.oncanplay = () => {
@@ -267,6 +281,7 @@
         if (elements.statusMessage) {
             elements.statusMessage.textContent = 'Escaneando código QR... Coloca el código frente a la cámara';
             elements.statusMessage.className = 'status-message loading-message';
+            elements.statusMessage.style.display = 'block';
         }
         
         console.log('✅ Indicador de escaneo agregado');
@@ -366,31 +381,44 @@
         }
     }
     
+    // Extraer ID de invitado desde el dato del QR
+    function getGuestIdFromQR(qrData) {
+        if (!qrData) return null;
+        // Intentar como URL con parámetro ?id=xxxxxx
+        try {
+            const url = new URL(qrData);
+            const id = url.searchParams.get('id');
+            if (id && /^[a-z0-9]{6}$/i.test(id)) {
+                return id.toLowerCase();
+            }
+        } catch (_) { /* no es URL */ }
+        // Fallback: primer token de 6 alfanuméricos
+        const match = String(qrData).match(/[a-z0-9]{6}/i);
+        return match ? match[0].toLowerCase() : null;
+    }
+
     function handleQRResult(qrData) {
         console.log('🎯 Procesando resultado QR:', qrData);
         
         try {
-            if (qrData && qrData.length > 0) {
-                console.log('✅ QR válido detectado');
-                
+            const guestId = getGuestIdFromQR(qrData);
+            if (guestId) {
+                console.log('✅ QR válido detectado. ID extraído:', guestId);
+
                 if (elements.guestIdInput) {
-                    elements.guestIdInput.value = qrData;
+                    elements.guestIdInput.value = guestId;
                 }
-                
-                closeCameraInterface();
-                
+
+                // Mostrar feedback y validar automáticamente
                 if (elements.statusMessage) {
-                    elements.statusMessage.textContent = `QR detectado: ${qrData}`;
+                    elements.statusMessage.textContent = `QR detectado: ${guestId}`;
                     elements.statusMessage.className = 'status-message success-message';
                 }
-                
-                setTimeout(() => {
-                    if (elements.statusMessage) {
-                        elements.statusMessage.textContent = 'Ingresa el ID del invitado o escanea el código QR';
-                        elements.statusMessage.className = 'status-message';
-                    }
-                }, 3000);
-                
+
+                // Cerrar cámara y lanzar validación
+                closeCameraInterface();
+                validateGuest(guestId);
+
             } else {
                 console.log('⚠️ QR inválido, reiniciando escaneo...');
                 setTimeout(() => {
@@ -481,39 +509,75 @@
     }
     
     async function performValidation(guestId) {
-        const url = window.VALIDAR_CONFIG?.GOOGLE_APPS_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
-        
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'validateGuest',
-                guestId: guestId
-            })
+        // Usar JSONP con doGet para evitar CORS en Apps Script
+        const baseUrl = window.VALIDAR_CONFIG?.GOOGLE_APPS_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
+        const callbackName = `VALIDAR_JSONP_CB_${Date.now()}`;
+        const url = `${baseUrl}?action=getGuestDetails&id=${encodeURIComponent(guestId)}&callback=${callbackName}`;
+
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            let timeoutId;
+
+            window[callbackName] = function(response) {
+                clearTimeout(timeoutId);
+                try {
+                    resolve(response);
+                } finally {
+                    cleanup();
+                }
+            };
+
+            function cleanup() {
+                if (script.parentNode) script.parentNode.removeChild(script);
+                try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
+            }
+
+            script.onerror = function() {
+                clearTimeout(timeoutId);
+                cleanup();
+                reject(new Error('JSONP request failed'));
+            };
+
+            timeoutId = setTimeout(() => {
+                cleanup();
+                reject(new Error('JSONP timeout'));
+            }, 10000);
+
+            script.src = url;
+            document.body.appendChild(script);
         });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.json();
     }
     
     function handleValidationResult(result) {
         console.log('✅ Resultado de validación:', result);
         
-        if (result.success) {
-            showGuestDetails(result.guest);
-            if (result.confirmation) {
-                showConfirmationDetails(result.confirmation);
-            }
+        // Adaptar respuesta de Apps Script (JSONP) o de API directa
+        if (result && (result.success || result.status === 'success')) {
+            const invitado = result.guest || result.invitado || {};
+            renderGuest(invitado);
+        } else if (result && (result.status === 'not_found')) {
+            showErrorState('Invitado no encontrado');
+        } else if (result && result.message) {
+            showErrorState(result.message);
         } else {
-            showErrorState(result.message || 'Invitado no encontrado');
+            showErrorState('Error de validación');
         }
         
         resetValidationState();
+    }
+
+    function adaptGuestData(invitado) {
+        // Normalizar estructura a la que espera la UI
+        return {
+            id: invitado.id || invitado.ID || '',
+            names: invitado.nombre || invitado.name || '',
+            email: invitado.email || '',
+            phone: invitado.telefono || invitado.phone || '',
+            status: invitado.estado || (invitado.confirmado ? 'Confirmado' : 'Pendiente') || 'Desconocido',
+            passes: invitado.pases || 0,
+            kids: invitado.ninos || 0,
+            table: invitado.mesa || ''
+        };
     }
     
     function handleValidationError(error) {
@@ -533,64 +597,85 @@
     
     function showGuestDetails(guestData) {
         if (!elements.guestDetails) return;
-        
-        elements.guestDetails.innerHTML = `
-            <div class="guest-info">
-                <h3>✅ Invitado Validado</h3>
-                <div class="guest-details-grid">
-                    <div class="detail-item">
-                        <strong>ID:</strong> ${guestData.id || '---'}
-                    </div>
-                    <div class="detail-item">
-                        <strong>Nombre:</strong> ${guestData.names || '---'}
-                    </div>
-                    <div class="detail-item">
-                        <strong>Email:</strong> ${guestData.email || '---'}
-                    </div>
-                    <div class="detail-item">
-                        <strong>Teléfono:</strong> ${guestData.phone || '---'}
-                    </div>
-                    <div class="detail-item">
-                        <strong>Estado:</strong> 
-                        <span class="status-badge status-${guestData.status?.toLowerCase() || 'unknown'}">
-                            ${guestData.status || 'Desconocido'}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        elements.guestDetails.style.display = 'block';
-        
-        if (elements.statusMessage) {
-            elements.statusMessage.textContent = '¡Invitado validado exitosamente!';
-            elements.statusMessage.className = 'status-message success-message';
+
+        // Llenar spans existentes en validar.html
+        const nameEl = document.getElementById('val-guest-name');
+        const idEl = document.getElementById('val-guest-id');
+        const statusEl = document.getElementById('val-status');
+        const passesEl = document.getElementById('val-passes');
+        const kidsEl = document.getElementById('val-kids');
+        const mesaRow = document.getElementById('mesa-row');
+        const mesaEl = document.getElementById('val-mesa');
+
+        if (nameEl) nameEl.textContent = guestData.names || guestData.nombre || '---';
+        if (idEl) idEl.textContent = guestData.id || '---';
+        if (statusEl) {
+            const statusText = guestData.status || guestData.estado || 'Desconocido';
+            statusEl.textContent = statusText;
+            statusEl.classList.remove('status-confirmed', 'status-pending');
+            if (/confirmado/i.test(statusText)) statusEl.classList.add('status-confirmed');
+            else if (/pendiente/i.test(statusText)) statusEl.classList.add('status-pending');
         }
-        
+        if (passesEl) passesEl.textContent = String(guestData.passes ?? guestData.pases ?? '0');
+        if (kidsEl) kidsEl.textContent = String(guestData.kids ?? guestData.ninos ?? '0');
+        const mesaValue = guestData.table ?? guestData.mesa ?? '';
+        if (mesaRow) mesaRow.style.display = mesaValue ? 'block' : 'none';
+        if (mesaEl) mesaEl.textContent = mesaValue || '---';
+
+        // Ocultar formulario de validación mientras se muestran datos
+        if (elements.form) {
+            elements.form.style.display = 'none';
+        }
+
+        elements.guestDetails.style.display = 'block';
+
+        if (elements.statusMessage) {
+            elements.statusMessage.style.display = 'none';
+        }
+
         addNewValidationButton();
     }
     
-    function showConfirmationDetails(confirmationData) {
+    function showConfirmationDetails(invitado) {
         if (!elements.confirmationDetails) return;
-        
-        elements.confirmationDetails.innerHTML = `
-            <div class="confirmation-info">
-                <h4>📅 Confirmación</h4>
-                <div class="confirmation-details-grid">
-                    <div class="detail-item">
-                        <strong>Fecha de confirmación:</strong> ${confirmationData.confirmationDate || '---'}
-                    </div>
-                    <div class="detail-item">
-                        <strong>Asistentes:</strong> ${confirmationData.attendees || '---'}
-                    </div>
-                    <div class="detail-item">
-                        <strong>Comentarios:</strong> ${confirmationData.comments || '---'}
-                    </div>
-                </div>
-            </div>
-        `;
-        
+
+        const passesUsedEl = document.getElementById('val-passes-used');
+        const kidsUsedEl = document.getElementById('val-kids-used');
+        const adultNamesEl = document.getElementById('val-adult-names');
+        const kidsNamesRow = document.getElementById('kids-names-row');
+        const kidsNamesEl = document.getElementById('val-kids-names');
+        const phoneEl = document.getElementById('val-phone');
+        const emailRow = document.getElementById('email-row');
+        const emailEl = document.getElementById('val-email');
+        const dateEl = document.getElementById('val-confirmation-date');
+
+        const formatDate = (window.formatDate || ((d)=>d));
+        const formatPhone = (window.formatPhone || ((p)=>p));
+        const formatEmail = (window.formatEmail || ((e)=>e));
+
+        if (passesUsedEl) passesUsedEl.textContent = String(invitado.pasesUtilizados ?? 0);
+        if (kidsUsedEl) kidsUsedEl.textContent = String(invitado.ninosUtilizados ?? 0);
+        if (adultNamesEl) adultNamesEl.textContent = invitado.nombresInvitados || invitado.nombre || '---';
+        const kidsNames = invitado.nombresNinos || '';
+        if (kidsNamesRow) kidsNamesRow.style.display = kidsNames ? 'block' : 'none';
+        if (kidsNamesEl) kidsNamesEl.textContent = kidsNames || '---';
+        if (phoneEl) phoneEl.textContent = formatPhone(invitado.telefono || '');
+        const email = invitado.email || '';
+        if (emailRow) emailRow.style.display = email ? 'block' : 'none';
+        if (emailEl) emailEl.textContent = formatEmail(email) || '---';
+        if (dateEl) dateEl.textContent = formatDate(invitado.fechaConfirmacion || '');
+
         elements.confirmationDetails.style.display = 'block';
+    }
+
+    function renderGuest(invitado) {
+        const guest = adaptGuestData(invitado);
+        showGuestDetails(guest);
+        if (invitado && (invitado.confirmado || invitado.fechaConfirmacion || invitado.pasesUtilizados != null)) {
+            showConfirmationDetails(invitado);
+        } else {
+            if (elements.confirmationDetails) elements.confirmationDetails.style.display = 'none';
+        }
     }
     
     function showErrorState(message) {
@@ -606,12 +691,19 @@
         if (elements.confirmationDetails) {
             elements.confirmationDetails.style.display = 'none';
         }
+
+        // Asegurar que el botón de nueva validación no aparezca en el formulario
+        const existingBtn = document.querySelector('.new-validation-btn');
+        if (existingBtn && existingBtn.parentNode) {
+            existingBtn.parentNode.removeChild(existingBtn);
+        }
     }
     
     function resetToInitialState() {
         if (elements.statusMessage) {
             elements.statusMessage.textContent = 'Ingresa el ID del invitado o escanea el código QR';
             elements.statusMessage.className = 'status-message';
+            elements.statusMessage.style.display = 'block';
         }
         
         if (elements.guestDetails) {
@@ -625,6 +717,12 @@
         if (elements.guestIdInput) {
             elements.guestIdInput.value = '';
             elements.guestIdInput.classList.remove('valid', 'invalid');
+        }
+
+        // Quitar el botón de "Validar Otro Invitado" si existe
+        const existingBtn = document.querySelector('.new-validation-btn');
+        if (existingBtn && existingBtn.parentNode) {
+            existingBtn.parentNode.removeChild(existingBtn);
         }
     }
     
@@ -640,15 +738,14 @@
         if (existingBtn) {
             existingBtn.remove();
         }
-        
+
         const newBtn = document.createElement('button');
         newBtn.type = 'button';
         newBtn.className = 'new-validation-btn';
         newBtn.textContent = 'Validar Otro Invitado';
         newBtn.style.cssText = `
-            margin-top: 20px;
+            margin-top: 24px;
             padding: 12px 24px;
-            background: #2196F3;
             color: white;
             border: none;
             border-radius: 8px;
@@ -656,16 +753,35 @@
             font-size: 16px;
             font-weight: 500;
         `;
-        
+        // Color verde oscuro (forzar sobre CSS con !important)
+        const darkGreen = '#1B5E20';
+        const darkGreenHover = '#2E7D32';
+        newBtn.style.setProperty('background', darkGreen, 'important');
+
+        newBtn.addEventListener('mouseenter', () => {
+            newBtn.style.setProperty('background', darkGreenHover, 'important');
+        });
+        newBtn.addEventListener('mouseleave', () => {
+            newBtn.style.setProperty('background', darkGreen, 'important');
+        });
+
         newBtn.addEventListener('click', () => {
             resetToInitialState();
             if (elements.form) {
                 elements.form.style.display = 'block';
             }
         });
-        
-        if (elements.guestDetails) {
-            elements.guestDetails.appendChild(newBtn);
+
+        // Insertarlo al final, después de confirmationDetails si existe, si no después de guestDetails
+        const container = document.querySelector('.validation-container');
+        if (elements.confirmationDetails) {
+            elements.confirmationDetails.insertAdjacentElement('afterend', newBtn);
+        } else if (elements.guestDetails) {
+            elements.guestDetails.insertAdjacentElement('afterend', newBtn);
+        } else if (container) {
+            container.appendChild(newBtn);
+        } else {
+            document.body.appendChild(newBtn);
         }
     }
     
