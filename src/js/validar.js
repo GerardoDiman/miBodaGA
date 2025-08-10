@@ -65,6 +65,13 @@
         if (elements.form) {
             elements.form.addEventListener('submit', handleValidationSubmit);
         }
+        // En caso de que el contenedor no sea un <form>, asegurar validación por click
+        if (elements.validateBtn) {
+            elements.validateBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+                handleValidationSubmit(event);
+            });
+        }
         
         if (elements.scanQRBtn) {
             elements.scanQRBtn.addEventListener('click', openCameraInterface);
@@ -87,6 +94,13 @@
         
         if (elements.guestIdInput) {
             elements.guestIdInput.addEventListener('input', handleGuestIdInput);
+            // Permitir Enter para validar
+            elements.guestIdInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleValidationSubmit(e);
+                }
+            });
         }
         
         console.log('✅ Event listeners configurados');
@@ -452,7 +466,9 @@
     
     function handleGuestIdInput(event) {
         const input = event.target;
-        const value = input.value.trim();
+        // Normalizar a minúsculas
+        const value = input.value.trim().toLowerCase();
+        if (input.value !== value) input.value = value;
         
         if (value.length === 6 && /^[a-z0-9]{6}$/.test(value)) {
             input.classList.remove('invalid');
@@ -468,17 +484,17 @@
     function handleValidationSubmit(event) {
         event.preventDefault();
         
-        const guestId = elements.guestIdInput?.value?.trim();
+        const guestId = elements.guestIdInput?.value?.trim().toLowerCase();
         
         if (!guestId) {
             showErrorState('Por favor ingresa un ID de invitado');
-            return;
-        }
-        
+                return;
+            }
+            
         if (!window.isValidGuestId || !window.isValidGuestId(guestId)) {
             showErrorState('ID de invitado inválido. Debe tener 6 caracteres alfanuméricos.');
-            return;
-        }
+                return;
+            }
         
         validateGuest(guestId);
     }
@@ -624,12 +640,12 @@
         if (passesUsedEl) passesUsedEl.textContent = String(invitado.pasesUtilizados ?? 0);
         if (kidsUsedEl) kidsUsedEl.textContent = String(invitado.ninosUtilizados ?? 0);
         if (adultNamesEl) {
-            renderNamesList(adultNamesEl, invitado.nombresInvitados || invitado.nombre || '');
+            renderNamesList(adultNamesEl, invitado.nombresInvitados || invitado.nombre || '', { placeholder: '---' });
         }
         const kidsNames = invitado.nombresNinos || '';
         if (kidsNamesRow) kidsNamesRow.style.display = kidsNames ? 'block' : 'none';
         if (kidsNamesEl) {
-            renderNamesList(kidsNamesEl, kidsNames);
+            renderNamesList(kidsNamesEl, kidsNames, { placeholder: '' });
         }
         if (phoneEl) phoneEl.textContent = formatPhone(invitado.telefono || '');
         const email = invitado.email || '';
@@ -651,18 +667,21 @@
     }
 
     // Utilidad: renderizar nombres separados por coma o salto de línea en lista <ul><li>
-    function renderNamesList(container, namesString) {
+    function renderNamesList(container, namesString, options) {
+        const placeholder = options && typeof options.placeholder === 'string' ? options.placeholder : '---';
         const clean = (namesString || '').toString().trim();
         container.innerHTML = '';
         if (!clean) {
-            container.textContent = '---';
+            if (placeholder) {
+                container.textContent = placeholder;
+            }
             return;
         }
         // Separar por coma o salto de línea
         const parts = clean.split(/[,\n]/).map(s => s.trim()).filter(Boolean);
         if (parts.length <= 1) {
             container.textContent = parts[0] || clean;
-            return;
+                return;
         }
         const ul = document.createElement('ul');
         ul.style.margin = '6px 0 0';
