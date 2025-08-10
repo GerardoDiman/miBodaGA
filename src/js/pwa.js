@@ -196,12 +196,7 @@ class PWAManager {
     
     // Configurar notificación de actualización
     setupUpdateNotification() {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                // Actualización silenciosa: recargar sin mostrar mensaje
-                window.location.reload();
-            });
-        }
+        // Ya no forzamos recarga automática; el contenido se servirá en vivo por estrategia Network First
     }
     
     // Mostrar notificación de actualización

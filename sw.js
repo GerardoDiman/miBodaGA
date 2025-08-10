@@ -83,25 +83,20 @@ self.addEventListener('fetch', event => {
     const { request } = event;
     const url = new URL(request.url);
     
-    // Estrategia: Stale While Revalidate para recursos principales (HTML, CSS, JS)
+    // Estrategia: Network First para recursos principales (HTML, CSS, JS)
     if (isMainResource(request.url)) {
         event.respondWith(
-            caches.open(STATIC_CACHE).then(cache => {
-                return cache.match(request).then(cachedResponse => {
-                    const fetchPromise = fetch(request).then(networkResponse => {
-                        if (networkResponse && networkResponse.status === 200) {
-                            // Actualizar cache con la nueva versión
-                            cache.put(request, networkResponse.clone());
-                        }
-                        return networkResponse;
-                    }).catch(() => {
-                        return cachedResponse;
-                    });
-                    
-                    // Devolver cache inmediatamente si existe, pero seguir actualizando en segundo plano
-                    return cachedResponse || fetchPromise;
-                });
-            })
+            fetch(request)
+                .then(networkResponse => {
+                    if (networkResponse && networkResponse.status === 200) {
+                        const responseClone = networkResponse.clone();
+                        caches.open(STATIC_CACHE).then(cache => cache.put(request, responseClone));
+                    }
+                    return networkResponse;
+                })
+                .catch(() => {
+                    return caches.open(STATIC_CACHE).then(cache => cache.match(request));
+                })
         );
     }
     

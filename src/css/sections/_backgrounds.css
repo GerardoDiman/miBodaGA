@@ -1,7 +1,7 @@
 /* ===========================================================================
    3. Definiciones de Fondos Específicos por Sección
    =========================================================================== */
-.title-bg::before {background-image: url('/assets/images/imgi11.png'); }
+.title-bg::before {background-image: url('/assets/images/imgi16.png'); }
 .details-bg::before { background-image: url('/assets/images/imgi17.png'); }
 .gallery-bg::before { background-image: url( '/assets/images/imgi6.png'); }
 .parents-bg::before { background-image: url('/assets/images/planta.jpg'); }

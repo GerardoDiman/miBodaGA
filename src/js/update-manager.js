@@ -70,19 +70,8 @@ class UpdateManager {
 
     async applyUpdateSilently() {
         try {
-            if (this.swRegistration && this.swRegistration.waiting) {
-                // Enviar mensaje al service worker para activar la nueva versión
-                this.swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
-                
-                // Escuchar cuando el nuevo service worker tome control
-                navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    // Recarga silenciosa sin mostrar nada al usuario
-                    window.location.reload();
-                });
-            } else {
-                // Recarga silenciosa con cache bypass
-                window.location.reload(true);
-            }
+            // Ya no forzamos recarga; la estrategia Network First obtendrá la última versión en el próximo request
+            return;
         } catch (error) {
             // Error silencioso - recarga normal sin mostrar nada
             window.location.reload();
