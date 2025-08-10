@@ -509,43 +509,11 @@
     }
     
     async function performValidation(guestId) {
-        // Usar JSONP con doGet para evitar CORS en Apps Script
-        const baseUrl = window.VALIDAR_CONFIG?.GOOGLE_APPS_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
-        const callbackName = `VALIDAR_JSONP_CB_${Date.now()}`;
-        const url = `${baseUrl}?action=getGuestDetails&id=${encodeURIComponent(guestId)}&callback=${callbackName}`;
-
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            let timeoutId;
-
-            window[callbackName] = function(response) {
-                clearTimeout(timeoutId);
-                try {
-                    resolve(response);
-                } finally {
-                    cleanup();
-                }
-            };
-
-            function cleanup() {
-                if (script.parentNode) script.parentNode.removeChild(script);
-                try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
-            }
-
-            script.onerror = function() {
-                clearTimeout(timeoutId);
-                cleanup();
-                reject(new Error('JSONP request failed'));
-            };
-
-            timeoutId = setTimeout(() => {
-                cleanup();
-                reject(new Error('JSONP timeout'));
-            }, 10000);
-
-            script.src = url;
-            document.body.appendChild(script);
-        });
+        // Usar proxy de Netlify para evitar CORS y JSONP en móviles
+        const proxyUrl = '/api/guest?action=getGuestDetails&id=' + encodeURIComponent(guestId);
+        const response = await fetch(proxyUrl, { method: 'GET' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
     }
     
     function handleValidationResult(result) {

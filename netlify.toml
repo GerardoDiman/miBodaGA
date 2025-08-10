@@ -61,6 +61,13 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"  # 24 horas (solo para assets estáticos)
 
+## Proxy a Google Apps Script para evitar CORS y problemas en móviles
+[[redirects]]
+  from = "/api/guest"
+  to = "https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/invitacion"
   to = "/"
