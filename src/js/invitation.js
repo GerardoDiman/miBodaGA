@@ -729,6 +729,15 @@ console.log('🎯 invitation.js cargado');
 
         if (confirmButton) {
             confirmButton.addEventListener('click', () => {
+                // Si rsvp-form expuso utilidades de deadline, usarlas también aquí como refuerzo
+                if (window.rsvpDeadline && typeof window.rsvpDeadline.isPast === 'function') {
+                    if (window.rsvpDeadline.isPast()) {
+                        if (typeof window.rsvpDeadline.showNotice === 'function') {
+                            window.rsvpDeadline.showNotice();
+                        }
+                        return;
+                    }
+                }
                 if (!invitadoActual || yaConfirmoSheet || confirmButton.disabled) {
                     console.log("Clic en Confirmar ignorado.");
                     return;

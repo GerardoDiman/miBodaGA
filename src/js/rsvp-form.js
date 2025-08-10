@@ -23,10 +23,71 @@
         
         // --- Configuraciones ---
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
+        // Fecha límite para realizar confirmaciones (inclusive hasta las 23:59:59 de ese día - hora local del navegador)
+        const RSVP_DEADLINE = new Date('2025-08-09T23:59:59');
         
         // --- Variables de Estado ---
         let invitadoActual = null;
         let pasesDisponibles = 0;
+
+        // --- Lógica de Fecha Límite ---
+        function isPastRsvpDeadline() {
+            const now = new Date();
+            return now.getTime() > RSVP_DEADLINE.getTime();
+        }
+
+        function showDeadlineNotice() {
+            // Si ya existe, no duplicar
+            if (document.getElementById('rsvp-deadline-notice')) return;
+
+            const notice = document.createElement('div');
+            notice.id = 'rsvp-deadline-notice';
+            notice.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(209, 72, 54, 0.95);
+                color: #fff;
+                padding: 24px;
+                border-radius: 12px;
+                z-index: 3000;
+                text-align: center;
+                max-width: 520px;
+                width: calc(100% - 40px);
+                box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+            `;
+            const deadlineDate = RSVP_DEADLINE.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+            notice.innerHTML = `
+                <h3 style="margin: 0 0 10px 0; font-size: 1.3em;">⚠️ Confirmación cerrada</h3>
+                <p style="margin: 0 0 16px 0; line-height: 1.5;">
+                    La confirmación estuvo disponible hasta el <strong>${deadlineDate}</strong>.
+                    Ya no es posible confirmar.
+                </p>
+                <button type="button" aria-label="Cerrar aviso" style="
+                    background: rgba(255,255,255,0.2);
+                    border: 1px solid rgba(255,255,255,0.35);
+                    color: #fff;
+                    padding: 10px 16px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 0.9em;
+                ">Entendido</button>
+            `;
+            const closeBtn = notice.querySelector('button');
+            closeBtn.addEventListener('click', () => notice.remove());
+            document.body.appendChild(notice);
+        }
+
+        function disableConfirmIfPastDeadline() {
+            if (isPastRsvpDeadline() && confirmButton) {
+                confirmButton.setAttribute('aria-disabled', 'true');
+                confirmButton.disabled = true;
+                confirmButton.textContent = 'Confirmación cerrada';
+                confirmButton.style.opacity = '0.6';
+                confirmButton.style.cursor = 'not-allowed';
+            }
+        }
 
         // --- DETECCIÓN MEJORADA DE NAVEGADOR Y DISPOSITIVO ---
         function detectBrowserAndDevice() {
@@ -643,6 +704,11 @@
         if (confirmButton) {
             confirmButton.addEventListener('click', (e) => {
                 e.preventDefault();
+                // Bloquear apertura si pasó la fecha límite
+                if (isPastRsvpDeadline()) {
+                    showDeadlineNotice();
+                    return;
+                }
                 if (!invitadoActual) {
                     console.error('No hay invitado actual');
                     return;
@@ -707,6 +773,12 @@
             rsvpForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
+                // Validación de fecha límite también al enviar
+                if (isPastRsvpDeadline()) {
+                    showFormError('La confirmación por formulario cerró el 20 de septiembre de 2025. Por favor contáctanos por WhatsApp o por llamada.');
+                    return;
+                }
+
                 // Validar formulario
                 if (!validateForm()) {
                     return;
@@ -831,6 +903,16 @@
         
         // Función para ocultar el formulario desde otros scripts
         window.hideRsvpForm = hideRsvpForm;
+
+        // Al cargar, si ya pasó la fecha límite, deshabilitar botón principal
+        disableConfirmIfPastDeadline();
+
+        // Exponer utilidades de fecha límite de forma global para otros módulos
+        window.rsvpDeadline = {
+            isPast: isPastRsvpDeadline,
+            showNotice: showDeadlineNotice,
+            deadline: RSVP_DEADLINE
+        };
         
     });
 })(); 
