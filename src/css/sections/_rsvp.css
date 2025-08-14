@@ -18,6 +18,7 @@
 .confirm-main-rsvp-button { display: inline-block; background-color: rgba(255, 255, 255, 0.15); color: var(--color-text); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 25px; padding: 12px 45px; margin: 0 auto var(--spacing-small) auto; font-family: var(--font-primary); font-size: 0.9em; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; position: relative; z-index: 1; }
 .confirm-main-rsvp-button:hover { background-color: rgba(255, 255, 255, 0.3); border-color: rgba(255, 255, 255, 0.4); color: var(--color-text); }
 .rsvp-contact-prompt { font-family: var(--font-primary); font-size: 0.65em; color: var(--color-text-secondary); padding: 0 var(--spacing-small); margin: 0 auto var(--spacing-large) auto; position: relative; z-index: 1;}
+.rsvp-contact-prompt.luis-name { font-size: 0.8em; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--color-accent);}
 .rsvp-options { 
     display: flex !important; 
     justify-content: center !important; 
