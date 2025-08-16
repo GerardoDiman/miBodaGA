@@ -24,7 +24,7 @@
         // --- Configuraciones ---
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
         // Fecha límite para realizar confirmaciones (inclusive hasta las 23:59:59 de ese día - hora local del navegador)
-        const RSVP_DEADLINE = new Date('2025-08-09T23:59:59');
+        const RSVP_DEADLINE = new Date('2025-09-20T23:59:59');
         
         // --- Variables de Estado ---
         let invitadoActual = null;
