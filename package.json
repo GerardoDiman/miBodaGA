@@ -30,6 +30,8 @@
     "generate-qr": "cd src/python && python generate_qr_codes.py",
     "clean-qr": "cd src/python && python clean_qr_codes.py",
     "process-notion-guests": "cd src/python && python process_notion_guests.py",
+    "restore-lost-guests": "cd src/python && python restore_lost_guests.py",
+    "sync-all-from-notion": "cd src/python && python sync_all_from_notion.py",
     "install-notion-deps": "pip install -r requirements.txt",
     "clean": "rm -rf node_modules package-lock.json",
     "install:clean": "npm run clean && npm install",

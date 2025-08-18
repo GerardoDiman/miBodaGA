@@ -48,10 +48,10 @@ def generate_invitation_links():
         
         # Generar enlace según tipo
         if tipo == 'Ceremonia':
-            invitation_link = f"https://mibodaag.netlify.app/ceremonia.html?id={invite_id}"
+            invitation_link = f"https://boda-alegera.com/ceremonia.html?id={invite_id}"
             ceremonia_count += 1
         else:
-            invitation_link = f"https://mibodaag.netlify.app/?id={invite_id}"
+            invitation_link = f"https://boda-alegera.com/?id={invite_id}"
             completo_count += 1
         
         print(f"👤 {guest_name}")

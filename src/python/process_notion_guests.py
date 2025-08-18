@@ -259,33 +259,56 @@ class NotionGuestProcessor:
             print(f"⚠️ Error generando QR codes: {e}")
     
     def sync_to_local_files(self, guests_with_ids):
-        """Sincroniza los datos actualizados a archivos locales"""
+        """Sincroniza los datos actualizados a archivos locales preservando invitados existentes"""
         print("💾 Sincronizando a archivos locales...")
         
         # Actualizar JSON
         json_path = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'invitados.json')
         os.makedirs(os.path.dirname(json_path), exist_ok=True)
         
-        guests_for_json = []
-        for guest in guests_with_ids:
-            guests_for_json.append({
-                'id': guest['generated_id'],
-                'nombre': guest['nombre'],
-                'pases': guest['pases'],
-                'ninos': guest['ninos'],
-                'mesa': guest['mesa'],
-                'email': guest['email'],
-                'telefono': guest['telefono'],
-                'notas': guest['notas'],
-                'confirmado': False,
-                'fecha_confirmacion': None
-            })
+        # Cargar invitados existentes
+        existing_guests = []
+        if os.path.exists(json_path):
+            try:
+                with open(json_path, 'r', encoding='utf-8') as f:
+                    existing_guests = json.load(f)
+                print(f"📖 Cargados {len(existing_guests)} invitados existentes")
+            except Exception as e:
+                print(f"⚠️ Error cargando invitados existentes: {e}")
+                existing_guests = []
         
+        # Crear set de IDs existentes para evitar duplicados
+        existing_ids = {guest['id'] for guest in existing_guests}
+        
+        # Agregar solo invitados nuevos
+        new_guests_added = 0
+        for guest in guests_with_ids:
+            if guest['generated_id'] not in existing_ids:
+                new_guest = {
+                    'id': guest['generated_id'],
+                    'nombre': guest['nombre'],
+                    'pases': guest['pases'],
+                    'ninos': guest['ninos'],
+                    'mesa': guest['mesa'],
+                    'email': guest['email'],
+                    'telefono': guest['telefono'],
+                    'notas': guest['notas'],
+                    'confirmado': False,
+                    'fecha_confirmacion': None
+                }
+                existing_guests.append(new_guest)
+                existing_ids.add(guest['generated_id'])
+                new_guests_added += 1
+                print(f"  ➕ Agregado: {guest['nombre']} ({guest['generated_id']})")
+            else:
+                print(f"  ⏭️ Ya existe: {guest['nombre']} ({guest['generated_id']})")
+        
+        # Guardar archivo actualizado
         with open(json_path, 'w', encoding='utf-8') as f:
-            json.dump(guests_for_json, f, ensure_ascii=False, indent=2)
+            json.dump(existing_guests, f, ensure_ascii=False, indent=2)
         
         print(f"✅ Archivo JSON actualizado: {json_path}")
-        print(f"📊 Total de invitados: {len(guests_for_json)}")
+        print(f"📊 Total de invitados: {len(existing_guests)} (agregados {new_guests_added} nuevos)")
     
     def process_all(self):
         """Proceso completo"""

@@ -57,9 +57,9 @@ class NotionLinkUpdater:
             
             # Generar nuevo enlace según tipo
             if tipo_invitacion == 'Ceremonia':
-                new_link = f"https://mibodaag.netlify.app/ceremonia.html?id={guest_id}"
+                new_link = f"https://boda-alegera.com/ceremonia.html?id={guest_id}"
             else:
-                new_link = f"https://mibodaag.netlify.app/?id={guest_id}"
+                new_link = f"https://boda-alegera.com/?id={guest_id}"
             
             # Solo actualizar si el enlace es diferente
             if current_link != new_link:
