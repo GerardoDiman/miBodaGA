@@ -78,7 +78,7 @@
     "ninos": 0,
     "mesa": 0,
     "email": "",
-    "telefono": "963 145 3377",
+    "telefono": "9631453377",
     "notas": "Prueba de API - 1754261165",
     "confirmado": false,
     "fecha_confirmacion": null
@@ -210,7 +210,7 @@
     "ninos": 0,
     "mesa": 0,
     "email": "",
-    "telefono": "",
+    "telefono": "9631180211",
     "notas": "",
     "confirmado": false,
     "fecha_confirmacion": null
@@ -421,7 +421,7 @@
   },
   {
     "id": "q4p41f",
-    "nombre": "Chalo",
+    "nombre": "Gonzalo David Pérez Pérez",
     "pases": 2,
     "ninos": 0,
     "mesa": 0,
