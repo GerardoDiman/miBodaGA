@@ -1,5 +1,29 @@
 [
   {
+    "id": "3rbqiu",
+    "nombre": "Luis Enrique Méndez Gómez",
+    "pases": 4,
+    "ninos": 0,
+    "mesa": 0,
+    "email": "",
+    "telefono": "9631295172",
+    "notas": "",
+    "confirmado": false,
+    "fecha_confirmacion": null
+  },
+  {
+    "id": "pgeupv",
+    "nombre": "Adalberto Figueroa Irecta",
+    "pases": 2,
+    "ninos": 0,
+    "mesa": 0,
+    "email": "",
+    "telefono": "9611559267",
+    "notas": "",
+    "confirmado": false,
+    "fecha_confirmacion": null
+  },
+  {
     "id": "m8xmgp",
     "nombre": "Juan Martín Hidalgo Alfaro",
     "pases": 2,
@@ -42,7 +66,7 @@
     "ninos": 0,
     "mesa": 0,
     "email": "",
-    "telefono": "",
+    "telefono": "8114877614",
     "notas": "",
     "confirmado": false,
     "fecha_confirmacion": null
@@ -61,7 +85,7 @@
   },
   {
     "id": "mjp83i",
-    "nombre": "Armando López",
+    "nombre": "Armando López Morales",
     "pases": 2,
     "ninos": 0,
     "mesa": 0,
@@ -74,11 +98,11 @@
   {
     "id": "5bblzl",
     "nombre": "Matilde Díaz Cabrera",
-    "pases": 1,
+    "pases": 3,
     "ninos": 0,
     "mesa": 0,
     "email": "",
-    "telefono": "",
+    "telefono": "9637031845",
     "notas": "",
     "confirmado": false,
     "fecha_confirmacion": null
@@ -109,12 +133,12 @@
   },
   {
     "id": "cno98o",
-    "nombre": "Hugo Caballero",
+    "nombre": "Hugo Caballero Velasco",
     "pases": 2,
     "ninos": 2,
     "mesa": 0,
     "email": "",
-    "telefono": "9631005888",
+    "telefono": "9631138197",
     "notas": "",
     "confirmado": false,
     "fecha_confirmacion": null
@@ -361,12 +385,12 @@
   },
   {
     "id": "zhpvsj",
-    "nombre": "Leticia Álvarez Méndez",
+    "nombre": "Jacob Vázquez Cruz",
     "pases": 5,
     "ninos": 0,
     "mesa": 0,
     "email": "",
-    "telefono": "",
+    "telefono": "9926995295",
     "notas": "",
     "confirmado": false,
     "fecha_confirmacion": null
@@ -385,12 +409,12 @@
   },
   {
     "id": "s6lu67",
-    "nombre": "Julio Albores",
+    "nombre": "Julio César Albores Albores",
     "pases": 2,
     "ninos": 0,
     "mesa": 0,
     "email": "",
-    "telefono": "",
+    "telefono": "9631340952",
     "notas": "",
     "confirmado": false,
     "fecha_confirmacion": null
@@ -409,12 +433,12 @@
   },
   {
     "id": "89mjzv",
-    "nombre": "María Méndez",
+    "nombre": "María Luisa Méndez Gómez",
     "pases": 2,
     "ninos": 0,
     "mesa": 0,
     "email": "",
-    "telefono": "",
+    "telefono": "9921046554",
     "notas": "",
     "confirmado": false,
     "fecha_confirmacion": null
@@ -540,18 +564,6 @@
     "fecha_confirmacion": null
   },
   {
-    "id": "glctgr",
-    "nombre": "María José Aguilar Díaz",
-    "pases": 2,
-    "ninos": 0,
-    "mesa": 0,
-    "email": "",
-    "telefono": "",
-    "notas": "",
-    "confirmado": false,
-    "fecha_confirmacion": null
-  },
-  {
     "id": "qg6hp7",
     "nombre": "Esperanza Álvarez Muñoz",
     "pases": 2,
@@ -613,12 +625,12 @@
   },
   {
     "id": "chbrjo",
-    "nombre": "Enrique ",
+    "nombre": "Enrique Penagos Cristiani",
     "pases": 2,
     "ninos": 0,
     "mesa": 0,
     "email": "",
-    "telefono": "",
+    "telefono": "9636336274",
     "notas": "",
     "confirmado": false,
     "fecha_confirmacion": null
@@ -637,12 +649,12 @@
   },
   {
     "id": "s4h6cq",
-    "nombre": "José Luis",
+    "nombre": "José Luis Gómez Díaz",
     "pases": 4,
     "ninos": 0,
     "mesa": 0,
     "email": "",
-    "telefono": "",
+    "telefono": "9631548508",
     "notas": "",
     "confirmado": false,
     "fecha_confirmacion": null
@@ -673,12 +685,12 @@
   },
   {
     "id": "6bsz5e",
-    "nombre": "Carlos Mandujano",
+    "nombre": "José Carlos Mandujano Jiménez",
     "pases": 1,
     "ninos": 0,
     "mesa": 0,
     "email": "",
-    "telefono": "9631135230",
+    "telefono": "9631005109",
     "notas": "",
     "confirmado": false,
     "fecha_confirmacion": null
@@ -745,12 +757,12 @@
   },
   {
     "id": "g9oikh",
-    "nombre": "Salazar",
+    "nombre": "Juan Gabriel Salazar Moreno",
     "pases": 2,
     "ninos": 0,
     "mesa": 0,
     "email": "",
-    "telefono": "",
+    "telefono": "9631835221",
     "notas": "",
     "confirmado": false,
     "fecha_confirmacion": null
