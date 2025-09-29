@@ -15,7 +15,6 @@
         const kidsNamesTable = document.getElementById('kids-names-table');
         const kidsNamesTbody = document.getElementById('kids-names-tbody');
         const guestPhoneInput = document.getElementById('guest-phone');
-        const guestEmailInput = document.getElementById('guest-email');
         const rsvpFormClose = document.getElementById('rsvp-form-close');
         const rsvpFormCancel = document.getElementById('rsvp-form-cancel');
         const rsvpFormSubmit = document.querySelector('.rsvp-form-submit');
@@ -23,13 +22,13 @@
         
         // --- Configuraciones ---
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPma1X-J0EgAPsYkXYhNT2I8LCSdANRa6CfcQLtFTVp8Xy5AZY5tAKm1apsE-0i9yW/exec';
-        // Fecha límite para realizar confirmaciones (inclusive hasta las 23:59:59 de ese día - hora local del navegador)
+        // RSVP DESHABILITADO - Fecha límite para realizar confirmaciones (inclusive hasta las 23:59:59 de ese día - hora local del navegador)
         const RSVP_DEADLINE = new Date('2025-09-25T23:59:59');
+        const RSVP_DISABLED = true; // RSVP completamente deshabilitado
         
         // --- Variables de Estado ---
         let invitadoActual = null;
         let pasesDisponibles = 0;
-
         // --- Lógica de Fecha Límite ---
         function isPastRsvpDeadline() {
             const now = new Date();
@@ -704,6 +703,11 @@
         if (confirmButton) {
             confirmButton.addEventListener('click', (e) => {
                 e.preventDefault();
+                // RSVP DESHABILITADO - Bloquear todas las interacciones
+                if (RSVP_DISABLED) {
+                    console.log('RSVP está deshabilitado');
+                    return;
+                }
                 // Bloquear apertura si pasó la fecha límite
                 if (isPastRsvpDeadline()) {
                     showDeadlineNotice();
@@ -772,6 +776,12 @@
         if (rsvpForm) {
             rsvpForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                
+                // RSVP DESHABILITADO - Bloquear envío de formulario
+                if (RSVP_DISABLED) {
+                    console.log('RSVP está deshabilitado - no se puede enviar formulario');
+                    return;
+                }
                 
                 // Validación de fecha límite también al enviar
                 if (isPastRsvpDeadline()) {
